@@ -3,3 +3,8 @@ elpa/
 games/
 session*
 
+/.emacs.desktop*
+*~
+/kkcrc
+/request/*
+/eshell/*
