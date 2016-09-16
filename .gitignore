@@ -3,3 +3,10 @@ elpa/
 games/
 session*
 
+/.emacs.desktop*
+*~
+/kkcrc
+/request/*
+/eshell/*
+/.python-environments/*
+projectile-bookmarks.eld
