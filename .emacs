@@ -62,15 +62,19 @@
 ;; VARIABLES
 (desktop-save-mode 1)  ;; automatically save the desktop
 
+(projectile-global-mode +1)		; resolve missing projects
+(setq projectile-enable-caching t)
+
 ;; ORG-MODE
 (setq org-log-done 'time)
+(setq org-default-notes-file "~/.emacs.d/captured.org")
+(define-key global-map "\C-cc" 'org-capture)
 
 
 
 ;; EXPAND REGION
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
-
 
 
 
