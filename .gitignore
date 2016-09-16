@@ -8,5 +8,8 @@ session*
 /kkcrc
 /request/*
 /eshell/*
+<<<<<<< HEAD
 /.python-environments/*
 projectile-bookmarks.eld
+=======
+>>>>>>> a2c8f5cc3036f6fb1e937c30f47109df5cdbb480
