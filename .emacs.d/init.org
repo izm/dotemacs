@@ -1,7 +1,15 @@
 #+STARTUP: hidestars
 
 * init.org
-  This will be tangled into =init.el= in the emacs directory, =~/init.d/=.
+  This file must be tangled into =init.el= in the emacs configuration
+  directory, =~/init.d/=.
+
+** TODO Automatically Tangle to init.el
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+     ;(org-babel-tangle-file ".emacs.d/init.org" ".emacs.d/init.el" "emacs-lisp")
+     (buffer-file-name)
+   #+END_SRC
 
 * Notes
 
@@ -9,13 +17,15 @@
   |-----------+-----------------------------------------------------|
   | C-c '     | narrow on code block in sibling window (and return) |
   | C-c C-v t | tangle                                              |
+  | C-c C-v f | tangle into specific filename, like "init.el"       |
 
   *Converting from .emacs or init.el*
   : (custom-set-variables
   :  '(my-variable value)
   :  '(column-number-mode t)
-  :  ; ...
-  : )
+  :  ; ...		     
+  : )		     
+  : 		     
 
   -->
 
