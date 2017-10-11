@@ -6,10 +6,22 @@
 
 ** TODO Automatically Tangle to init.el
 
+   Why doesn't this work? It tangles to current direcotry
    #+BEGIN_SRC emacs-lisp :tangle no
-     ;(org-babel-tangle-file ".emacs.d/init.org" ".emacs.d/init.el" "emacs-lisp")
-     (buffer-file-name)
+     (defun my/myfunc (source &optional target lang)
+       "Testing optional args being used."
+       (interactive "p")
+       (message "%s %s %s " source target lang)
+       )
+     (my/myfunc "src" );"opt" "lang")
+       
+     (org-babel-tangle
+      ;buffer-file-name
+      "init-from-babel.el"
+      ; (expand-file-name (concat user-emacs-directory "init-from-babel.el"))
+      "emacs-lisp")
    #+END_SRC
+
 
 * Notes
 
@@ -204,7 +216,7 @@
 ** magit
    A Git version control interface.
    
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package magit
        :ensure t
        :bind ("C-x g" . magit-status)
@@ -221,6 +233,14 @@
      ;; (use-package doom-themes)
    #+END_SRC
 
+** TODO paredit
+   http://danmidwood.com/content/2014/11/21/animated-paredit.html
+
+** TODO multi-cursors
+** TODO company
+** TODO helm
+** TODO gnus
+** TODO erc
 * Org Mode
 ** TODO use conditional environment variables (env: home/work os:win/linux)
    #+BEGIN_SRC emacs-lisp :tangle no
