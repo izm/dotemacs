@@ -4,29 +4,22 @@
   This file must be tangled into =init.el= in the emacs configuration
   directory, =~/init.d/=.
 
-** TODO Automatically Tangle to init.el
 
+** Tangle to init.el
+   
    I should probably remove =:tangle= header from source blocks, add
    =:tangle no= to this one.  Then I can include the target filename
    in one plcae below.
 
-   #+BEGIN_SRC emacs-lisp
-	  (defun my/myfunc (source &optional target lang)
-	    "Testing optional args being used."
-	    (interactive "p")
-	    (message "%s %s %s " source target lang)
-	    )
-	  (my/myfunc "src" );"opt" "lang")
-
-	  (org-babel-tangle-file
-	   buffer-file-name
-	   "tangled.el"
-     ;      (expand-file-name (concat user-emacs-directory "init-from-babel.el"))
-	   "emacs-lisp")
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (org-babel-tangle-file
+      buffer-file-name
+      (expand-file-name (concat user-emacs-directory "init.el"))
+      "emacs-lisp")
    #+END_SRC
 
    #+RESULTS:
-   | c:/Users/steve/Projects/dotemacs/init.el |
+   | c:/Users/steve/AppData/Roaming/.emacs.d/init.el |
 
 
 * Notes
@@ -85,6 +78,15 @@
      (setq use-package-always-ensure t)      ; ensure package is installed
    #+END_SRC
 
+   Explicit =use-package= use: 
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+     ;; (use-package expand-region
+     ;;   :commands expand-region
+     ;;   :init
+     ;;   (bind-key "C-=" "expand-region"))    
+   #+END_SRC
+
 * Emacs
 ** General
    
@@ -108,9 +110,9 @@
 
 ** Fonts
 
-   =list-fontsets= to see available fonts.
+   =list-fontsets= to see available installed fonts.
 
-   Some good programming fonts here: [[https://blog.checkio.org/top-10-most-popular-coding-fonts-5f6e65282266?imm_mid=0f5f86][link]]
+   Some good programming fonts [[https://blog.checkio.org/top-10-most-popular-coding-fonts-5f6e65282266?imm_mid=0f5f86][here]].
 
    1. Inconsolata
    2. Fira Mono
@@ -176,25 +178,33 @@
    =global-set-key=.
 
    #+BEGIN_SRC emacs-lisp :tangle (concat user-emacs-directory "init.el")
-     ;; (require 'expand-region)  ;; superceded
-     ;;(global-set-key (kbd "C-=") 'er/expand-region)  ;; superceded
-
      (use-package expand-region
-       :bind ("C-=" . er/expand-region)		;
-       :ensure t)
+       :ensure t
+       :bind ("C-=" . er/expand-region))
    #+END_SRC
 
+** wrap-region
 
-   #+BEGIN_SRC emacs-lisp :tangle no
-     ;; ALTERNATIVE/EXPLICIT OF ABOVE
-     ;; (use-package expand-region
-     ;;   :commands expand-region
-     ;;   :init
-     ;;   (bind-key "C-=" "expand-region"))    
-   #+END_SRC
+   http://pragmaticemacs.com/emacs/wrap-text-in-custom-characters/
+
+  #+BEGIN_SRC emacs-lisp :tangle (concat user-emacs-directory "init.el")
+    (use-package wrap-region
+      :ensure t
+      :config
+      (wrap-region-add-wrappers
+       '(("*" "*" nil org-mode)
+	 ("~" "~" nil org-mode)
+	 ("/" "/" nil org-mode)
+	 ("=" "=" ":" org-mode) ; Avoid conflict with expand-region, use ':'
+	 ("+" "+" "+" org-mode)
+	 ("_" "_" nil org-mode)))
+	 ;; ("$" "$" nil (org-mode latex-mode))
+      (add-hook 'org-mode-hook 'wrap-region-mode))
+
+  #+END_SRC 
 
 ** projectile
-
+   
    #+BEGIN_SRC emacs-lisp :tangle (concat user-emacs-directory "init.el")
      (use-package projectile
        :ensure t				; ensure package is downloaded
@@ -257,6 +267,9 @@
 ** TODO helm
 ** TODO gnus
 ** TODO erc
+** TODO org for blog
+   - [[https://github.com/org2blog/org2blog][org2blog]]
+   - 
 * Org Mode
 ** TODO use conditional environment variables (env: home/work os:win/linux)
    #+BEGIN_SRC emacs-lisp :tangle no
@@ -276,17 +289,20 @@
 	    ))
    #+END_SRC
 
+** Export
+   #+BEGIN_SRC emacs-lisp :tangle (concat user-emacs-directory "init.el")
+     ;; (org-export-creator-string)
+     ;; (org-export-with-creator)
+     ;; TODO: remove creator string and validation link in footer
+     ;; #+OPTIONS
+     (setq org-export-initial-scope "subtree")
+     (org-html-head)
+   #+END_SRC
+
 ** Files
    #+BEGIN_SRC emacs-lisp :tangle (concat user-emacs-directory "init.el")
      ;; (add-to-list 'load-path "~/../or
      (setq org-directory "c:/Users/steve/Dropbox/org") ;TODO: this is specific to Windows, add Platform
-
-     (setq org-agenda-files
-	(quote
-	 ("c:/Users/steve/Dropbox/org/notes.org"
-	  "c:/Users/steve/Dropbox/org/work.org"
-	  "c:/Users/steve/Dropbox/org/agenda.org"
-	  )))
 
      (setq org-agenda-files (list (concat org-directory "/notes.org")    ; Home/Learn/Everything
 				  (concat org-directory "/work.org")     ; Work                 
