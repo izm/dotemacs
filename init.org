@@ -23,7 +23,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-10-15.15-52-16)
+   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-10-15.20-51-11)
 
 
 * Notes
@@ -281,6 +281,20 @@
 ** TODO org for blog
    - [[https://github.com/org2blog/org2blog][org2blog]]
    - 
+* Dired
+
+  Let =dired= try to guess target (copy and rename ops) directory when
+  two =dired= buffers open.
+
+  Also useful:
+  - writeable dired: 
+  - 
+
+  #+BEGIN_SRC emacs-lisp
+    (setq dired-dwim-target t)		; guess target directory
+
+  #+END_SRC
+
 * Org Mode
 ** TODO use conditional environment variables (env: home/work os:win/linux)
    #+BEGIN_SRC emacs-lisp :tangle no
