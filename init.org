@@ -23,7 +23,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : (c:/Users/steven.brown/AppData/Roaming/.emacs.d/init.el . 2017-10-19.15-50-26)
+   : (c:/Users/steven.brown/AppData/Roaming/.emacs.d/init.el . 2017-10-19.17-38-52)
 
 
 * Notes
@@ -392,11 +392,16 @@
    - [ ] Use platform independent home directory.  (getenv "HOMEPATH")
    #+BEGIN_SRC emacs-lisp
      ;; (add-to-list 'load-path "~/../or
-     (setq org-directory "c:/Users/steve/Dropbox/org") ;TODO: this is specific to Windows, add Platform
+     (if (string-match-p (regexp-quote "steven.brown") (getenv "USERPROFILE"))
+         ;; Work setup ;TODO: this is specific to Windows, add Platform
+         (setq org-directory (concat (expand-file-name (getenv "USERPROFILE")) "/Projects/org"))
+       ;; else, Home setup
+       (setq org-directory (concat (expand-file-name (getenv "USERPROFILE")) "/Dropbox/org"))
+       )
 
      (setq org-agenda-files (list (concat org-directory "/notes.org")    ; Home/Learn/Everything
-				  (concat org-directory "/work.org")     ; Work                 
-				  (concat org-directory "/agenda.org")))  ; Life Stuff - rename to 'personal'?
+      			    (concat org-directory "/work.org")     ; Work                 
+      			    (concat org-directory "/agenda.org")))  ; Life Stuff - rename to 'personal'?
 
      (setq org-default-notes-file (concat org-directory "/captured.org")) ; Unsorted  Notes
    #+END_SRC
