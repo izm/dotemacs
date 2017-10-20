@@ -23,7 +23,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-10-20.00-50-57)
+   : (c:/Users/steven.brown/AppData/Roaming/.emacs.d/init.el . 2017-10-20.16-49-28)
 
 
 * Notes
@@ -49,7 +49,8 @@
   Reference:
 
   - [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua init.org]]
-  - 
+  - https://www.masteringemacs.org/article/running-shells-in-emacs-overview \
+    You *must* set extra variables if customizing shell on Windows....
 
 * Initialize
 ** package
@@ -214,7 +215,7 @@
    #+BEGIN_SRC emacs-lisp
      (use-package expand-region
        :ensure t
-       :defer t
+       :defer 1
        :bind ("C-=" . er/expand-region))
    #+END_SRC
 
@@ -225,7 +226,7 @@
   #+BEGIN_SRC emacs-lisp
     (use-package wrap-region
       :ensure t
-      :defer t
+      :defer 1
       :config
       (wrap-region-add-wrappers
        '(("*" "*" nil org-mode)
@@ -246,8 +247,8 @@
        :ensure t				; ensure package is downloaded
        :defer t
        :init					; pre-load config
-       (setq projectile-enable-caching t)	; 
-       (projectile-mode +1)			; resolve missing projects
+       (setq projectile-enable-caching t)	; resolve missing projects
+       ;; (projectile-mode +1)			; global projectil mode
        :config nil				; post-load config
        )
    #+END_SRC  
@@ -259,7 +260,7 @@
    #+BEGIN_SRC emacs-lisp
      (use-package org-bullets
        :ensure t
-       :defer t
+       :defer 1
        :init
      ;;  (setq org-bullets-bullet-list '("◉" "◎" "○" "►" "◇"))
        :config
@@ -308,8 +309,10 @@
      (use-package ein
        :ensure t
        :defer t
+       :backends ein:company-backend
+       :init
        :config
-       (advice-add 'request--netscape-cookie-parse :around #'fix-request-netscape-cookie-parse)
+       ;; (advice-add 'request--netscape-cookie-parse :around #'fix-request-netscape-cookie-parse)
        )
 
      (use-package jedi
@@ -323,7 +326,7 @@
 
      (use-package company
        :ensure t
-       :defer t
+       :defer 2
        :init
        :config
        (add-to-list 'company-backends 'company-jedi)
