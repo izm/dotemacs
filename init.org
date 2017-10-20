@@ -23,7 +23,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : (c:/Users/steven.brown/AppData/Roaming/.emacs.d/init.el . 2017-10-19.17-38-52)
+   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-10-20.00-50-57)
 
 
 * Notes
@@ -308,6 +308,7 @@
      (use-package ein
        :ensure t
        :defer t
+       :config
        (advice-add 'request--netscape-cookie-parse :around #'fix-request-netscape-cookie-parse)
        )
 
