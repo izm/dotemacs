@@ -23,7 +23,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : (c:/Users/steven.brown/AppData/Roaming/.emacs.d/init.el . 2017-10-20.16-49-28)
+   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-10-21.09-33-44)
 
 
 * Notes
@@ -105,19 +105,21 @@
    #+BEGIN_SRC emacs-lisp
      (setq ansi-color-faces-vector
 	   [default bold shadow italic underline bold bold-italic bold])
-
-     (setq column-number-mode t)	     ; show column numbers in modeline
-     (setq inhibit-startup-screen t)	     ; skip startup screen
-     (setq tool-bar-mode nil)	     ; Remove clunky toolbar and icons
-     (show-paren-mode t)		     ; highlight matching parentheses
+     (setq fill-column 80)		; where to wrap lines; set locally with C-x f
      (set-default 'truncate-lines t)	; truncate long lines, don't wrap them
+     (setq column-number-mode t)	; show column numbers in modeline
+     (setq inhibit-startup-screen t)	; skip startup screen
+     (setq tool-bar-mode nil)	; Remove clunky toolbar and icons
+     (show-paren-mode t)		; highlight matching parentheses
+     (global-hl-line-mode t)		; highlight current line
+     (setq visible-bell t)		; blink, don't bark
 
      ;;(setq uniquify-buffer-name-style (quote forward) nil (uniquify))
      (setq uniquify-buffer-name-style (quote post-forward-angle-brackets))
 
-     (desktop-save-mode 1) ;; automatically save the desktop/state of emacs' frames/buffers
-     (setq backup-directory-alist `(("." . "~/.emacs.d/.backups"))) ;
-     (setq backup-by-copying t)                                     ;
+     (desktop-save-mode 1)	       ; save the desktop/state of emacs' frames/buffers
+     (setq backup-directory-alist `(("." . "~/.emacs.d/.backups"))) ; keep in clean
+     (setq backup-by-copying t)                                     ; vs renaming
    #+END_SRC
 
 ** Fonts
@@ -176,9 +178,9 @@
    - [ ] write script to cycle through installed themes at keypress?
    
    #+BEGIN_SRC emacs-lisp
-     (load-theme 'material t nil)		; load & enable theme, no confirm
+     (unless custom-enabled-themes
+       (load-theme 'material t nil))		; load & enable theme, if nothing already set
 
-     
      (setq custom-safe-themes
 	   (quote
 	("5999e12c8070b9090a2a1bbcd02ec28906e150bb2cdce5ace4f965c76cf30476" "a4c9e536d86666d4494ef7f43c84807162d9bd29b0dfd39bdf2c3d845dcc7b2e" "c72a772c104710300103307264c00a04210c00f6cc419a79b8af7890478f380e" "555c5a7fa39f8d1538501cc3fdb4fba7562ec4507f1665079021870e0a4c57d8" "3e8ea6a37f17fd9e0828dee76b7ba709319c4d93b7b21742684fadd918e8aca3" "5dc0ae2d193460de979a463b907b4b2c6d2c9c4657b2e9e66b8898d2592e3de5" "04dd0236a367865e591927a3810f178e8d33c372ad5bfef48b5ce90d4b476481" "5e3fc08bcadce4c6785fc49be686a4a82a356db569f55d411258984e952f194a" "7153b82e50b6f7452b4519097f880d968a6eaf6f6ef38cc45a144958e553fbc6" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "98cc377af705c0f2133bb6d340bf0becd08944a588804ee655809da5d8140de6" "130319ab9b4f97439d1b8fd72345ab77b43301cf29dddc88edb01e2bc3aff1e7" "43c1a8090ed19ab3c0b1490ce412f78f157d69a29828aa977dae941b994b4147" "5dd70fe6b64f3278d5b9ad3ff8f709b5e15cd153b0377d840c5281c352e8ccce" "7356632cebc6a11a87bc5fcffaa49bae528026a78637acd03cae57c091afd9b9" "ab04c00a7e48ad784b52f34aa6bfa1e80d0c3fcacc50e1189af3651013eb0d58" "a0feb1322de9e26a4d209d1cfa236deaf64662bb604fa513cca6a057ddf0ef64" default)))
@@ -309,7 +311,7 @@
      (use-package ein
        :ensure t
        :defer t
-       :backends ein:company-backend
+       ;; :backends ein:company-backend
        :init
        :config
        ;; (advice-add 'request--netscape-cookie-parse :around #'fix-request-netscape-cookie-parse)
@@ -387,6 +389,7 @@
      ;; (org-export-creator-string)
      ;; (org-export-with-creator)
      ;; TODO: remove creator string and validation link in footer
+     ;; (setq org-export-html-postabmle nil) <-- deprecated
      ;; #+OPTIONS
      (setq org-export-initial-scope "subtree")
      ;; (org-html-head)
