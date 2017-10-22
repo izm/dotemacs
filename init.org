@@ -4,14 +4,6 @@
   This file must be tangled into =init.el= in the emacs configuration
   directory, =~/init.d/=.
 
-
-** TODO Tangle to init.el [3/4]
-
-   - [X] Add =:tangle no= to the block below
-   - [X] Remove =:tangle= header from source blocks.
-   - [X] Add date completed
-   - [ ] Add prompt before overwriting =init.el=.  OR... just do it and backup old one?
-
    #+BEGIN_SRC emacs-lisp :tangle no
      (cons
       (car 
@@ -23,8 +15,15 @@
    #+END_SRC
 
    #+RESULTS:
-   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-10-21.09-33-44)
+   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-10-21.16-57-01)
 
+
+** TODO Tangle to init.el [3/4]
+
+   - [X] Add =:tangle no= to the block below
+   - [X] Remove =:tangle= header from source blocks.
+   - [X] Add date completed
+   - [ ] Add prompt before overwriting =init.el=.  OR... just do it and backup old one?
 
 * Notes
 
@@ -194,6 +193,10 @@
    #+END_SRC
 
 * Packages
+  
+  If there is a compile error, or "tar not found," try
+  =package-refresh-contents= to refresh the package database.
+
 ** selected-packages
     =package-selected-packages= is used by ‘package-autoremove’ to decide
     which packages are no longer needed.
@@ -208,6 +211,8 @@
 			  helm helm-projectile expand-region org-projectile
 			  projectile web-mode)))
     #+END_SRC
+
+*** TODO Superceded by =use-package=?
 
 ** expand-region
 
@@ -367,6 +372,8 @@
 
 * Org Mode
 ** TODO use conditional environment variables (env: home/work os:win/linux)
+   https://stackoverflow.com/questions/17537124/how-to-declare-the-location-of-emacss-init-file-as-a-variable
+
    #+BEGIN_SRC emacs-lisp :tangle no
      ;; elisp note on conditionally setting variable
      (setq 'my-list-depending-on-system
@@ -385,6 +392,9 @@
    #+END_SRC
 
 ** Export
+
+   - http://orgmode.org/manual/Export-settings.html#Export-settings
+
    #+BEGIN_SRC emacs-lisp
      ;; (org-export-creator-string)
      ;; (org-export-with-creator)
@@ -431,6 +441,7 @@
      (define-key global-map "\C-ca" 'org-agenda)     ; 
      (define-key global-map "\C-cl" 'org-store-link) ; 
    #+END_SRC
+
 ** Agenda
    #+BEGIN_SRC emacs-lisp
    (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
