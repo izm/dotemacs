@@ -15,7 +15,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-10-21.16-57-01)
+   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-10-21.17-41-34)
 
 
 ** TODO Tangle to init.el [3/4]
@@ -112,6 +112,7 @@
      (show-paren-mode t)		; highlight matching parentheses
      (global-hl-line-mode t)		; highlight current line
      (setq visible-bell t)		; blink, don't bark
+     (setq x-stretch-cursor t) ; cursor width will match tab character width
 
      ;;(setq uniquify-buffer-name-style (quote forward) nil (uniquify))
      (setq uniquify-buffer-name-style (quote post-forward-angle-brackets))
@@ -347,12 +348,24 @@
        :defer t)
    #+END_SRC
 
+** smartscan
 
+   #+BEGIN_SRC emacs-lisp
+	  (use-package smartscan
+	    :ensure t
+	    :defer 1
+	    :bind (("M-n" . smartscan-symbol-go-forward)
+		   ("M-p" . smartscan-symbol-go-backward))
+	    )
+   #+END_SRC
+   
 ** TODO multi-cursors
 ** TODO company
 ** TODO helm
 ** TODO gnus
+   - 
 ** TODO erc
+   - https://www.emacswiki.org/emacs/EmacsChannel
 ** TODO org for blog
    - [[https://github.com/org2blog/org2blog][org2blog]]
    - 
