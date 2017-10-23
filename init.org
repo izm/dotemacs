@@ -15,7 +15,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-10-21.17-41-34)
+   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-10-22.17-58-32)
 
 
 ** TODO Tangle to init.el [3/4]
@@ -24,32 +24,6 @@
    - [X] Remove =:tangle= header from source blocks.
    - [X] Add date completed
    - [ ] Add prompt before overwriting =init.el=.  OR... just do it and backup old one?
-
-* Notes
-
-  | Key       | What                                                |
-  |-----------+-----------------------------------------------------|
-  | C-c '     | narrow on code block in sibling window (and return) |
-  | C-c C-v t | tangle                                              |
-  | C-c C-v f | tangle into specific filename, like "init.el"       |
-
-  *Converting from .emacs or init.el*
-  : (custom-set-variables
-  :  '(my-variable value)
-  :  '(column-number-mode t)
-  :  ; ...		     
-  : )		     
-  : 		     
-
-  -->
-
-  : (setq column-number-mode t) 
-
-  Reference:
-
-  - [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua init.org]]
-  - https://www.masteringemacs.org/article/running-shells-in-emacs-overview \
-    You *must* set extra variables if customizing shell on Windows....
 
 * Initialize
 ** package
@@ -80,6 +54,7 @@
    #+BEGIN_SRC emacs-lisp
      (require 'use-package)                  ; we want this instead of 'require
      (setq use-package-always-ensure t)      ; ensure package is installed
+     (setq use-package-verbose t) 		; report config loading time in *Messages*
    #+END_SRC
 
    Explicit =use-package= use: 
@@ -270,9 +245,10 @@
        :ensure t
        :defer 1
        :init
-     ;;  (setq org-bullets-bullet-list '("◉" "◎" "○" "►" "◇"))
+       (add-hook 'org-mode-hook (lambda () (org-bullets-mode t)))
+       ;;  (setq org-bullets-bullet-list '("◉" "◎" "○" "►" "◇"))
        :config
-     (add-hook 'org-mode-hook (lambda () (org-bullets-mode t))))
+       )
 
    #+END_SRC
 
@@ -319,8 +295,10 @@
        :defer t
        ;; :backends ein:company-backend
        :init
+       (require 'ein-connect)		; not sure why this is needed suddenly..?
        :config
        ;; (advice-add 'request--netscape-cookie-parse :around #'fix-request-netscape-cookie-parse)
+       (setq ein:completion-backend 'ein:use-ac-jedi-backend)
        )
 
      (use-package jedi
@@ -336,16 +314,17 @@
        :ensure t
        :defer 2
        :init
-       :config
-       (add-to-list 'company-backends 'company-jedi)
-       (add-hook 'python-mode-hook 'company-mode)
        (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
-       ;; (company-quickhelp-mode 1)
+       (add-hook 'python-mode-hook 'company-mode)
+       ;; (add-hook 'ein:connect-mode-hook 'company-mode) ; Can't figure out company-jedi + ein
+
+       :config
+       (use-package company-jedi)
+       (use-package company-quickhelp)
+       (company-quickhelp-mode 1)
+       (add-to-list 'company-backends 'company-jedi)
        )
 
-     (use-package company-jedi
-       :ensure t
-       :defer t)
    #+END_SRC
 
 ** smartscan
@@ -519,5 +498,31 @@
 	  ;; appear in the output of java applications.
 	  (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)))
     #+END_SRC
+
+* Notes
+
+  | Key       | What                                                |
+  |-----------+-----------------------------------------------------|
+  | C-c '     | narrow on code block in sibling window (and return) |
+  | C-c C-v t | tangle                                              |
+  | C-c C-v f | tangle into specific filename, like "init.el"       |
+
+  *Converting from .emacs or init.el*
+  : (custom-set-variables
+  :  '(my-variable value)
+  :  '(column-number-mode t)
+  :  ; ...		     
+  : )		     
+  : 		     
+
+  -->
+
+  : (setq column-number-mode t) 
+
+  Reference:
+
+  - [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua init.org]]
+  - https://www.masteringemacs.org/article/running-shells-in-emacs-overview \
+    You *must* set extra variables if customizing shell on Windows....
 
 
