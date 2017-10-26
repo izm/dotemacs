@@ -513,26 +513,35 @@
       ;; under Windows and c:\cygwin exists. Assumes that C:\cygwin\bin is
       ;; not already in your Windows Path (it generally should not be).
       ;;
-      (let* ((cygwin-root "c:/Program Files/cygwin64") ;TODO: Customize by environment home/work
-	     (cygwin-bin (concat cygwin-root "/bin")))
-	(when (and (eq 'windows-nt system-type)
-		   (file-readable-p cygwin-root))
 
-	  (setq exec-path (cons cygwin-bin exec-path))
-	  (setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
+      (if (string-match-p (regexp-quote "steven.brown") (getenv "USERPROFILE"))
+          (setq my/env "work")
+        (setq my/env "personal"))
+  
 
-	  ;; By default use the Windows HOME.
-	  ;; Otherwise, uncomment below to set a HOME
-	  ;;      (setenv "HOME" (concat cygwin-root "/home/eric")) ;TODO: Customize by environment
+      ;;(let* ((cygwin-root "c:/Program Files/cygwin64") ;TODO: Customize by environment home/work
+      (let* ((cygwin-root (if (string-equal my/env "work")
+    			  "c:/Users/steven.brown/Apps/cygwin64" ; work
+    			"c:/Program Files/cygwin64"))	      ; home
+    	 (cygwin-bin (concat cygwin-root "/bin")))
+        (when (and (eq 'windows-nt system-type)
+    	       (file-readable-p cygwin-root))
 
-	  ;; NT-emacs assumes a Windows shell. Change to bash.
-	  (setq shell-file-name "bash")
-	  (setenv "SHELL" shell-file-name) 
-	  (setq explicit-shell-file-name shell-file-name) 
+          (setq exec-path (cons cygwin-bin exec-path))
+          (setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
 
-	  ;; This removes unsightly ^M characters that would otherwise
-	  ;; appear in the output of java applications.
-	  (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)))
+          ;; By default use the Windows HOME.
+          ;; Otherwise, uncomment below to set a HOME
+          ;;      (setenv "HOME" (concat cygwin-root "/home/eric")) ;TODO: Customize by environment
+
+          ;; NT-emacs assumes a Windows shell. Change to bash.
+          (setq shell-file-name "bash")
+          (setenv "SHELL" shell-file-name) 
+          (setq explicit-shell-file-name shell-file-name) 
+
+          ;; This removes unsightly ^M characters that would otherwise
+          ;; appear in the output of java applications.
+          (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)))
     #+END_SRC
 
 * Notes
