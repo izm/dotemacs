@@ -566,6 +566,8 @@
 
   Reference:
 
+  - https://github.com/howardabrams/dot-files/blob/master/emacs-client.org \
+    sanityinc-tomorrow-theme
   - [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua init.org]]
   - https://www.masteringemacs.org/article/running-shells-in-emacs-overview \
     You *must* set extra variables if customizing shell on Windows....
