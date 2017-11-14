@@ -15,7 +15,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-10-22.17-58-32)
+   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-11-13.15-58-44)
 
 
 ** TODO Tangle to init.el [3/4]
@@ -66,8 +66,14 @@
      ;;   (bind-key "C-=" "expand-region"))    
    #+END_SRC
 
-* Emacs
+* Private
+  Load things that should be slightly more private.
+  #+BEGIN_SRC emacs-lisp
+    (setq init_private_loaded (load "~/.emacs.d/init_private.el")) ;; ensure init_private.el is loaded
+    ;; defines: my/user-dir, my/on-work-pc, my/user-name, my/computer-name, my/org-directory
+  #+END_SRC
 
+* Emacs
 ** User
    #+BEGIN_SRC emacs-lisp
    (setq user-full-name "Steven Brown")
@@ -141,6 +147,11 @@
 *** Try a font
     #+BEGIN_SRC emacs-lisp :tangle no :results output silent
       (set-frame-font "Lucida Console-12")
+    #+END_SRC
+
+*** Look at installed fonts
+    #+BEGIN_SRC emacs-lisp :tangle no :results output silent
+    (x-select-font nil t)
     #+END_SRC
 
 ** TODO Directories
@@ -381,9 +392,18 @@
    - 
 ** TODO erc
    - https://www.emacswiki.org/emacs/EmacsChannel
-** TODO org for blog
+** TODO org2blog
    - [[https://github.com/org2blog/org2blog][org2blog]]
-   - 
+   #+BEGIN_SRC emacs-lisp
+     (use-package org2blog
+       :ensure t
+       :defer 1
+       :init
+       :config
+       ;; see init_private.el
+       )
+   #+END_SRC
+
 * Dired
 
   Let =dired= try to guess target (copy and rename ops) directory when
@@ -437,18 +457,13 @@
    - [ ] Use platform independent home directory.  (getenv "HOMEPATH")
    #+BEGIN_SRC emacs-lisp
      ;; (add-to-list 'load-path "~/../or
-     (if (string-match-p (regexp-quote "steven.brown") (getenv "USERPROFILE"))
-         ;; Work setup ;TODO: this is specific to Windows, add Platform
-         (setq org-directory (concat (expand-file-name (getenv "USERPROFILE")) "/Projects/org"))
-       ;; else, Home setup
-       (setq org-directory (concat (expand-file-name (getenv "USERPROFILE")) "/Dropbox/org"))
-       )
+     ;; my/org-directory defined in init_private.el
+     (setq org-agenda-files (list
+			     (concat my/org-directory "/notes.org")    ; Home/Learn/Everything
+			     (concat my/org-directory "/work.org")     ; Work                 
+			     (concat my/org-directory "/agenda.org")))  ; Life Stuff - rename to 'personal'?
 
-     (setq org-agenda-files (list (concat org-directory "/notes.org")    ; Home/Learn/Everything
-      			    (concat org-directory "/work.org")     ; Work                 
-      			    (concat org-directory "/agenda.org")))  ; Life Stuff - rename to 'personal'?
-
-     (setq org-default-notes-file (concat org-directory "/captured.org")) ; Unsorted  Notes
+     (setq org-default-notes-file (concat my/org-directory "/captured.org")) ; Unsorted  Notes
    #+END_SRC
 
 ** Other
@@ -566,6 +581,8 @@
 
   Reference:
 
+  - https://github.com/howardabrams/dot-files/blob/master/emacs-client.org \
+    sanityinc-tomorrow-theme
   - [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua init.org]]
   - https://www.masteringemacs.org/article/running-shells-in-emacs-overview \
     You *must* set extra variables if customizing shell on Windows....
