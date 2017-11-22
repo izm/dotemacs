@@ -334,6 +334,16 @@
        :defer t)
    #+END_SRC
 
+** smartparens
+   #+BEGIN_SRC emacs-lisp
+     (use-package smartparens
+       :ensure t
+       :defer t
+       :init
+       :config
+     )
+   #+END_SRC
+
 ** TODO NEW EIN, COMPANY, JEDI [2017-10-19 Thu]
    #+BEGIN_SRC emacs-lisp
      ;; Jupyter python  ;added 2017-10-17
@@ -342,7 +352,12 @@
        :defer t
        ;; :backends ein:company-backend
        :init
-       (require 'ein-connect)		; not sure why this is needed suddenly..?
+       (require 'ein-connect)     ; not sure why this is needed suddenly..?
+  
+       ;; Fix "Null value passed to ein:get-ipython-major-version" #work pc
+       ;; https://github.com/millejoh/emacs-ipython-notebook/issues/176
+       (ein:force-ipython-version-check)
+  
        :config
        ;; (advice-add 'request--netscape-cookie-parse :around #'fix-request-netscape-cookie-parse)
        (setq ein:completion-backend 'ein:use-ac-jedi-backend)
