@@ -15,12 +15,11 @@
    #+END_SRC
 
    #+RESULTS:
-   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2017-11-13.15-58-44)
+   : (c:/Users/steven.brown/AppData/Roaming/.emacs.d/init.el . 2017-12-21.12-53-13)
 
 
 ** TODO Tangle to init.el [3/4]
-
-   - [X] Add =:tangle no= to the block below
+   - [X] Add =:tangle no= to the eval block
    - [X] Remove =:tangle= header from source blocks.
    - [X] Add date completed
    - [ ] Add prompt before overwriting =init.el=.  OR... just do it and backup old one?
@@ -101,6 +100,7 @@
      (desktop-save-mode 1)	       ; save the desktop/state of emacs' frames/buffers
      (setq backup-directory-alist `(("." . "~/.emacs.d/.backups"))) ; keep in clean
      (setq backup-by-copying t)                                     ; vs renaming
+     (put 'narrow-to-region 'disabled nil)			       ; enable narrowing C-x n n
    #+END_SRC
 
 ** Fonts
@@ -154,8 +154,6 @@
     (x-select-font nil t)
     #+END_SRC
 
-** TODO Directories
-** TODO Private
 ** Themes
 
    - /Custom Themes/ (not /color-themes/) can be loaded and stacked using =load-theme=.
