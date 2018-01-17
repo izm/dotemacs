@@ -15,7 +15,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : (c:/Users/steven.brown/AppData/Roaming/.emacs.d/init.el . 2017-12-21.12-53-13)
+   : (c:/Users/steven.brown/AppData/Roaming/.emacs.d/init.el . 2018-01-17.11-36-35)
 
 
 ** TODO Tangle to init.el [3/4]
@@ -342,7 +342,18 @@
      )
    #+END_SRC
 
-** TODO NEW EIN, COMPANY, JEDI [2017-10-19 Thu]
+** which-key
+   Gentle reminders and added discoverability.
+   #+BEGIN_SRC emacs-lisp
+     (use-package which-key
+       :ensure t
+       :config
+       (which-key-mode))
+
+   #+END_SRC
+
+** ein
+   Jupyter Notebooks in emacs!  Added [2017-10-19 Thu]
    #+BEGIN_SRC emacs-lisp
      ;; Jupyter python  ;added 2017-10-17
      (use-package ein
@@ -361,15 +372,23 @@
        (setq ein:completion-backend 'ein:use-ac-jedi-backend)
        )
 
-     (use-package jedi
-       :ensure t
-       :defer t
-       :init
-       :config
-       ;; (setq jedi:complete-on-dot t)
-       ;; (add-hook 'python-mode-hook 'jedi:setup)
-       )
+   #+END_SRC
 
+** jedi
+   #+BEGIN_SRC emacs-lisp
+     (use-package jedi
+	 :ensure t
+	 :defer t
+	 :init
+	 :config
+	 ;; (setq jedi:complete-on-dot t)
+	 ;; (add-hook 'python-mode-hook 'jedi:setup)
+	 )
+
+   #+END_SRC
+** company
+   
+   #+BEGIN_SRC emacs-lisp
      (use-package company
        :ensure t
        :defer 2
@@ -383,8 +402,9 @@
        (use-package company-quickhelp)
        (company-quickhelp-mode 1)
        (add-to-list 'company-backends 'company-jedi)
+       (setq company-idle-delay 0.5)
+       (setq company-minimum-prefix-length 2)
        )
-
    #+END_SRC
 
 ** smartscan
@@ -397,15 +417,7 @@
 		   ("M-p" . smartscan-symbol-go-backward))
 	    )
    #+END_SRC
-   
-** TODO multi-cursors
-** TODO company
-** TODO helm
-** TODO gnus
-   - 
-** TODO erc
-   - https://www.emacswiki.org/emacs/EmacsChannel
-** TODO org2blog
+** org2blog
    - [[https://github.com/org2blog/org2blog][org2blog]]
    #+BEGIN_SRC emacs-lisp
      (use-package org2blog
@@ -416,6 +428,20 @@
        ;; see init_private.el
        )
    #+END_SRC
+** spaceline modeline
+   #+BEGIN_SRC emacs-lisp
+     (use-package spaceline-all-the-icons
+       :ensure t
+       :config
+       (require 'spaceline-config)
+       (spaceline-spacemacs-theme)
+       )
+   #+END_SRC
+** TODO multi-cursors
+** TODO helm
+** TODO gnus
+** TODO erc
+   - https://www.emacswiki.org/emacs/EmacsChannel
 
 * Dired
 
@@ -599,5 +625,6 @@
   - [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua init.org]]
   - https://www.masteringemacs.org/article/running-shells-in-emacs-overview \
     You *must* set extra variables if customizing shell on Windows....
+  - https://github.com/daedreth/UncleDavesEmacs
 
 
