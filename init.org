@@ -5,17 +5,20 @@
   directory, =~/init.d/=.
 
    #+BEGIN_SRC emacs-lisp :tangle no
+     ;; Tangle this file into init.el, log time, then load it.
      (cons
       (car 
        (org-babel-tangle-file
 	buffer-file-name
 	(expand-file-name (concat user-emacs-directory "init.el"))
 	"emacs-lisp"))
-      (format-time-string "%Y-%m-%d.%H-%M-%S" (current-time)))
+      (cons (format-time-string "%Y-%m-%d.%H-%M-%S" (current-time))
+	    (load (concat user-emacs-directory "init.el")))	; load tangled file
+      )
    #+END_SRC
 
    #+RESULTS:
-   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el . 2018-01-17.23-16-06)
+   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el 2018-02-03.15-12-25 . t)
 
 
 ** TODO Tangle to init.el [3/4]
