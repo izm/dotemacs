@@ -17,9 +17,6 @@
       )
    #+END_SRC
 
-   #+RESULTS:
-   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el 2018-02-03.15-12-25 . t)
-
 
 ** TODO Tangle to init.el [3/4]
    - [X] Add =:tangle no= to the eval block
@@ -132,24 +129,34 @@
      (setq default-font-name nil)
      (cond
       ((find-font (font-spec :name "DejaVu Sans Mono"))
-       (setq default-font-name "DejaVu Sans Mono"))
+       (setq default-font-name "DejaVu Sans Mono")
+       (setq default-font-size "12"))
+
+      ((find-font (font-spec :name "Consolas"))
+       (setq default-font-name "Consolas")
+       (setq default-font-size "13"))
+ 
       ;; (set-frame-font "DejaVu Sans Mono-12"))
       ;; ((find-font (font-spec :name "Lucida Console"))
       ;;  (set-frame-font "Lucida Console-12"))
       ;; (setq default-font-name "Lucida Console"))
       ((find-font (font-spec :name "Courier New"))
        ;; (set-frame-font "Courier New-12"))
-       (setq default-font-name "Courier New"))
+       (setq default-font-name "Courier New")
+       (setq default-font-size "12"))
       )
      (when default-font-name
-       (add-to-list 'default-frame-alist (cons 'font (concat default-font-name "-12")))
-       )
+       (add-to-list 'default-frame-alist
+		    (cons 'font (concat default-font-name
+					"-"
+					(or default-font-size "12")))))
      ;; (set-face-attribute 'default t :family "Monospace" :height +1)
    #+END_SRC
 
 *** Try a font
     #+BEGIN_SRC emacs-lisp :tangle no :results output silent
-      (set-frame-font "Lucida Console-12")
+      ;; (set-frame-font "Lucida Console-14")
+      (set-frame-font "Consolas-13")
     #+END_SRC
 
 *** Look at installed fonts
@@ -178,6 +185,12 @@
    #+BEGIN_SRC emacs-lisp
      (setq PYTHONIOENCODING "utf-8")        ;print utf-8 in shell
      (prefer-coding-system 'utf-8)
+
+     ;; Unicode characters cause some windows systems to hang obnoxiously
+     ;; (Easily noticed in large org-mode files using org-bullets package.)
+     ;; https://github.com/purcell/emacs.d/issues/273
+     (when (eq system-type 'windows-nt)
+       (setq inhibit-compacting-font-caches t))
    #+END_SRC
 
 ** ibuffer
