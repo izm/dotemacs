@@ -569,21 +569,26 @@
    #+END_SRC
 
 ** External Programs
-*** Spelling & Dictionaries (aspell/ispell)
+*** Spelling & Dictionaries (aspell/ispell/hunspell)
     #+BEGIN_SRC emacs-lisp
-      ;; WINDOWS ASPELL, find, grep, ls, etc to system path
-      ;;(setq exec-path (append exec-path '("C:/Program Files (x86)/Aspell/bin"
-					  ;; http://aspell.net/				    ;; 
-	 ;;				 "C:/Program Files (x86)/GnuWin32/bin")))
-					  ;; http://gnuwin32.sourceforge.net/
+      ;; WINDOWS install hunspell from cygwin, add below, and update
+      ;; dictionaries
 
-      ;(setq-default ispell-program-name "aspell")
+      ;; THANK YOU, ALEX
+      ;; http://gromnitsky.blogspot.ca/2016/09/emacs-251-hunspell.html
 
-      ;; Git on Windows ?
+      ;; Updated dict from openoffice:
+      ;; https://extensions.openoffice.org/en/project/dict-en-fixed (via
+      ;; https://sourceforge.net/p/hunspell/patches/35/)
+      (setenv "LANG" "en_CA.UTF-8")
+      (setq-default ispell-program-name "hunspell")
+      (setq ispell-dictionary "en_CA")
+      (setq ispell-hunspell-dict-paths-alist
+	    '(("en_CA" "C:/Program Files/cygwin64/usr/share/myspell/en_CA.aff")
+	      ("en_US" "C:/Program Files/cygwin64/usr/share/myspell/en_US.aff")
+	      ("en_GB" "C:/Program Files/cygwin64/usr/share/myspell/en_GB.aff")
+	      ))
 
-      ;; LIST INSTALLED PACKAGES
-      ;; C-h, v : package-activated-list
-      ;; (alect-themes atom-one-dark-theme borland-blue-theme expand-region eziam-theme helm-projectile helm helm-core async leuven-theme material-theme org-bullets org-projectile dash popup projectile pkg-info epl tangotango-theme web-mode)
     #+END_SRC
 
 *** Cygwin
