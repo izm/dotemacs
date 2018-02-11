@@ -4,21 +4,24 @@
   This file must be tangled into =init.el= in the emacs configuration
   directory, =~/init.d/=.
 
-   #+BEGIN_SRC emacs-lisp :tangle no
-     ;; Tangle this file into init.el, log time, then load it.
-     (cons
-      (car 
-       (org-babel-tangle-file
-	buffer-file-name
-	(expand-file-name (concat user-emacs-directory "init.el"))
-	"emacs-lisp"))
-      (cons (format-time-string "%Y-%m-%d.%H-%M-%S" (current-time))
-	    (load (concat user-emacs-directory "init.el")))	; load tangled file
-      )
-   #+END_SRC
+   #+BEGIN_SRC emacs-lisp :tangle no :results output silent
+     ;; Tangle this file into init.el, then load it.
+     ;; Output logged in *Messages* buffer
+     (message "Tangled and Loaded!\n  |- %s\n  |- %s\n  |- %s"
 
-   #+RESULTS:
-   : (c:/Users/steve/AppData/Roaming/.emacs.d/init.el 2018-02-10.13-36-48 . t)
+	      ;; tangled file name
+	      (car 
+	       (org-babel-tangle-file
+		buffer-file-name
+		(expand-file-name (concat user-emacs-directory "init.el"))
+		"emacs-lisp"))
+
+	      ;; date and time of tangle
+	      (format-time-string "%Y-%m-%d.%H-%M-%S" (current-time))
+
+	      ;; load tangled file
+	      (load (concat user-emacs-directory "init.el")))
+   #+END_SRC
 
 
 ** TODO Tangle to init.el [3/4]
@@ -573,16 +576,19 @@
 
 ** External Programs
 *** Spelling & Dictionaries (aspell/ispell/hunspell)
+
+    - WINDOWS: install hunspell from cygwin, add code below, and update
+      dictionaries to handle apostrophes. ie. =echo I'm | hunspell -d en_CA=
+
+    - THANK YOU, ALEX
+      - http://gromnitsky.blogspot.ca/2016/09/emacs-251-hunspell.html
+    
+    - Updated dict from openoffice to handle apostrophes:
+      - https://extensions.openoffice.org/en/project/dict-en-fixed
+      - (via https://sourceforge.net/p/hunspell/patches/35/)
+
+
     #+BEGIN_SRC emacs-lisp
-      ;; WINDOWS install hunspell from cygwin, add below, and update
-      ;; dictionaries
-
-      ;; THANK YOU, ALEX
-      ;; http://gromnitsky.blogspot.ca/2016/09/emacs-251-hunspell.html
-
-      ;; Updated dict from openoffice:
-      ;; https://extensions.openoffice.org/en/project/dict-en-fixed (via
-      ;; https://sourceforge.net/p/hunspell/patches/35/)
       (setenv "LANG" "en_CA.UTF-8")
       (setq-default ispell-program-name "hunspell")
       (setq ispell-dictionary "en_CA")
