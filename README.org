@@ -1,0 +1,15 @@
+* dotemacs README
+
+This is my personal emacs configuration, which anyone is free to use
+and modify.  However, it is quite personalized, so would probably
+require modification to use.  I also use it as a tool for learning and
+playing around, so no promises are given on its state at any point.
+
+It began as an =emacs-lisp= file called =.emacs= (hence the repository
+name).  It is now a rich =org-mode= file that is processed by =emacs
+org-mode= into the default =emacs= configuration file,
+=~/.emacs.d/init.el= file.  When it does this, it overwrites the
+existing =init.el= so be sure to back that up if you have one.
+
+The file is [[file:init.org::*init.org][init.org]], which (like this README file) is conveniently
+parsed by GitHub.

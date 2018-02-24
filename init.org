@@ -471,6 +471,7 @@
        (spaceline-spacemacs-theme))
    #+END_SRC
 
+** TODO origami-mode
 ** TODO multi-cursors
 ** TODO helm
 ** TODO gnus
