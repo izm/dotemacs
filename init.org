@@ -539,6 +539,7 @@
 
      (setq org-default-notes-file (concat my/org-directory "/captured.org")) ; Unsorted  Notes
    #+END_SRC
+
 ** Capture
 
    - [[https://www.gnu.org/software/emacs/manual/html_node/org/Template-elements.html][Capture Template Elements]]
@@ -564,6 +565,8 @@
 
 ** Other
    #+BEGIN_SRC emacs-lisp
+     (setq org-ellipsis "◿")			;⤵, ▐, ►, ▽, ◿, ◹, », ↵, ≋, …, ⋞, ⊡, ⊹, ⊘
+
      ;; fontify (pretty formating) code in code blocks
      (setq org-src-fontify-natively t)	; important for init.org !
 
