@@ -539,6 +539,28 @@
 
      (setq org-default-notes-file (concat my/org-directory "/captured.org")) ; Unsorted  Notes
    #+END_SRC
+** Capture
+
+   - [[https://www.gnu.org/software/emacs/manual/html_node/org/Template-elements.html][Capture Template Elements]]
+
+   #+BEGIN_SRC emacs-lisp
+     (setq org-capture-templates
+	   '(("t"				; key
+	      "Task"				; description
+	      entry				; type
+	      ;; heading type and title
+	      (file+headline org-default-notes-file "Tasks") ; target
+	      "* TODO %?\n  %i\n  %a"	; template
+	      ;; optional property list  ; properties
+	      )
+	     ("j"
+	      "Learning Journal"
+	      entry
+	      (file+datetree org-default-notes-file "Learning Journal")
+	      "* %?\nEntered on %U\n  %i\n  %a" ; %a stores link, %i is active region
+	      )
+	     ))
+   #+END_SRC
 
 ** Other
    #+BEGIN_SRC emacs-lisp
