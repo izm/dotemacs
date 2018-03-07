@@ -588,15 +588,6 @@
    #+END_SRC
 
 * Windows
-** Temporary
-   #+BEGIN_SRC emacs-lisp :tangle no
-     ;; WINDOWS SPECIFIC, for programs not in PATH
-     ;(setq python-shell-interpreter "C:/Python27/Scripts/ipython.exe"
-     ;      python-shell-interpreter-args "-i")
-     ;(setq python-shell-interpreter "C:/Python27/python.exe")
-     ;; (add-to-list 'python-shell-extra-pythonpaths "/path/to/the/dependency")
-   #+END_SRC
-
 ** External Programs
 *** Spelling & Dictionaries (aspell/ispell/hunspell)
 
@@ -615,12 +606,6 @@
       (setenv "LANG" "en_CA.UTF-8")
       (setq-default ispell-program-name "hunspell")
       (setq ispell-dictionary "en_CA")
-      ;; (setq ispell-hunspell-dict-paths-alist
-      ;;       '(("en_CA" "C:/Program Files/cygwin64/usr/share/myspell/en_CA.aff")
-      ;; 	("en_US" "C:/Program Files/cygwin64/usr/share/myspell/en_US.aff")
-      ;; 	("en_GB" "C:/Program Files/cygwin64/usr/share/myspell/en_GB.aff")
-      ;; 	))
-
     #+END_SRC
 
 *** Cygwin
