@@ -558,14 +558,14 @@
 	      "Learning Journal"
 	      entry
 	      (file+datetree org-default-notes-file "Learning Journal")
-	      "* %?\nEntered on %U\n  %i\n  %a" ; %a stores link, %i is active region
+	      "* %?\n  Entered on %U\n  - Active Region: %i\n  - Created while at: %a\n" ; %a stores link, %i is active region
 	      )
 	     ))
    #+END_SRC
 
 ** Other
    #+BEGIN_SRC emacs-lisp
-     (setq org-ellipsis "◿")			;⤵, ▐, ►, ▽, ◿, ◹, », ↵, ≋, …, ⋞, ⊡, ⊹, ⊘
+     (setq org-ellipsis " ⤵")			;⤵, ▐, ►, ▽, ◿, ◹, », ↵, ≋, …, ⋞, ⊡, ⊹, ⊘
 
      ;; fontify (pretty formating) code in code blocks
      (setq org-src-fontify-natively t)	; important for init.org !
