@@ -471,6 +471,18 @@
        (spaceline-spacemacs-theme))
    #+END_SRC
 
+** anzu
+   - https://github.com/syohex/emacs-anzu
+   - Show current match and total matches for various search modes.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package anzu
+       :ensure t
+       :config
+       (global-anzu-mode +1))
+
+   #+END_SRC   
+
 ** TODO origami-mode
 ** TODO multi-cursors
 ** TODO helm
@@ -581,7 +593,13 @@
      ;org-mode keybindings
      (define-key global-map "\C-cc" 'org-capture)    ; todo: move to use-package :bind ?
      (define-key global-map "\C-ca" 'org-agenda)     ; 
-     (define-key global-map "\C-cl" 'org-store-link) ; 
+     (define-key global-map "\C-cl" 'org-store-link) ;
+
+     ;; Add python to list of languages for org-babel to load
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((emacs-lisp . t)
+	(python . t)))
    #+END_SRC
 
 ** Agenda
