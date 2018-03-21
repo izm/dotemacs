@@ -99,6 +99,7 @@
      (global-hl-line-mode t)		; highlight current line
      (setq visible-bell t)		; blink, don't bark
      (setq x-stretch-cursor t) ; cursor width will match tab character width
+     (set-default 'indent-tabs-mode nil)
 
      ;;(setq uniquify-buffer-name-style (quote forward) nil (uniquify))
      (setq uniquify-buffer-name-style (quote post-forward-angle-brackets))
