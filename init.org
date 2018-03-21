@@ -483,7 +483,14 @@
 
    #+END_SRC   
 
-** TODO origami-mode
+** origami
+   - https://github.com/gregsexton/origami.el
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package origami
+       :ensure t)
+   #+END_SRC
+   
 ** TODO multi-cursors
 ** TODO helm
 ** TODO gnus
