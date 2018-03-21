@@ -538,13 +538,13 @@
    - http://orgmode.org/manual/Export-settings.html#Export-settings
 
    #+BEGIN_SRC emacs-lisp
-     ;; (org-export-creator-string)
-     ;; (org-export-with-creator)
-     ;; TODO: remove creator string and validation link in footer
-     ;; (setq org-export-html-postabmle nil) <-- deprecated
-     ;; #+OPTIONS
      (setq org-export-initial-scope "subtree")
-     ;; (org-html-head)
+
+     ;; postamble
+     (setq org-html-postamble 't)
+     (setq org-html-postamble-format
+	   '(("en" "<p class=\"author\">%a</p> <p class=\"date\">%T</p>")))
+
    #+END_SRC
 
 ** Files
