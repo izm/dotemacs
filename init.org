@@ -503,6 +503,30 @@
               ("M-X" . smex-major-mode-commands)
               ("C-c C-c M-x" . execute-extended-command)))
    #+END_SRC
+** flycheck
+
+   https://github.com/flycheck/flycheck
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package flycheck
+       :ensure t
+       :defer t
+       :config
+       ;; (global-flycheck-mode) <-- too noisy
+       )
+   #+END_SRC
+** diff-hl
+
+   https://github.com/dgutov/diff-hl
+
+   #+BEGIN_SRC emacs-lisp
+          (use-package diff-hl
+            :ensure t
+            :config
+            (diff-hl-flydiff-mode)
+            (global-diff-hl-mode))
+   #+END_SRC
+
 ** TODO multi-cursors
 ** TODO helm
 ** TODO gnus
