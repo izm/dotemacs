@@ -771,6 +771,8 @@
 
   Reference:
 
+  - emacs-lite: https://github.com/asimpson/dotfiles/blob/master/emacs/emacs-lite.org
+  - Alain Lafon emacs: https://github.com/munen/emacs.d (play emacs like an instrument talk) 
   - https://github.com/howardabrams/dot-files/blob/master/emacs-client.org \
     sanityinc-tomorrow-theme
   - [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua init.org]]
