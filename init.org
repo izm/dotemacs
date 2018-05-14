@@ -108,6 +108,9 @@
      (setq backup-directory-alist `(("." . "~/.emacs.d/.backups"))) ; keep in clean
      (setq backup-by-copying t)                                     ; vs renaming
      (put 'narrow-to-region 'disabled nil)			       ; enable narrowing C-x n n
+
+     (toggle-scroll-bar 0)
+     (tool-bar-mode 0)
    #+END_SRC
 
 ** Fonts
@@ -532,7 +535,8 @@
        :ensure t
        :config
        (diff-hl-flydiff-mode)
-       (global-diff-hl-mode))
+       ;(global-diff-hl-mode)  ;; slow on lesser computers
+       )
    #+END_SRC
 
 ** Ivy, Counsel, Swiper
