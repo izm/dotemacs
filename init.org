@@ -90,7 +90,7 @@
    #+BEGIN_SRC emacs-lisp
      (setq ansi-color-faces-vector
 	   [default bold shadow italic underline bold bold-italic bold])
-     (setq fill-column 80)		; where to wrap lines; set locally with C-x f
+     (setq-default fill-column 80)		; where to wrap lines; set locally with C-x f
      (set-default 'truncate-lines t)	; truncate long lines, don't wrap them
      (setq column-number-mode t)	; show column numbers in modeline
      (setq inhibit-startup-screen t)	; skip startup screen
