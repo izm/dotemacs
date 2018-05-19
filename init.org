@@ -382,6 +382,65 @@
 
    #+END_SRC
 
+** jedi - TODO: Remove?
+
+   This is an ac (autocomplete)  backend, so will probably be superceded by company.
+
+   #+BEGIN_SRC emacs-lisp
+     ;; (use-package jedi
+     ;;     :ensure t
+     ;;     :defer t
+     ;;     :init
+     ;;     :config
+     ;;     ;; (setq jedi:complete-on-dot t)
+     ;;     ;; (add-hook 'python-mode-hook 'jedi:setup)
+     ;;     )
+
+   #+END_SRC
+
+** company
+   
+   #+BEGIN_SRC emacs-lisp
+     (use-package company
+       :ensure t
+       ;; (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
+       ;; (add-hook 'ein:connect-mode-hook 'company-mode) ; Can't figure out company-jedi + ein
+
+       :config
+       (setq company-idle-delay 0.5)
+       (setq company-minimum-prefix-length 2)
+       )
+
+     (use-package company-quickhelp
+       :ensure t
+       :defer 2
+       :config
+       (company-quickhelp-mode 1)
+       )
+  
+
+   #+END_SRC
+
+** anaconda-mode
+   - https://github.com/proofit404/anaconda-mode
+   - https://github.com/proofit404/company-anaconda
+   - https://emacs.stackexchange.com/questions/27834/spacemacs-company-anaconda-doesnt-work
+   - https://www.reddit.com/r/emacs/comments/5slhkb/what_is_your_preferred_setup_for_python/
+   - https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Blang/python#auto-completion-anaconda-dependencies
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package anaconda-mode
+       :ensure t
+       :config
+       (add-hook 'python-mode-hook 'anaconda-mode))
+
+     (use-package company-anaconda
+       :ensure t
+       :config
+       (eval-after-load "company"
+         '(add-to-list 'company-backends 'company-anaconda)))
+   #+END_SRC
+
 ** ein
    - Jupyter Notebooks in emacs!  Added [2017-10-19 Thu]
    #+BEGIN_SRC emacs-lisp
@@ -392,50 +451,16 @@
        ;; :backends ein:company-backend
        :init
        (require 'ein-connect)     ; not sure why this is needed suddenly..?
-  
+
        ;; Fix "Null value passed to ein:get-ipython-major-version" #work pc
        ;; https://github.com/millejoh/emacs-ipython-notebook/issues/176
        (ein:force-ipython-version-check)
-  
+
        :config
        ;; (advice-add 'request--netscape-cookie-parse :around #'fix-request-netscape-cookie-parse)
-       (setq ein:completion-backend 'ein:use-ac-jedi-backend)
+       (setq ein:completion-backend 'ein:use-ac-jedi-backend) ;TODO
        )
 
-   #+END_SRC
-
-** jedi
-   #+BEGIN_SRC emacs-lisp
-     (use-package jedi
-	 :ensure t
-	 :defer t
-	 :init
-	 :config
-	 ;; (setq jedi:complete-on-dot t)
-	 ;; (add-hook 'python-mode-hook 'jedi:setup)
-	 )
-
-   #+END_SRC
-
-** company
-   
-   #+BEGIN_SRC emacs-lisp
-     (use-package company
-       :ensure t
-       :defer 2
-       :init
-       (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
-       (add-hook 'python-mode-hook 'company-mode)
-       ;; (add-hook 'ein:connect-mode-hook 'company-mode) ; Can't figure out company-jedi + ein
-
-       :config
-       (use-package company-jedi)
-       (use-package company-quickhelp)
-       (company-quickhelp-mode 1)
-       (add-to-list 'company-backends 'company-jedi)
-       (setq company-idle-delay 0.5)
-       (setq company-minimum-prefix-length 2)
-       )
    #+END_SRC
 
 ** smartscan
