@@ -1,4 +1,5 @@
 #+STARTUP: hidestars
+#+TODO: TODO TRY | NOTE OLD
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -9,18 +10,18 @@
      ;; Output logged in *Messages* buffer
      (message "Tangled and Loaded!\n  |- %s\n  |- %s\n  |- %s"
 
-	      ;; tangled file name
-	      (car 
-	       (org-babel-tangle-file
-		buffer-file-name
-		(expand-file-name (concat user-emacs-directory "init.el"))
-		"emacs-lisp"))
+              ;; tangled file name
+              (car
+               (org-babel-tangle-file
+                buffer-file-name
+                (expand-file-name (concat user-emacs-directory "init.el"))
+                "emacs-lisp"))
 
-	      ;; date and time of tangle
-	      (format-time-string "%Y-%m-%d.%H-%M-%S" (current-time))
+              ;; date and time of tangle
+              (format-time-string "%Y-%m-%d.%H-%M-%S" (current-time))
 
-	      ;; load tangled file
-	      (load (concat user-emacs-directory "init.el")))
+              ;; load tangled file
+              (load (concat user-emacs-directory "init.el")))
    #+END_SRC
 
 
@@ -31,7 +32,7 @@
    - [ ] Add prompt before overwriting =init.el=.  OR... just do it and backup old one?
 
 * Initialize
-** package
+** package - REQUIRED
 
    =(package-initialize)= must come before configurations of installed
    packages.
@@ -53,8 +54,8 @@
    #+END_SRC
 
 ** use-package
-   
-   Info about =use-package=: https://github.com/jwiegley/use-package
+   - Used instead of =(require 'pkg-name)= primarily for auto-download.  
+   - https://github.com/jwiegley/use-package
 
    #+BEGIN_SRC emacs-lisp
      (require 'use-package)                  ; we want this instead of 'require
@@ -62,34 +63,30 @@
      (setq use-package-verbose t) 		; report config loading time in *Messages*
    #+END_SRC
 
-   Explicit =use-package= use: 
-
-   #+BEGIN_SRC emacs-lisp :tangle no
-     ;; (use-package expand-region
-     ;;   :commands expand-region
-     ;;   :init
-     ;;   (bind-key "C-=" "expand-region"))    
-   #+END_SRC
-
 * Private
   Load things that should be slightly more private.
   #+BEGIN_SRC emacs-lisp
-    (setq init_private_loaded (load "~/.emacs.d/init_private.el")) ;; ensure init_private.el is loaded
+    ;; ensure init_private.el is loaded
+    (setq init_private_loaded
+          (load
+           (concat user-emacs-directory
+                   "init_private.el")))
     ;; defines: my/user-dir, my/on-work-pc, my/user-name, my/computer-name, my/org-directory
   #+END_SRC
 
-* Emacs
-** User
+* Emacs - General
+
+** User - name, email
    #+BEGIN_SRC emacs-lisp
    (setq user-full-name "Steven Brown")
    (setq user-mail-address "steven.w.j.brown@gmail.com")
    #+END_SRC
 
-** General
-   
+** General - colour, lines, columns, backups, frame
+
    #+BEGIN_SRC emacs-lisp
      (setq ansi-color-faces-vector
-	   [default bold shadow italic underline bold bold-italic bold])
+           [default bold shadow italic underline bold bold-italic bold])
      (setq-default fill-column 80)		; where to wrap lines; set locally with C-x f
      (set-default 'truncate-lines t)	; truncate long lines, don't wrap them
      (setq column-number-mode t)	; show column numbers in modeline
@@ -105,12 +102,13 @@
      (setq uniquify-buffer-name-style (quote post-forward-angle-brackets))
 
      (desktop-save-mode 1)	       ; save the desktop/state of emacs' frames/buffers
-     (setq backup-directory-alist `(("." . "~/.emacs.d/.backups"))) ; keep in clean
+     (setq backup-directory-alist `(("." . ,(concat user-emacs-directory ".backups")))) ; keep in clean
      (setq backup-by-copying t)                                     ; vs renaming
      (put 'narrow-to-region 'disabled nil)			       ; enable narrowing C-x n n
 
      (toggle-scroll-bar 0)
      (tool-bar-mode 0)
+     (global-eldoc-mode 1)                   ; highlight parameters in minibuffer
    #+END_SRC
 
 ** Fonts
@@ -145,7 +143,7 @@
       ((find-font (font-spec :name "Consolas"))
        (setq default-font-name "Consolas")
        (setq default-font-size "13"))
- 
+
       ;; (set-frame-font "DejaVu Sans Mono-12"))
       ;; ((find-font (font-spec :name "Lucida Console"))
       ;;  (set-frame-font "Lucida Console-12"))
@@ -180,14 +178,15 @@
    - Loaded themes must be unloaded individually by =disable-theme=.
    - Both allow tab-completion for applicable themes.
    - [ ] write script to cycle through installed themes at keypress?
-   
+
    #+BEGIN_SRC emacs-lisp
-     (unless custom-enabled-themes
-       (load-theme 'material t nil))		; load & enable theme, if nothing already set
+     ;; (unless custom-enabled-themes
+     ;;   (load-theme 'material t nil))		; load & enable theme, if nothing already set
+     (setq custom-theme-directory user-emacs-directory)
 
      (setq custom-safe-themes
-	   (quote
-	("5999e12c8070b9090a2a1bbcd02ec28906e150bb2cdce5ace4f965c76cf30476" "a4c9e536d86666d4494ef7f43c84807162d9bd29b0dfd39bdf2c3d845dcc7b2e" "c72a772c104710300103307264c00a04210c00f6cc419a79b8af7890478f380e" "555c5a7fa39f8d1538501cc3fdb4fba7562ec4507f1665079021870e0a4c57d8" "3e8ea6a37f17fd9e0828dee76b7ba709319c4d93b7b21742684fadd918e8aca3" "5dc0ae2d193460de979a463b907b4b2c6d2c9c4657b2e9e66b8898d2592e3de5" "04dd0236a367865e591927a3810f178e8d33c372ad5bfef48b5ce90d4b476481" "5e3fc08bcadce4c6785fc49be686a4a82a356db569f55d411258984e952f194a" "7153b82e50b6f7452b4519097f880d968a6eaf6f6ef38cc45a144958e553fbc6" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "98cc377af705c0f2133bb6d340bf0becd08944a588804ee655809da5d8140de6" "130319ab9b4f97439d1b8fd72345ab77b43301cf29dddc88edb01e2bc3aff1e7" "43c1a8090ed19ab3c0b1490ce412f78f157d69a29828aa977dae941b994b4147" "5dd70fe6b64f3278d5b9ad3ff8f709b5e15cd153b0377d840c5281c352e8ccce" "7356632cebc6a11a87bc5fcffaa49bae528026a78637acd03cae57c091afd9b9" "ab04c00a7e48ad784b52f34aa6bfa1e80d0c3fcacc50e1189af3651013eb0d58" "a0feb1322de9e26a4d209d1cfa236deaf64662bb604fa513cca6a057ddf0ef64" default)))
+           (quote
+        ("5999e12c8070b9090a2a1bbcd02ec28906e150bb2cdce5ace4f965c76cf30476" "a4c9e536d86666d4494ef7f43c84807162d9bd29b0dfd39bdf2c3d845dcc7b2e" "c72a772c104710300103307264c00a04210c00f6cc419a79b8af7890478f380e" "555c5a7fa39f8d1538501cc3fdb4fba7562ec4507f1665079021870e0a4c57d8" "3e8ea6a37f17fd9e0828dee76b7ba709319c4d93b7b21742684fadd918e8aca3" "5dc0ae2d193460de979a463b907b4b2c6d2c9c4657b2e9e66b8898d2592e3de5" "04dd0236a367865e591927a3810f178e8d33c372ad5bfef48b5ce90d4b476481" "5e3fc08bcadce4c6785fc49be686a4a82a356db569f55d411258984e952f194a" "7153b82e50b6f7452b4519097f880d968a6eaf6f6ef38cc45a144958e553fbc6" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "98cc377af705c0f2133bb6d340bf0becd08944a588804ee655809da5d8140de6" "130319ab9b4f97439d1b8fd72345ab77b43301cf29dddc88edb01e2bc3aff1e7" "43c1a8090ed19ab3c0b1490ce412f78f157d69a29828aa977dae941b994b4147" "5dd70fe6b64f3278d5b9ad3ff8f709b5e15cd153b0377d840c5281c352e8ccce" "7356632cebc6a11a87bc5fcffaa49bae528026a78637acd03cae57c091afd9b9" "ab04c00a7e48ad784b52f34aa6bfa1e80d0c3fcacc50e1189af3651013eb0d58" "a0feb1322de9e26a4d209d1cfa236deaf64662bb604fa513cca6a057ddf0ef64" default)))
    #+END_SRC
 
 ** UTF-8
@@ -203,10 +202,10 @@
        (setq inhibit-compacting-font-caches t))
    #+END_SRC
 
-** ibuffer
+** ibuffer - custom filters
 
    #+BEGIN_SRC emacs-lisp
-     (define-key global-map "\C-x\C-b" 'ibuffer) ; 
+     (define-key global-map "\C-x\C-b" 'ibuffer) ;
 
      (setq ibuffer-saved-filter-groups
        (quote
@@ -240,121 +239,27 @@
    #+END_SRC
 
 * Packages
-  
+
   If there is a compile error, or "tar not found," try
   =package-refresh-contents= to refresh the package database.
 
-** selected-packages
-    =package-selected-packages= is used by ‘package-autoremove’ to
-    decide which packages are no longer needed.
-
-    You can use it to (re)install packages on other machines by
-    running ‘package-install-selected-packages’.
-
-    See currently activated packages with =package-activated-list=.
-
-    - [ ] Superceded by =use-package=?
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (setq package-selected-packages
-	    (quote
-	     (org-bullets tangotango-theme leuven-theme eziam-theme alect-themes
-			  atom-one-dark-theme borland-blue-theme material-theme
-			  helm helm-projectile expand-region org-projectile
-			  projectile web-mode)))
-    #+END_SRC
-    
-** expand-region
-
-   Example of how =use-package= can replace =require= and
-   =global-set-key=.
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package expand-region
-       :ensure t
-       :defer 1
-       :bind ("C-=" . er/expand-region))
-   #+END_SRC
-
-** wrap-region
-
-   http://pragmaticemacs.com/emacs/wrap-text-in-custom-characters/
-
-  #+BEGIN_SRC emacs-lisp
-    (use-package wrap-region
-      :ensure t
-      :defer 1
-      :config
-      (wrap-region-add-wrappers
-       '(("*" "*" nil org-mode)
-	 ("~" "~" nil org-mode)
-	 ("/" "/" nil org-mode)
-	 ("=" "=" ":" org-mode) ; Avoid conflict with expand-region, use ':'
-	 ("+" "+" "+" org-mode)
-	 ("_" "_" nil org-mode)))
-	 ;; ("$" "$" nil (org-mode latex-mode))
-      (add-hook 'org-mode-hook 'wrap-region-mode))
-
-  #+END_SRC 
-
-** projectile (think about removing)
-   
-   #+BEGIN_SRC emacs-lisp
-     (use-package projectile
-       :ensure t				; ensure package is downloaded
-       :defer t
-       :init					; pre-load config
-       (setq projectile-enable-caching t)	; resolve missing projects
-       ;; (projectile-mode +1)			; global projectil mode
-       :config nil				; post-load config
-       )
-   #+END_SRC  
-
-** org-bullets
-
-   https://thraxys.wordpress.com/2016/01/14/pimp-up-your-org-agenda/
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package org-bullets
-       :ensure t
-       :defer 1
-       :init
-       (add-hook 'org-mode-hook (lambda () (org-bullets-mode t)))
-       ;;  (setq org-bullets-bullet-list '("◉" "◎" "○" "►" "◇"))
-       :config
-       )
-
-   #+END_SRC
-
-** magit
-   A Git version control interface.
-   
-   #+BEGIN_SRC emacs-lisp
-     (use-package magit
-       :ensure t
-       :defer t
-       :bind ("C-x g" . magit-status)
-       )
-   #+END_SRC
-   
 ** themes
 
-   Placeholder to put themes 100% decided on.
-
-   Currently enjoy:
-   - leuven-theme
-   - material-theme
-   - spacemacs-theme
+   Place to put themes 100% decided on.
 
    #+BEGIN_SRC emacs-lisp
-     ;; (use-package flatland-theme
-     ;;   :ensure t)
-     ;; (use-package doom-themes)
+     (use-package material-theme :ensure t :defer t)
+     (use-package leuven-theme :ensure t :defer t)
+     (use-package spacemacs-theme
+       :ensure t
+       :defer t
+       ;; :init (load-theme 'spacemacs-dark t)
+       )
    #+END_SRC
-
-** paredit (not enabled)
+** OLD paredit (not enabled)
+   CLOSED: [2018-05-20 Sun 18:37]
    - http://danmidwood.com/content/2014/11/21/animated-paredit.html (super cool animated gifs)
-   - disabling paredit, will use smartparens if I need it. 
+   - disabling paredit, will use smartparens if I need it.
    #+BEGIN_SRC emacs-lisp
      ;; (use-package paredit
      ;;   :ensure t
@@ -372,7 +277,7 @@
      )
    #+END_SRC
 
-** which-key
+** which-key - comand popup
    - Gentle reminders and added discoverability.
    #+BEGIN_SRC emacs-lisp
      (use-package which-key
@@ -382,24 +287,19 @@
 
    #+END_SRC
 
-** jedi - TODO: Remove?
-
-   This is an ac (autocomplete)  backend, so will probably be superceded by company.
+** OLD jedi - auto-completion backend
+   CLOSED: [2018-05-20 Sun 18:46]
+   This is an ac (autocomplete)  backend, and we want to try company.
 
    #+BEGIN_SRC emacs-lisp
-     ;; (use-package jedi
-     ;;     :ensure t
-     ;;     :defer t
-     ;;     :init
-     ;;     :config
-     ;;     ;; (setq jedi:complete-on-dot t)
-     ;;     ;; (add-hook 'python-mode-hook 'jedi:setup)
-     ;;     )
-
+     ;; remove jedi ac package if present, we're going to use company
+     (when (featurep 'jedi)
+         (package-delete jedi))
    #+END_SRC
 
-** company
-   
+** company - auto-completion front-end
+   - Replaces emacs' built-in autocomplete (ac)
+
    #+BEGIN_SRC emacs-lisp
      (use-package company
        :ensure t
@@ -408,7 +308,8 @@
 
        :config
        (setq company-idle-delay 0.5)
-       (setq company-minimum-prefix-length 2)
+       (setq company-minimum-prefix-length 0)
+       (global-company-mode 1)
        )
 
      (use-package company-quickhelp
@@ -416,15 +317,29 @@
        :defer 2
        :config
        (company-quickhelp-mode 1)
+       (setq company-quickhelp-delay 1.5)
        )
-  
+
 
    #+END_SRC
 
-** anaconda-mode
+** iedit - Simple refactoring
+   - https://github.com/victorhge/iedit
+   - =C-;= at symbol to start refactor, again to finish.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package iedit
+       :ensure t)
+   #+END_SRC
+
+** anaconda-mode - Python programming 
    - https://github.com/proofit404/anaconda-mode
    - https://github.com/proofit404/company-anaconda
    - https://emacs.stackexchange.com/questions/27834/spacemacs-company-anaconda-doesnt-work
+
+     # pip install --upgrade jedi json-rpc service_factory
+     # python -m pip install --upgrade pip
+
    - https://www.reddit.com/r/emacs/comments/5slhkb/what_is_your_preferred_setup_for_python/
    - https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Blang/python#auto-completion-anaconda-dependencies
 
@@ -432,7 +347,8 @@
      (use-package anaconda-mode
        :ensure t
        :config
-       (add-hook 'python-mode-hook 'anaconda-mode))
+       (add-hook 'python-mode-hook 'anaconda-mode)        ; doc lookup, definition jump, etc
+       (add-hook 'python-mode-hook 'anaconda-eldoc-mode)) ; argument prompt in mini-buffer
 
      (use-package company-anaconda
        :ensure t
@@ -441,7 +357,24 @@
          '(add-to-list 'company-backends 'company-anaconda)))
    #+END_SRC
 
-** ein
+** esup - Emacs Start Up Profiler
+
+   - https://github.com/jschaf/esup
+   - =M-x esup=
+   - =C-u M-x esup= to use custom file
+   - HOME PC:
+   :     Total User Startup Time: 0.285sec     Total Number of GC Pauses: 8     Total GC Time: 0.047sec
+   - WORK Laptop:
+   : TODO
+   - HOME Laptop:
+   : TODO
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package esup
+       :ensure t)
+   #+END_SRC
+
+** ein - emacs iron python notebook (Jupyter)
    - Jupyter Notebooks in emacs!  Added [2017-10-19 Thu]
    #+BEGIN_SRC emacs-lisp
      ;; Jupyter python  ;added 2017-10-17
@@ -458,12 +391,12 @@
 
        :config
        ;; (advice-add 'request--netscape-cookie-parse :around #'fix-request-netscape-cookie-parse)
-       (setq ein:completion-backend 'ein:use-ac-jedi-backend) ;TODO
+       (setq ein:completion-backend 'ein:use-company-backend)
        )
 
    #+END_SRC
 
-** smartscan
+** smartscan - simple word-instance jumping
    - easily move between like-symbols
    - *NOTE*: currently conflicts with ein checkpoint bindings.
    #+BEGIN_SRC emacs-lisp
@@ -475,7 +408,7 @@
 	    )
    #+END_SRC
 
-** org2blog
+** org2blog - blog to wordpress from org
    - [[https://github.com/org2blog/org2blog][org2blog]]
    #+BEGIN_SRC emacs-lisp
      (use-package org2blog
@@ -487,7 +420,7 @@
        )
    #+END_SRC
 
-** beacon
+** beacon - highlight cursor when switching windows
    - animated indicator of cursor location when switching windows
    #+BEGIN_SRC emacs-lisp
      (use-package beacon
@@ -506,29 +439,32 @@
        (spaceline-spacemacs-theme))
    #+END_SRC
 
-** anzu
+** OLD anzu
+   CLOSED: [2018-05-20 Sun 18:38]
    - https://github.com/syohex/emacs-anzu
    - Show current match and total matches for various search modes.
-
-   #+BEGIN_SRC emacs-lisp
+   - Superceded by Swiper
+   #+BEGIN_SRC emacs-lisp :tangle no
      (use-package anzu
        :ensure t
        :config
        (global-anzu-mode +1))
 
-   #+END_SRC   
+   #+END_SRC
 
-** origami
+** origami - code folding
    - https://github.com/gregsexton/origami.el
 
    #+BEGIN_SRC emacs-lisp
      (use-package origami
        :ensure t)
    #+END_SRC
-   
-** smex
 
-   https://github.com/nonsequitur/smex
+** smex - fuzzy M-x function matching
+
+   - https://github.com/nonsequitur/smex
+   - Partially superceded by Swiper, not sure if I want to use =counsel-M-x= in
+     place....
 
    #+BEGIN_SRC emacs-lisp
      (use-package smex
@@ -537,7 +473,7 @@
               ("M-X" . smex-major-mode-commands)
               ("C-c C-c M-x" . execute-extended-command)))
    #+END_SRC
-   
+
 ** flycheck
 
    https://github.com/flycheck/flycheck
@@ -570,21 +506,125 @@
 
    Suite of completion tools.
     - https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html
-    - 
+    -
 
-   #+BEGIN_SRC emacs-lisp 
-          (use-package counsel
-            :ensure t
-            :config
-            (ivy-mode 1)
-            (setq ivy-use-virtual-buffers t)
-            (setq enable-recursive-minibuffers t))
+   #+BEGIN_SRC emacs-lisp
+     (use-package counsel
+       :ensure t
+       :config
+       (ivy-mode 1)
+       (setq ivy-use-virtual-buffers t)
+       (setq enable-recursive-minibuffers t)
+       :bind (("C-s" . swiper)                  ; Replace isearch-forward
+              ("C-x C-f" . counsel-find-file))) ; Replace find-file
    #+END_SRC
 
-** TODO multi-cursors
-** TODO gnus
-** TODO erc
+** rainbow-mode - set bg to colour of #00000 string
+   http://elpa.gnu.org/packages/rainbow-mode.html
+   #+BEGIN_SRC emacs-lisp
+   (use-package rainbow-mode :ensure t)
+   
+   #+END_SRC
+** TRY multi-cursors
+** TRY gnus
+** TRY erc
    - https://www.emacswiki.org/emacs/EmacsChannel
+
+** selected-packages [*has to be manually updated*]
+    =package-selected-packages= is used by ‘package-autoremove’ to decide which
+    packages are no longer needed.  But there was an issue with use-package not
+    adding packages to =package-selected-packages=, so it has to be done
+    manually..
+
+    You can use it to (re)install packages on other machines by
+    running ‘package-install-selected-packages’.
+
+    See currently activated packages with =package-activated-list=.
+
+    - [ ] Superceded by =use-package=?
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (setq package-selected-packages
+	    (quote
+	     (org-bullets tangotango-theme leuven-theme eziam-theme alect-themes
+			  atom-one-dark-theme borland-blue-theme material-theme
+			  helm helm-projectile expand-region org-projectile
+			  projectile web-mode)))
+    #+END_SRC
+
+** expand-region - select "up"
+
+   Example of how =use-package= can replace =require= and
+   =global-set-key=.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package expand-region
+       :ensure t
+       :defer 1
+       :bind ("C-=" . er/expand-region))
+   #+END_SRC
+
+** wrap-region - wrap region in matching characters
+
+   - http://pragmaticemacs.com/emacs/wrap-text-in-custom-characters/
+   - Use for =org-mode= formatting
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package wrap-region
+      :ensure t
+      :defer 1
+      :config
+      (wrap-region-add-wrappers
+       '(("*" "*" nil org-mode)
+	 ("~" "~" nil org-mode)
+	 ("/" "/" nil org-mode)
+	 ("=" "=" ":" org-mode) ; Avoid conflict with expand-region, use ':'
+	 ("+" "+" "+" org-mode)
+	 ("_" "_" nil org-mode)))
+	 ;; ("$" "$" nil (org-mode latex-mode))
+      (add-hook 'org-mode-hook 'wrap-region-mode))
+
+  #+END_SRC
+
+** projectile (think about removing)
+   - some performance issues on lesser computers.  Will have to investigate
+   #+BEGIN_SRC emacs-lisp
+     (use-package projectile
+       :ensure t				; ensure package is downloaded
+       :defer t
+       :init					; pre-load config
+       (setq projectile-enable-caching t)	; resolve missing projects
+       ;; (projectile-mode +1)			; global projectil mode
+       :config nil				; post-load config
+       )
+   #+END_SRC
+
+** org-bullets - Unicode org-mode bullets
+
+   https://thraxys.wordpress.com/2016/01/14/pimp-up-your-org-agenda/
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-bullets
+       :ensure t
+       :defer 1
+       :init
+       (add-hook 'org-mode-hook (lambda () (org-bullets-mode t)))
+       ;;  (setq org-bullets-bullet-list '("◉" "◎" "○" "►" "◇"))
+       :config
+       )
+
+   #+END_SRC
+
+** magit - Git integration
+   A Git version control interface.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package magit
+       :ensure t
+       :defer t
+       :bind ("C-x g" . magit-status)
+       )
+   #+END_SRC
 
 * Dired
 
@@ -592,8 +632,8 @@
   two =dired= buffers open.
 
   Also useful:
-  - writeable dired: 
-  - 
+  - writeable dired:
+  -
 
   #+BEGIN_SRC emacs-lisp
     (setq dired-dwim-target t)		; guess target directory
@@ -642,7 +682,7 @@
      ;; my/org-directory defined in init_private.el
      (setq org-agenda-files (list
 			     (concat my/org-directory "/notes.org")    ; Home/Learn/Everything
-			     (concat my/org-directory "/work.org")     ; Work                 
+			     (concat my/org-directory "/work.org")     ; Work
 			     (concat my/org-directory "/agenda.org")))  ; Life Stuff - rename to 'personal'?
 
      (setq org-default-notes-file (concat my/org-directory "/captured.org")) ; Unsorted  Notes
@@ -682,13 +722,13 @@
      (setq org-refile-use-outline-path 'file)
 
      ;; org-mode customization
-     (setq org-log-done 'time)  ;; 
+     (setq org-log-done 'time)  ;;
      (setq org-todo-keywords
 	    '((sequence "TODO(t)" "STARTD(s)" "WAITING(w)" "|" "DONE(d)" "DELEGATED(e)" "CANCELLED(c)")))
 
      ;org-mode keybindings
      (define-key global-map "\C-cc" 'org-capture)    ; todo: move to use-package :bind ?
-     (define-key global-map "\C-ca" 'org-agenda)     ; 
+     (define-key global-map "\C-ca" 'org-agenda)     ;
      (define-key global-map "\C-cl" 'org-store-link) ;
 
      ;; Add python to list of languages for org-babel to load
@@ -701,7 +741,7 @@
 ** Agenda
    #+BEGIN_SRC emacs-lisp
    (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
-   
+
    #+END_SRC
 
 * Windows
@@ -730,7 +770,7 @@
 
     - THANK YOU, ALEX
       - http://gromnitsky.blogspot.ca/2016/09/emacs-251-hunspell.html
-    
+
     - Updated dict from openoffice to handle apostrophes:
       - https://extensions.openoffice.org/en/project/dict-en-fixed
       - (via https://sourceforge.net/p/hunspell/patches/35/)
@@ -773,8 +813,8 @@
 
 	  ;; NT-emacs assumes a Windows shell. Change to bash.
 	  (setq shell-file-name "bash")
-	  (setenv "SHELL" shell-file-name) 
-	  (setq explicit-shell-file-name shell-file-name) 
+	  (setenv "SHELL" shell-file-name)
+	  (setq explicit-shell-file-name shell-file-name)
 
 	  ;; This removes unsightly ^M characters that would otherwise
 	  ;; appear in the output of java applications.
@@ -786,7 +826,7 @@
 		  ("en_US" ,(concat (file-name-as-directory cygwin-root) "usr/share/myspell/en_US.aff"))
 		  ("en_GB" ,(concat (file-name-as-directory cygwin-root) "usr/share/myspell/en_GB.aff"))
 		  ))
-	  ))			       
+	  ))
     #+END_SRC
 
 * Notes
@@ -801,23 +841,21 @@
   : (custom-set-variables
   :  '(my-variable value)
   :  '(column-number-mode t)
-  :  ; ...		     
-  : )		     
-  : 		     
+  :  ; ...
+  : )
+  :
 
   -->
 
-  : (setq column-number-mode t) 
+  : (setq column-number-mode t)
 
   Reference:
 
   - emacs-lite: https://github.com/asimpson/dotfiles/blob/master/emacs/emacs-lite.org
-  - Alain Lafon emacs: https://github.com/munen/emacs.d (play emacs like an instrument talk) 
+  - Alain Lafon emacs: https://github.com/munen/emacs.d (play emacs like an instrument talk)
   - https://github.com/howardabrams/dot-files/blob/master/emacs-client.org \
     sanityinc-tomorrow-theme
   - [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua init.org]]
   - https://www.masteringemacs.org/article/running-shells-in-emacs-overview \
     You *must* set extra variables if customizing shell on Windows....
   - https://github.com/daedreth/UncleDavesEmacs
-
-
