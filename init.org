@@ -256,6 +256,7 @@
        ;; :init (load-theme 'spacemacs-dark t)
        )
    #+END_SRC
+
 ** OLD paredit (not enabled)
    CLOSED: [2018-05-20 Sun 18:37]
    - http://danmidwood.com/content/2014/11/21/animated-paredit.html (super cool animated gifs)
@@ -525,6 +526,7 @@
    (use-package rainbow-mode :ensure t)
    
    #+END_SRC
+
 ** TRY multi-cursors
 ** TRY gnus
 ** TRY erc
@@ -752,16 +754,15 @@
 
     #+BEGIN_SRC emacs-lisp
       (when (eq 'windows-nt system-type)
-	(defun w32-browser (doc) (w32-shell-execute 1 doc))
-	;; Ctrl-ENT to open with default application
-	(eval-after-load "dired"
-	  '(define-key dired-mode-map [C-return]
-	     (lambda ()
-	       (interactive)
-	       (w32-browser (dired-replace-in-string "/" "\\" (dired-get-filename)))))))
+        (defun w32-browser (doc) (w32-shell-execute 1 doc))
+        ;; Ctrl-ENT to open with default application
+        (eval-after-load "dired"
+          '(define-key dired-mode-map [C-return]
+             (lambda ()
+               (interactive)
+               (w32-browser (dired-replace-in-string "/" "\\" (dired-get-filename)))))))
 
 	   #+END_SRC
-
 
 *** Spelling & Dictionaries (aspell/ispell/hunspell)
 
