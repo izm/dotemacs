@@ -109,6 +109,7 @@
      (toggle-scroll-bar 0)
      (tool-bar-mode 0)
      (global-eldoc-mode 1)                   ; highlight parameters in minibuffer
+     (setq gc-cons-threshold 20000000)       ; default is 800,000 ... too small!
    #+END_SRC
 
 ** Fonts
@@ -182,11 +183,20 @@
    #+BEGIN_SRC emacs-lisp
      ;; (unless custom-enabled-themes
      ;;   (load-theme 'material t nil))		; load & enable theme, if nothing already set
-     (setq custom-theme-directory user-emacs-directory)
 
-     (setq custom-safe-themes
-           (quote
-        ("5999e12c8070b9090a2a1bbcd02ec28906e150bb2cdce5ace4f965c76cf30476" "a4c9e536d86666d4494ef7f43c84807162d9bd29b0dfd39bdf2c3d845dcc7b2e" "c72a772c104710300103307264c00a04210c00f6cc419a79b8af7890478f380e" "555c5a7fa39f8d1538501cc3fdb4fba7562ec4507f1665079021870e0a4c57d8" "3e8ea6a37f17fd9e0828dee76b7ba709319c4d93b7b21742684fadd918e8aca3" "5dc0ae2d193460de979a463b907b4b2c6d2c9c4657b2e9e66b8898d2592e3de5" "04dd0236a367865e591927a3810f178e8d33c372ad5bfef48b5ce90d4b476481" "5e3fc08bcadce4c6785fc49be686a4a82a356db569f55d411258984e952f194a" "7153b82e50b6f7452b4519097f880d968a6eaf6f6ef38cc45a144958e553fbc6" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "98cc377af705c0f2133bb6d340bf0becd08944a588804ee655809da5d8140de6" "130319ab9b4f97439d1b8fd72345ab77b43301cf29dddc88edb01e2bc3aff1e7" "43c1a8090ed19ab3c0b1490ce412f78f157d69a29828aa977dae941b994b4147" "5dd70fe6b64f3278d5b9ad3ff8f709b5e15cd153b0377d840c5281c352e8ccce" "7356632cebc6a11a87bc5fcffaa49bae528026a78637acd03cae57c091afd9b9" "ab04c00a7e48ad784b52f34aa6bfa1e80d0c3fcacc50e1189af3651013eb0d58" "a0feb1322de9e26a4d209d1cfa236deaf64662bb604fa513cca6a057ddf0ef64" default)))
+     (defun my/disable-all-themes (theme-list)
+       "Disable all themes in theme-list and call powerline-revert."
+       (if (and (eq (car theme-list) nil)
+                (fboundp 'powerline-revert))
+           (powerline-revert)
+         (disable-theme (car theme-list))
+         (disable-all-themes (cdr theme-list))))
+
+     (setq custom-theme-directory user-emacs-directory)
+     (progn 
+       (load-theme 'leuven t)
+       (powerline-reset))
+
    #+END_SRC
 
 ** UTF-8
@@ -401,12 +411,12 @@
    - easily move between like-symbols
    - *NOTE*: currently conflicts with ein checkpoint bindings.
    #+BEGIN_SRC emacs-lisp
-	  (use-package smartscan
-	    :ensure t
-	    :defer 1
-	    :bind (("M-n" . smartscan-symbol-go-forward)
-		   ("M-p" . smartscan-symbol-go-backward))
-	    )
+     (use-package smartscan
+       :ensure t
+       :defer 1
+       ;; :bind (("M-n" . smartscan-symbol-go-forward)
+       ;;        ("M-p" . smartscan-symbol-go-backward))
+       )
    #+END_SRC
 
 ** org2blog - blog to wordpress from org
@@ -427,7 +437,7 @@
      (use-package beacon
        :ensure t
        :init
-       (beacon-mode 1))
+       (beacon-mode nil))                    ; causes slow updates on some comps
    #+END_SRC
 
 ** spaceline (powerline) modeline
@@ -515,6 +525,7 @@
        :config
        (ivy-mode 1)
        (setq ivy-use-virtual-buffers t)
+       (setq ivy-count-format "%d/%d ")      ; current/total match number
        (setq enable-recursive-minibuffers t)
        :bind (("C-s" . swiper)                  ; Replace isearch-forward
               ("C-x C-f" . counsel-find-file))) ; Replace find-file
