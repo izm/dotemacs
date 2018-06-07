@@ -864,10 +864,19 @@
   Reference:
 
   - emacs-lite: https://github.com/asimpson/dotfiles/blob/master/emacs/emacs-lite.org
-  - Alain Lafon emacs: https://github.com/munen/emacs.d (play emacs like an instrument talk)
-  - https://github.com/howardabrams/dot-files/blob/master/emacs-client.org \
+  - Alain Lafon emacs: https://github.com/munen/emacs.d \\
+    (play emacs like an instrument talk)
+  - https://github.com/howardabrams/dot-files/blob/master/emacs-client.org \\
     sanityinc-tomorrow-theme
   - [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua init.org]]
-  - https://www.masteringemacs.org/article/running-shells-in-emacs-overview \
+  - https://www.masteringemacs.org/article/running-shells-in-emacs-overview \\
     You *must* set extra variables if customizing shell on Windows....
   - https://github.com/daedreth/UncleDavesEmacs
+  - https://www.johndcook.com/blog/emacs_windows/#select \\
+    Nicely written tips for emacs on Windows.
+  - https://github.com/emacs-tw/awesome-emacs Awesome Emacs \\
+    Community list of useful packages.
+  - [[https://www.reddit.com/r/emacs/comments/5slhkb/what_is_your_preferred_setup_for_python/][Reddit Emacs Python setup]]
+    - https://github.com/proofit404/company-anaconda
+    - https://github.com/proofit404/anaconda-mode
+  - [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html][Ivy, Counsel, Swiper]] - counsel alternatives to built-ins
