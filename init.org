@@ -185,17 +185,22 @@
      ;;   (load-theme 'material t nil))		; load & enable theme, if nothing already set
 
      (defun my/disable-all-themes (theme-list)
-       "Disable all themes in theme-list and call powerline-revert."
+       "Disable all themes in theme-list and call powerline-revert.  
+     TODO: Call with custom-enabled-themes if called without argument."
        (if (and (eq (car theme-list) nil)
                 (fboundp 'powerline-revert))
            (powerline-revert)
          (disable-theme (car theme-list))
-         (disable-all-themes (cdr theme-list))))
+         (my/disable-all-themes (cdr theme-list))))
+
+     (defun my/load-theme (theme)
+       "Load a theme and reset powerline, if enabled."
+       (progn 
+         (load-theme theme t)
+         (when (fboundp 'powerline-reset) (powerline-reset))))
+  
 
      (setq custom-theme-directory user-emacs-directory)
-     (progn 
-       (load-theme 'leuven t)
-       (powerline-reset))
 
    #+END_SRC
 
