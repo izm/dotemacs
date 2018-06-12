@@ -101,7 +101,7 @@
      ;;(setq uniquify-buffer-name-style (quote forward) nil (uniquify))
      (setq uniquify-buffer-name-style (quote post-forward-angle-brackets))
 
-     (desktop-save-mode 1)	       ; save the desktop/state of emacs' frames/buffers
+     (desktop-save-mode 0)	       ; save the desktop/state of emacs' frames/buffersb
      (setq backup-directory-alist `(("." . ,(concat user-emacs-directory ".backups")))) ; keep in clean
      (setq backup-by-copying t)                                     ; vs renaming
      (put 'narrow-to-region 'disabled nil)			       ; enable narrowing C-x n n
@@ -315,6 +315,7 @@
 
 ** company - auto-completion front-end
    - Replaces emacs' built-in autocomplete (ac)
+   - [[https://emacs.stackexchange.com/questions/9835/how-can-i-prevent-company-mode-completing-numbers/9845][Reducing noise in returned results]]
 
    #+BEGIN_SRC emacs-lisp
      (use-package company
@@ -324,7 +325,7 @@
 
        :config
        (setq company-idle-delay 0.5)
-       (setq company-minimum-prefix-length 0)
+       (setq company-minimum-prefix-length 1)
        (global-company-mode 1)
        )
 
@@ -336,7 +337,15 @@
        (setq company-quickhelp-delay 1.5)
        )
 
-
+     ;; Reduce noise in candidate suggestions
+     (push (apply-partially
+            #'cl-remove-if
+            (lambda (c)
+              (or (string-match-p "[^\x00-\x7F]+" c) ;non-ansii candidates
+                  (string-match-p "[0-9]+" c)        ;candidates containing numbers
+                  (if (equal major-mode "org")       ;
+                      (>= (length c) 15))))) ; candidates >= 15 chars in org-mode
+           company-transformers)
    #+END_SRC
 
 ** iedit - Simple refactoring
@@ -442,7 +451,7 @@
      (use-package beacon
        :ensure t
        :init
-       (beacon-mode nil))                    ; causes slow updates on some comps
+       (beacon-mode 0))                    ; causes slow updates on some comps
    #+END_SRC
 
 ** spaceline (powerline) modeline
@@ -730,6 +739,8 @@
    #+END_SRC
 
 ** Other
+   - [[https://orgmode.org/manual/Speed-keys.html][Org Speed Keys]]
+
    #+BEGIN_SRC emacs-lisp
      (setq org-ellipsis " ⤵")			;⤵, ▐, ►, ▽, ◿, ◹, », ↵, ≋, …, ⋞, ⊡, ⊹, ⊘
 
@@ -742,7 +753,7 @@
      ;; org-mode customization
      (setq org-log-done 'time)  ;;
      (setq org-todo-keywords
-	    '((sequence "TODO(t)" "STARTD(s)" "WAITING(w)" "|" "DONE(d)" "DELEGATED(e)" "CANCELLED(c)")))
+            '((sequence "TODO(t)" "STARTD(s)" "WAITING(w)" "|" "DONE(d)" "DELEGATED(e)" "CANCELLED(c)")))
 
      ;org-mode keybindings
      (define-key global-map "\C-cc" 'org-capture)    ; todo: move to use-package :bind ?
@@ -753,7 +764,10 @@
      (org-babel-do-load-languages
       'org-babel-load-languages
       '((emacs-lisp . t)
-	(python . t)))
+        (python . t)))
+
+     ;; Enable single-key commands at beginning of headers
+     (setq org-use-speed-commands t)
    #+END_SRC
 
 ** Agenda
@@ -845,6 +859,18 @@
 		  ))
 	  ))
     #+END_SRC
+
+* Finally
+  After environment setup is complete, do any remaining things like opening
+  files.
+  #+BEGIN_SRC emacs-lisp
+    ;; Open a couple files
+    (find-file (concat my/org-directory "/*.org")) ; filter to .org files in org
+                                                   ; directory
+    (if my/on-work-pc
+        (find-file (concat my/org-directory "/work.org"))
+      (find-file (concat my/org-directory "/private.org")))
+  #+END_SRC
 
 * Notes
 
