@@ -272,7 +272,7 @@
        )
    #+END_SRC
 
-** OLD paredit (not enabled)
+** OLD paredit - Intense parentheses mode (not enabled)
    CLOSED: [2018-05-20 Sun 18:37]
    - http://danmidwood.com/content/2014/11/21/animated-paredit.html (super cool animated gifs)
    - disabling paredit, will use smartparens if I need it.
@@ -282,7 +282,7 @@
      ;;   :defer t)
    #+END_SRC
 
-** smartparens
+** smartparens - Minor mode to work with pairs
    - https://github.com/Fuco1/smartparens (more animated gif guides)
    #+BEGIN_SRC emacs-lisp
      (use-package smartparens
@@ -293,7 +293,7 @@
      )
    #+END_SRC
 
-** which-key - comand popup
+** which-key - Comand popup
    - Gentle reminders and added discoverability.
    #+BEGIN_SRC emacs-lisp
      (use-package which-key
@@ -303,7 +303,7 @@
 
    #+END_SRC
 
-** OLD jedi - auto-completion backend
+** OLD jedi - Auto-completion backend
    CLOSED: [2018-05-20 Sun 18:46]
    This is an ac (autocomplete)  backend, and we want to try company.
 
@@ -313,7 +313,7 @@
          (package-delete jedi))
    #+END_SRC
 
-** company - auto-completion front-end
+** company - Auto-completion front-end
    - Replaces emacs' built-in autocomplete (ac)
    - [[https://emacs.stackexchange.com/questions/9835/how-can-i-prevent-company-mode-completing-numbers/9845][Reducing noise in returned results]]
 
@@ -399,7 +399,7 @@
        :ensure t)
    #+END_SRC
 
-** ein - emacs iron python notebook (Jupyter)
+** ein - Emacs iron python notebook (Jupyter)
    - Jupyter Notebooks in emacs!  Added [2017-10-19 Thu]
    #+BEGIN_SRC emacs-lisp
      ;; Jupyter python  ;added 2017-10-17
@@ -421,7 +421,7 @@
 
    #+END_SRC
 
-** smartscan - simple word-instance jumping
+** smartscan - Simple word-instance jumping
    - easily move between like-symbols
    - *NOTE*: currently conflicts with ein checkpoint bindings.
    #+BEGIN_SRC emacs-lisp
@@ -433,7 +433,7 @@
        )
    #+END_SRC
 
-** org2blog - blog to wordpress from org
+** org2blog - Blog to wordpress from org
    - [[https://github.com/org2blog/org2blog][org2blog]]
    #+BEGIN_SRC emacs-lisp
      (use-package org2blog
@@ -445,7 +445,7 @@
        )
    #+END_SRC
 
-** beacon - highlight cursor when switching windows
+** beacon - Highlight cursor when switching windows
    - animated indicator of cursor location when switching windows
    #+BEGIN_SRC emacs-lisp
      (use-package beacon
@@ -454,7 +454,7 @@
        (beacon-mode 0))                    ; causes slow updates on some comps
    #+END_SRC
 
-** spaceline (powerline) modeline
+** spaceline - (Powerline) modeline
    #+BEGIN_SRC emacs-lisp
      (use-package spaceline
        :ensure t
@@ -464,20 +464,20 @@
        (spaceline-spacemacs-theme))
    #+END_SRC
 
-** OLD anzu
+** OLD anzu - Count isearch matches
    CLOSED: [2018-05-20 Sun 18:38]
    - https://github.com/syohex/emacs-anzu
    - Show current match and total matches for various search modes.
    - Superceded by Swiper
    #+BEGIN_SRC emacs-lisp :tangle no
      (use-package anzu
-       :ensure t
+       :ensure nil
        :config
        (global-anzu-mode +1))
 
    #+END_SRC
 
-** origami - code folding
+** origami - Code folding
    - https://github.com/gregsexton/origami.el
 
    #+BEGIN_SRC emacs-lisp
@@ -485,8 +485,7 @@
        :ensure t)
    #+END_SRC
 
-** smex - fuzzy M-x function matching
-
+** OLD smex - Fuzzy =M-x= function matching
    - https://github.com/nonsequitur/smex
    - Partially superceded by Swiper, not sure if I want to use =counsel-M-x= in
      place....
@@ -499,7 +498,7 @@
               ("C-c C-c M-x" . execute-extended-command)))
    #+END_SRC
 
-** flycheck
+** flycheck - Syntax-checking
 
    https://github.com/flycheck/flycheck
 
@@ -512,7 +511,7 @@
        )
    #+END_SRC
 
-** diff-hl
+** diff-hl - Highlight diffs
 
    https://github.com/dgutov/diff-hl
 
@@ -525,7 +524,13 @@
        )
    #+END_SRC
 
-** Ivy, Counsel, Swiper
+** avy - Jump to visible text
+   https://github.com/abo-abo/avy
+   #+BEGIN_SRC emacs-lisp
+     (use-package avy :ensure t)
+   #+END_SRC
+
+** Ivy, Counsel, Swiper - Minibuffer completion suite
 
    Link: https://github.com/abo-abo/swiper
 
@@ -545,11 +550,10 @@
               ("C-x C-f" . counsel-find-file))) ; Replace find-file
    #+END_SRC
 
-** rainbow-mode - set bg to colour of #00000 string
+** rainbow-mode - Set bg to colour of #00000 string
    http://elpa.gnu.org/packages/rainbow-mode.html
    #+BEGIN_SRC emacs-lisp
    (use-package rainbow-mode :ensure t)
-   
    #+END_SRC
 
 ** TRY multi-cursors
@@ -579,7 +583,7 @@
 			  projectile web-mode)))
     #+END_SRC
 
-** expand-region - select "up"
+** expand-region - Select "up"
 
    Example of how =use-package= can replace =require= and
    =global-set-key=.
@@ -591,7 +595,7 @@
        :bind ("C-=" . er/expand-region))
    #+END_SRC
 
-** wrap-region - wrap region in matching characters
+** wrap-region - Wrap region in matching characters
 
    - http://pragmaticemacs.com/emacs/wrap-text-in-custom-characters/
    - Use for =org-mode= formatting
