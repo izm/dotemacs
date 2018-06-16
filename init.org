@@ -672,32 +672,12 @@
   #+END_SRC
 
 * Org Mode
-** TODO use conditional environment variables (env: home/work os:win/linux)
-   https://stackoverflow.com/questions/17537124/how-to-declare-the-location-of-emacss-init-file-as-a-variable
-
-   #+BEGIN_SRC emacs-lisp :tangle no
-     ;; elisp note on conditionally setting variable
-     (setq 'my-list-depending-on-system
-	   (cond
-	    ((string-equal system-type "windows-nt")
-	     '(
-	       "item 1 windows"
-	       "item 2 windows"
-	       ))
-	    ((string-equal system-type "gnu/linux")
-	     '(
-	       "item 1 linux"
-	       "item 2 linux"
-	       ))
-	    ))
-   #+END_SRC
-
 ** Export
 
    - http://orgmode.org/manual/Export-settings.html#Export-settings
 
    #+BEGIN_SRC emacs-lisp
-     (setq org-export-initial-scope "subtree")
+     (setq org-export-initial-scope 'subtree)
 
      ;; postamble
      (setq org-html-postamble 't)
