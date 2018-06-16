@@ -663,7 +663,6 @@
    #+BEGIN_SRC emacs-lisp
      (use-package org-bullets
        :ensure t
-       :defer 1
        :init
        (add-hook 'org-mode-hook (lambda () (org-bullets-mode t)))
        ;;  (setq org-bullets-bullet-list '("◉" "◎" "○" "►" "◇"))
