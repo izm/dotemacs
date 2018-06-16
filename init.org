@@ -664,6 +664,14 @@
 ** ace-window - DWIM window switcher
    - https://github.com/abo-abo/ace-window
 
+   - Note: =aw-scope= defaults to =global= (all frames).  Toggle by setting to
+     =frame=
+
+   - swap window: =C-u ace-window=
+   - delete window: =C-u C-u ace-window=
+
+   At the dispatcher (3 or more windows unless =aw-dispatch-always= = =t=):
+
    - =x= : delete window
    - =m= : swap windows
    - =M= : move window
