@@ -224,33 +224,36 @@
 
      (setq ibuffer-saved-filter-groups
        (quote
-	(("ibuffer-filter-groups"
-	  ("Notebooks"
-	   (name . "\\*ein:.*"))
-	  ("Python"
-	   (used-mode . python-mode))
-	  ("org"
-	   (used-mode . org-mode))
-	  ("dirs"
-	   (used-mode . dired-mode))))))
+        (("ibuffer-filter-groups"
+          ("Directories"
+           (used-mode . dired-mode))
+          ("Org Files"
+           (used-mode . org-mode))
+          ("Notebooks"
+           (name . "\\*ein:.*"))
+          ("Python"
+           (used-mode . python-mode))
+          ("Emacs Lisp"
+           (used-mode . emacs-lisp-mode))
+          ))))
 
      (setq ibuffer-saved-filters
        (quote
-	(("gnus"
-	  ((or
-	    (mode . message-mode)
-	    (mode . mail-mode)
-	    (mode . gnus-group-mode)
-	    (mode . gnus-summary-mode)
-	    (mode . gnus-article-mode))))
-	 ("programming"
-	  ((or
-	    (mode . emacs-lisp-mode)
-	    (mode . cperl-mode)
-	    (mode . c-mode)
-	    (mode . java-mode)
-	    (mode . idl-mode)
-	    (mode . lisp-mode)))))))
+        (("gnus"
+          ((or
+            (mode . message-mode)
+            (mode . mail-mode)
+            (mode . gnus-group-mode)
+            (mode . gnus-summary-mode)
+            (mode . gnus-article-mode))))
+         ("programming"
+          ((or
+            (mode . emacs-lisp-mode)
+            (mode . cperl-mode)
+            (mode . c-mode)
+            (mode . java-mode)
+            (mode . idl-mode)
+            (mode . lisp-mode)))))))
    #+END_SRC
 
 * Packages
