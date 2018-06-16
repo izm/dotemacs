@@ -284,12 +284,14 @@
 
 ** smartparens - Minor mode to work with pairs
    - https://github.com/Fuco1/smartparens (more animated gif guides)
+   - https://ebzzry.io/en/emacs-pairs/ suggested key bindings and usage
    #+BEGIN_SRC emacs-lisp
      (use-package smartparens
        :ensure t
        :defer t
        :init
        :config
+       (setq sp-smartparens-bindings "sp")
      )
    #+END_SRC
 
@@ -342,7 +344,7 @@
             #'cl-remove-if
             (lambda (c)
               (or (string-match-p "[^\x00-\x7F]+" c) ;non-ansii candidates
-                  (string-match-p "[0-9]+" c)        ;candidates containing numbers
+                  (string-match-p "0-9+" c)        ;candidates containing numbers
                   (if (equal major-mode "org")       ;
                       (>= (length c) 15))))) ; candidates >= 15 chars in org-mode
            company-transformers)
@@ -378,7 +380,7 @@
      (use-package company-anaconda
        :ensure t
        :config
-       (eval-after-load "company"
+       (eval-after-load company
          '(add-to-list 'company-backends 'company-anaconda)))
    #+END_SRC
 
@@ -410,7 +412,7 @@
        :init
        (require 'ein-connect)     ; not sure why this is needed suddenly..?
 
-       ;; Fix "Null value passed to ein:get-ipython-major-version" #work pc
+       ;; Fix Null value passed to ein:get-ipython-major-version #work pc
        ;; https://github.com/millejoh/emacs-ipython-notebook/issues/176
        (ein:force-ipython-version-check)
 
@@ -527,16 +529,14 @@
 ** avy - Jump to visible text
    https://github.com/abo-abo/avy
    #+BEGIN_SRC emacs-lisp
-     (use-package avy :ensure t)
+     (use-package avy :ensure t
+       :bind ("C-:" . avy-goto-char-2))
    #+END_SRC
 
 ** Ivy, Counsel, Swiper - Minibuffer completion suite
-
-   Link: https://github.com/abo-abo/swiper
-
    Suite of completion tools.
     - https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html
-    -
+    - https://github.com/abo-abo/swiper
 
    #+BEGIN_SRC emacs-lisp
      (use-package counsel
