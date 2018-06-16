@@ -87,29 +87,30 @@
    #+BEGIN_SRC emacs-lisp
      (setq ansi-color-faces-vector
            [default bold shadow italic underline bold bold-italic bold])
-     (setq-default fill-column 80)		; where to wrap lines; set locally with C-x f
-     (set-default 'truncate-lines t)	; truncate long lines, don't wrap them
-     (setq column-number-mode t)	; show column numbers in modeline
-     (setq inhibit-startup-screen t)	; skip startup screen
-     (setq tool-bar-mode nil)	; Remove clunky toolbar and icons
-     (show-paren-mode t)		; highlight matching parentheses
-     (global-hl-line-mode t)		; highlight current line
-     (setq visible-bell t)		; blink, don't bark
-     (setq x-stretch-cursor t) ; cursor width will match tab character width
+     (setq-default fill-column 80)      ; where to wrap lines; set locally with C-x f
+     (set-default 'truncate-lines t)    ; truncate long lines, don't wrap them
+     (setq column-number-mode t)        ; show column numbers in modeline
+     (setq inhibit-startup-screen t)    ; skip startup screen
+     (setq tool-bar-mode nil)           ; Remove clunky toolbar and icons
+     (show-paren-mode t)                ; highlight matching parentheses
+     (global-hl-line-mode t)            ; highlight current line
+     (setq visible-bell t)              ; blink, don't bark
+     (setq x-stretch-cursor t)          ; cursor width will match tab character width
      (set-default 'indent-tabs-mode nil)
 
      ;;(setq uniquify-buffer-name-style (quote forward) nil (uniquify))
      (setq uniquify-buffer-name-style (quote post-forward-angle-brackets))
 
-     (desktop-save-mode 0)	       ; save the desktop/state of emacs' frames/buffersb
+     (desktop-save-mode 0)         ; save the desktop/state of emacs' frames/buffersb
      (setq backup-directory-alist `(("." . ,(concat user-emacs-directory ".backups")))) ; keep in clean
-     (setq backup-by-copying t)                                     ; vs renaming
-     (put 'narrow-to-region 'disabled nil)			       ; enable narrowing C-x n n
+     (setq backup-by-copying t)              ; vs renaming
+     (put 'narrow-to-region 'disabled nil)   ; enable narrowing C-x n n
 
      (toggle-scroll-bar 0)
      (tool-bar-mode 0)
-     (global-eldoc-mode 1)                   ; highlight parameters in minibuffer
-     (setq gc-cons-threshold 20000000)       ; default is 800,000 ... too small!
+     (global-eldoc-mode 1)                  ; highlight parameters in minibuffer
+     (setq gc-cons-threshold 20000000)      ; default is 800,000 ... too small!
+     (setq reb-re-syntax 'string)           ; C-c TAB to cycle when in regexp-builder
    #+END_SRC
 
 ** Fonts
@@ -575,11 +576,6 @@
    (use-package rainbow-mode :ensure t)
    #+END_SRC
 
-** TRY multi-cursors
-** TRY gnus
-** TRY erc
-   - https://www.emacswiki.org/emacs/EmacsChannel
-
 ** selected-packages [*has to be manually updated*]
     =package-selected-packages= is used by ‘package-autoremove’ to decide which
     packages are no longer needed.  But there was an issue with use-package not
@@ -665,6 +661,28 @@
 
    #+END_SRC
 
+** ace-window - DWIM window switcher
+   - https://github.com/abo-abo/ace-window
+
+   - =x= : delete window
+   - =m= : swap windows
+   - =M= : move window
+   - =j= : select buffer
+   - =n= : select the previous window
+   - =u= : select buffer in the other window
+   - =c= : split window fairly, either vertically or horizontally
+   - =v= : split window vertically
+   - =b= : split window horizontally
+   - =o= : maximize current window
+   - =?= : show these command bindings   
+
+     #+BEGIN_SRC emacs-lisp
+       (use-package ace-window
+         :ensure t
+         :bind ("M-o" . ace-window )                     ; replace facemenu-keymap binding
+         )
+     #+END_SRC
+
 ** magit - Git integration
    A Git version control interface.
 
@@ -675,6 +693,11 @@
        :bind ("C-x g" . magit-status)
        )
    #+END_SRC
+
+** TRY multi-cursors
+** TRY gnus
+** TRY erc
+   - https://www.emacswiki.org/emacs/EmacsChannel
 
 * Dired
 
