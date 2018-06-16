@@ -184,25 +184,41 @@
      ;; (unless custom-enabled-themes
      ;;   (load-theme 'material t nil))		; load & enable theme, if nothing already set
 
-     (defun my/disable-all-themes (theme-list)
-       "Disable all themes in theme-list and call powerline-revert.  
-     TODO: Call with custom-enabled-themes if called without argument."
+     (defun my/disable-all-themes (&optional theme-list)
+       "Disable all themes in theme-list and call powerline-revert."
+       ;; TODO: Call with custom-enabled-themes if called without argument.
        (if (and (eq (car theme-list) nil)
-                (fboundp 'powerline-revert))
-           (powerline-revert)
+                (fboundp 'powerline-reset))
+           (powerline-reset)                ; Only called once last theme is disabled
          (disable-theme (car theme-list))
          (my/disable-all-themes (cdr theme-list))))
 
      (defun my/load-theme (theme)
        "Load a theme and reset powerline, if enabled."
-       (progn 
+       (progn
+         (my/disable-all-themes custom-enabled-themes)
          (load-theme theme t)
          (when (fboundp 'powerline-reset) (powerline-reset))))
-  
 
+     (defun my/load-theme-advice-after (theme &optional no-confirm no-enable)
+       "Reset/update packages' themes, if needed and available."
+       (progn 
+         (when (fboundp 'powerline-reset) (powerline-reset))))
+
+     (advice-add 'load-theme :after #'my/load-theme-advice-after)
+     ;(advice-add 'disable-theme :after #'(when (fboundp 'powerline-reset) (powerline-reset)))
      (setq custom-theme-directory user-emacs-directory)
-
    #+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle no :results silent
+  ;; TESTING
+  (spaceline-spacemacs-theme)
+  (advice-remove 'load-theme 'my/load-theme-advice-after)
+  (my/load-theme 'two-fifteen)
+  (my/disable-all-themes custom-enabled-themes)
+
+#+END_SRC
+
 
 ** UTF-8
 
@@ -466,7 +482,7 @@
        :config
        (require 'spaceline-config)
        (setq powerline-default-separator 'wave)
-       (spaceline-spacemacs-theme))
+       (spaceline-spacemacs-theme))          ; quickly makes modeline pretty
    #+END_SRC
 
 ** OLD anzu - Count isearch matches
@@ -852,11 +868,16 @@
   files.
   #+BEGIN_SRC emacs-lisp
     ;; Open a couple files
-    (find-file (concat my/org-directory "/*.org")) ; filter to .org files in org
-                                                   ; directory
+    (dired (concat my/org-directory "/*.org")) ; filter to .org files in org
+
+    (find-file (concat my/user-dir "/Projects/dotemacs/init.org"))
+                                               ; directory
     (if my/on-work-pc
         (find-file (concat my/org-directory "/work.org"))
       (find-file (concat my/org-directory "/private.org")))
+
+    (my/disable-all-themes custom-enabled-themes) ; just in case multiple
+    (my/load-theme 'two-fifteen)                  ; load starting theme
   #+END_SRC
 
 * Notes
