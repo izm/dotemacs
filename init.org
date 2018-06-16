@@ -58,7 +58,12 @@
    - https://github.com/jwiegley/use-package
 
    #+BEGIN_SRC emacs-lisp
-     (require 'use-package)                  ; we want this instead of 'require
+     ;; This is only needed once, near the top of the file
+     (eval-when-compile
+       ;; Following line is not needed if use-package.el is in ~/.emacs.d
+       (add-to-list 'load-path "<path where use-package is installed>")
+       (require 'use-package))                ; we want this instead of 'require
+                 
      (setq use-package-always-ensure t)      ; ensure package is installed
      (setq use-package-verbose t) 		; report config loading time in *Messages*
    #+END_SRC
@@ -410,10 +415,16 @@
    - =M-x esup=
    - =C-u M-x esup= to use custom file
    - HOME PC:
-   :     Total User Startup Time: 0.285sec     Total Number of GC Pauses: 8     Total GC Time: 0.047sec
+   : Total User Startup Time: 0.285sec     Total Number of GC Pauses: 8     Total GC Time: 0.047sec
+
+   - HOME Laptop, battery:
+   : Total User Startup Time: 20.273sec    Total Number of GC Pauses: 12    Total GC Time: 0.511sec
+
+   : ein-connect.elc:15  6.680sec   32% (x2)
+   : gnus-sum.elc:16  1.953sec   9%
+   : anaconda-mode.elc:16  1.742sec   8%
+
    - WORK Laptop:
-   : TODO
-   - HOME Laptop:
    : TODO
 
    #+BEGIN_SRC emacs-lisp
