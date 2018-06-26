@@ -916,6 +916,9 @@
   After environment setup is complete, do any remaining things like opening
   files.
   #+BEGIN_SRC emacs-lisp
+    (my/disable-all-themes custom-enabled-themes) ; just in case multiple
+    (my/load-theme 'two-fifteen)                  ; load starting theme
+
     ;; Open a couple files
     (dired (concat my/org-directory "/*.org")) ; filter to .org files in org
 
@@ -924,9 +927,6 @@
     (if my/on-work-pc
         (find-file (concat my/org-directory "/work.org"))
       (find-file (concat my/org-directory "/private.org")))
-
-    (my/disable-all-themes custom-enabled-themes) ; just in case multiple
-    (my/load-theme 'two-fifteen)                  ; load starting theme
   #+END_SRC
 
 * Notes
