@@ -425,7 +425,11 @@
    : anaconda-mode.elc:16  1.742sec   8%
 
    - WORK Laptop:
-   : TODO
+   : Total User Startup Time: 81.152sec     Total Number of GC Pauses: 17     Total GC Time: 0.504sec
+
+   : ein-connect.elc:15  21.581sec   26% (x2)
+   : anaconda-mode.elc:16  15.036sec   18%
+   : use-package.elc:15  2.944sec   3% (x2)
 
    #+BEGIN_SRC emacs-lisp
      (use-package esup
