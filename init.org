@@ -724,6 +724,17 @@
      )
    #+END_SRC
 
+** ob-ipython - jupyter for org-mode
+   - https://github.com/gregsexton/ob-ipython
+   - http://cachestocaches.com/2018/6/org-literate-programming/
+
+   org-babel integration with Jupyter for evaluating code blocks.
+
+   #+BEGIN_SRC emacs-lisp
+   (use-package ob-ipython
+   :ensure t)
+   #+END_SRC
+
 ** TRY multi-cursors
 ** TRY gnus
 ** TRY erc
@@ -820,7 +831,11 @@
      (org-babel-do-load-languages
       'org-babel-load-languages
       '((emacs-lisp . t)
-        (python . t)))
+        (python . t)
+        (ipython . t)))
+
+     ;; Don't prompt before running org code blocks w/C-c C-c
+     (setq org-confirm-babel-evaluate nil)
 
      ;; Enable single-key commands at beginning of headers
      (setq org-use-speed-commands t)
