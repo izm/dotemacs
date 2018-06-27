@@ -731,8 +731,24 @@
    org-babel integration with Jupyter for evaluating code blocks.
 
    #+BEGIN_SRC emacs-lisp
-   (use-package ob-ipython
-   :ensure t)
+     (use-package ob-ipython
+       :ensure t)
+   #+END_SRC
+
+** ob-async - asynchronous execution of org-babel src blocks
+   https://github.com/astahlman/ob-async
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package ob-async
+       :ensure t)
+   #+END_SRC
+
+** helpful - adding more info to emacs help
+   https://github.com/Wilfred/helpful
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package helpful
+       :ensure t)
    #+END_SRC
 
 ** TRY multi-cursors
@@ -836,6 +852,10 @@
 
      ;; Don't prompt before running org code blocks w/C-c C-c
      (setq org-confirm-babel-evaluate nil)
+
+     ;; http://cachestocaches.com/2018/6/org-literate-programming/
+     ;; Fix an incompatibility between the ob-async and ob-ipython packages
+     (setq ob-async-no-async-languages-alist '("ipython"))
 
      ;; Enable single-key commands at beginning of headers
      (setq org-use-speed-commands t)
