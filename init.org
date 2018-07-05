@@ -830,12 +830,16 @@
      ;; fontify (pretty formating) code in code blocks
      (setq org-src-fontify-natively t)	; important for init.org !
 
-     (setq org-refile-targets (quote ((org-agenda-files :level . 2))))
-     (setq org-refile-use-outline-path 'file)
+     ;; org-refile
+     (setq org-refile-targets (quote ((nil :maxlevel . 5)
+                                      (org-agenda-files :maxlevel . 5))))
+     (setq org-outline-path-complete-in-steps nil) ; prevent org interfering w/ivy
+     (setq org-refile-use-outline-path 'file) ; refile paths begin with the file name
+     (setq org-reverse-note-order t)         ; new notes at top of file or entry
 
      ;; org-mode customization
-     (setq org-log-done 'time)  ;;
-     (setq org-todo-keywords
+     (setq org-log-done 'time)         ; add time stamp when task moves to DONE state
+     (setq org-todo-keywords           ; default TODO keywords
             '((sequence "TODO(t)" "STARTD(s)" "WAITING(w)" "|" "DONE(d)" "DELEGATED(e)" "CANCELLED(c)")))
 
      ;org-mode keybindings
