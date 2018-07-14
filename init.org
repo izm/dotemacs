@@ -307,6 +307,13 @@
      ;;   :defer t)
    #+END_SRC
 
+** diminish
+   #+BEGIN_SRC emacs-lisp
+   (use-package diminish :ensure t)
+   #+END_SRC
+   
+** TODO delight
+
 ** smartparens - Minor mode to work with pairs
    - https://github.com/Fuco1/smartparens (more animated gif guides)
    - https://ebzzry.io/en/emacs-pairs/ suggested key bindings and usage
@@ -325,6 +332,7 @@
    #+BEGIN_SRC emacs-lisp
      (use-package which-key
        :ensure t
+       :diminish which-key-mode
        :config
        (which-key-mode))
 
@@ -347,6 +355,7 @@
    #+BEGIN_SRC emacs-lisp
      (use-package company
        :ensure t
+       :diminish company-mode
        ;; (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
        ;; (add-hook 'ein:connect-mode-hook 'company-mode) ; Can't figure out company-jedi + ein
 
@@ -583,6 +592,7 @@
        (setq enable-recursive-minibuffers t)
        :bind (("C-s" . swiper)                  ; Replace isearch-forward
               ("C-x C-f" . counsel-find-file))) ; Replace find-file
+     (diminish 'ivy-mode)
    #+END_SRC
 
 ** rainbow-mode - Set bg to colour of #00000 string
@@ -633,7 +643,6 @@
   #+BEGIN_SRC emacs-lisp
     (use-package wrap-region
       :ensure t
-      :defer 1
       :config
       (wrap-region-add-wrappers
        '(("*" "*" nil org-mode)
@@ -751,6 +760,8 @@
        :ensure t)
    #+END_SRC
 
+** TRY org-listcruncher - Parse emacs org list contents into table
+   https://github.com/dfeich/org-listcruncher
 ** TRY multi-cursors
 ** TRY gnus
 ** TRY erc
