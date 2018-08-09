@@ -1,6 +1,8 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
+Updated: <2018-08-09 10:16:08>
+
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
   directory, =~/init.d/=.
@@ -116,6 +118,10 @@
      (global-eldoc-mode 1)                  ; highlight parameters in minibuffer
      (setq gc-cons-threshold 20000000)      ; default is 800,000 ... too small!
      (setq reb-re-syntax 'string)           ; C-c TAB to cycle when in regexp-builder
+
+     ;; see file-local variable: time-stamp-pattern, time-stamp-start, etc
+     (add-hook 'before-save-hook 'time-stamp) ; update timestamps of set format before saving
+
    #+END_SRC
 
 ** Fonts
@@ -1022,3 +1028,9 @@
     - https://github.com/proofit404/company-anaconda
     - https://github.com/proofit404/anaconda-mode
   - [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html][Ivy, Counsel, Swiper]] - counsel alternatives to built-ins
+
+
+# Local Variables:
+# time-stamp-start: "Updated:[ 	]+\\\\?[\"<]+"
+# time-stamp-format: "%:y-%02m-%02d %02H:%02M:%02S"
+# End:
