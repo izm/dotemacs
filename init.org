@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-08-09 10:16:08>
+Updated: <2018-09-10 09:43:41>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -739,21 +739,23 @@ Updated: <2018-08-09 10:16:08>
      )
    #+END_SRC
 
-** ob-ipython - jupyter for org-mode
+** TRY ob-ipython - jupyter for org-mode
    - https://github.com/gregsexton/ob-ipython
    - http://cachestocaches.com/2018/6/org-literate-programming/
 
    org-babel integration with Jupyter for evaluating code blocks.
 
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle no
+     ;; INCREDIBLY slow startup time.  Disabled until needed.
      (use-package ob-ipython
        :ensure t)
    #+END_SRC
 
-** ob-async - asynchronous execution of org-babel src blocks
+** TRY ob-async - asynchronous execution of org-babel src blocks
    https://github.com/astahlman/ob-async
 
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle no
+     ;; INCREDIBLY slow startup time.  Disabled until needed.
      (use-package ob-async
        :ensure t)
    #+END_SRC
