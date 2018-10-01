@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-09-10 09:43:41>
+Updated: <2018-10-01 11:53:57>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -723,6 +723,9 @@ Updated: <2018-09-10 09:43:41>
 ** magit - Git integration
    A Git version control interface.
 
+   Recommended: =ssh-keygen=, add key to git host, ensure =.ssh/= directory is
+   in HOME directory (=C:/Users/Username/AppData/Roaming/= on /Windows 10/)
+   
    #+BEGIN_SRC emacs-lisp
      (use-package magit
        :ensure t
@@ -938,40 +941,41 @@ Updated: <2018-09-10 09:43:41>
       ;;
 
       (if (string-match-p (regexp-quote "steven.brown") (getenv "USERPROFILE"))
-	  (setq my/env "work")
-	(setq my/env "personal"))
+          (setq my/env "work")
+        (setq my/env "personal"))
 
 
       (let* ((cygwin-root (if (string-equal my/env "work")
-			      "c:/Users/steven.brown/Apps/cygwin64" ; work
-			    "c:/Program Files/cygwin64"))	      ; home
-	     (cygwin-bin (concat cygwin-root "/bin")))
-	(when (and (eq 'windows-nt system-type)
-		   (file-readable-p cygwin-root))
+                              "c:/Users/steven.brown/Apps/cygwin64" ; work
+                            "c:/Program Files/cygwin64"))	      ; home
+             (cygwin-bin (concat cygwin-root "/bin")))
+        (when (and (eq 'windows-nt system-type)
+                   (file-readable-p cygwin-root))
 
-	  (setq exec-path (cons cygwin-bin exec-path))
-	  (setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
+          (setq exec-path (cons cygwin-bin exec-path))
+          (setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
 
-	  ;; By default use the Windows HOME.
-	  ;; Otherwise, uncomment below to set a HOME
-	  ;;      (setenv "HOME" (concat cygwin-root "/home/eric")) ;TODO: Customize by environment
+          ;; By default use the Windows HOME. (userdir/AppData/Roaming/.emacs.d)
+          ;; (setenv "HOME" (getenv "USERPROFILE"))
+          ;; Otherwise, uncomment below to set a HOME
+          ;;      (setenv "HOME" (concat cygwin-root "/home/eric")) ;TODO: Customize by environment
 
-	  ;; NT-emacs assumes a Windows shell. Change to bash.
-	  (setq shell-file-name "bash")
-	  (setenv "SHELL" shell-file-name)
-	  (setq explicit-shell-file-name shell-file-name)
+          ;; NT-emacs assumes a Windows shell. Change to bash.
+          (setq shell-file-name "bash")
+          (setenv "SHELL" shell-file-name)
+          (setq explicit-shell-file-name shell-file-name)
 
-	  ;; This removes unsightly ^M characters that would otherwise
-	  ;; appear in the output of java applications.
-	  (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
+          ;; This removes unsightly ^M characters that would otherwise
+          ;; appear in the output of java applications.
+          (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
 
-	  ;; explicitly set dictionary path
-	  (setq ispell-hunspell-dict-paths-alist
-		`(("en_CA" ,(concat (file-name-as-directory cygwin-root) "usr/share/myspell/en_CA.aff"))
-		  ("en_US" ,(concat (file-name-as-directory cygwin-root) "usr/share/myspell/en_US.aff"))
-		  ("en_GB" ,(concat (file-name-as-directory cygwin-root) "usr/share/myspell/en_GB.aff"))
-		  ))
-	  ))
+          ;; explicitly set dictionary path
+          (setq ispell-hunspell-dict-paths-alist
+                `(("en_CA" ,(concat (file-name-as-directory cygwin-root) "usr/share/myspell/en_CA.aff"))
+                  ("en_US" ,(concat (file-name-as-directory cygwin-root) "usr/share/myspell/en_US.aff"))
+                  ("en_GB" ,(concat (file-name-as-directory cygwin-root) "usr/share/myspell/en_GB.aff"))
+                  ))
+          ))
     #+END_SRC
 
 * Finally
