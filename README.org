@@ -1,25 +1,24 @@
 * dotemacs README
 
-This is my personal emacs configuration, which anyone is free to use
-and modify.  However, it is quite personalized, so would probably
-require modification to use.  I also use it as a tool for learning and
-playing around, so no promises are given on its state at any point.
+This is my personal emacs configuration.  It is quite personalized, so would
+probably require modification to use, but bits and pieces may be useful.  I also
+use it as a tool for learning and playing around, so no promises are given on
+its state at any point.
 
-It began as an =emacs-lisp= file called =.emacs= (hence the repository
-name).  It is now a rich =org-mode= file, [[file:init.org::*init.org][init.org]], that is processed
-by =emacs org-mode= overwriting the default =emacs= configuration file
-at =~/.emacs.d/init.el=.  Again, when it does this, it /overwrites/
-the existing =init.el= so be sure to back that up before running this.
+It began as an =emacs-lisp= file called =.emacs= (hence the repository name).
+It is now a rich =org-mode= file, [[file:init.org::*init.org][init.org]], that is processed by =emacs
+org-mode= overwriting the default =emacs= configuration file at
+=~/.emacs.d/init.el=.  Again, when it does this, it /overwrites/ the existing
+=init.el= so be sure to back that up before running this.
 
-GitHub parses =org-mode= files such as [[file:init.org::*init.org][init.org]] and this =README.org=
-file, so that's probably the best way to take look at it. 
+GitHub parses =org-mode= files such as [[file:init.org::*init.org][init.org]] and this =README.org= file, so
+that's probably the best way to [[https://github.com/izm/dotemacs][view it]].
 
 If you /do/ want to process it (and /overwrite/ the current
-=~/.emacs.d/init.el=), open the [[file:init.org::*init.org][init.org]] file in =emacs=, move the
-cursor to the first emacs-lisp source code block at the top of the
-file (under the =init.org= heading), and press =C-c C-c= or use =M-x
-org-babel-src-execute=.  This will extract all the other source code
-blocks into =init.el= and then load it, downloading and compiling any
-needed packages.
+=~/.emacs.d/init.el=), open the [[file:init.org::*init.org][init.org]] file in =emacs=, move the cursor to the
+first emacs-lisp source code block at the top of the file (under the =init.org=
+heading), and press =C-c C-c= or use =M-x org-babel-src-execute=.  This will
+extract all the other source code blocks into =init.el= and then load it,
+downloading and compiling any needed packages.
 
 You may have to first install =use-package=.
