@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-10-01 11:53:57>
+Updated: <2018-10-07 17:21:17>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -538,14 +538,15 @@ Updated: <2018-10-01 11:53:57>
    #+END_SRC
 
 ** OLD smex - Fuzzy =M-x= function matching
+   CLOSED: [2018-10-07 Sun 15:22]
    - https://github.com/nonsequitur/smex
-   - Partially superceded by Swiper, not sure if I want to use =counsel-M-x= in
-     place....
+   - Ultra-lightweight =M-x= enhancement
+   - Superceded by Swiper & Counsel
 
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle no
      (use-package smex
        :ensure t
-       :bind (("M-x" . smex)
+       :bind (;("M-x" . smex) replaced w/counsel
               ("M-X" . smex-major-mode-commands)
               ("C-c C-c M-x" . execute-extended-command)))
    #+END_SRC
@@ -592,13 +593,16 @@ Updated: <2018-10-01 11:53:57>
      (use-package counsel
        :ensure t
        :config
-       (ivy-mode 1)
+       ;; use ivy completion on any command using 'completing-read-function'
+       (ivy-mode 1)                          
        (setq ivy-use-virtual-buffers t)
        (setq ivy-count-format "%d/%d ")      ; current/total match number
        (setq enable-recursive-minibuffers t)
-       :bind (("C-s" . swiper)                  ; Replace isearch-forward
-              ("C-x C-f" . counsel-find-file))) ; Replace find-file
+       (counsel-mode 1) ; use counsel equivalents of existing Emacs functions
+       :bind (("C-s" . swiper)               ; Replace isearch-forward
+              ))
      (diminish 'ivy-mode)
+     (diminish 'counsel-mode)
    #+END_SRC
 
 ** rainbow-mode - Set bg to colour of #00000 string
@@ -652,14 +656,14 @@ Updated: <2018-10-01 11:53:57>
       :config
       (wrap-region-add-wrappers
        '(("*" "*" nil org-mode)
-	 ("~" "~" nil org-mode)
-	 ("/" "/" nil org-mode)
-	 ("=" "=" ":" org-mode) ; Avoid conflict with expand-region, use ':'
-	 ("+" "+" "+" org-mode)
-	 ("_" "_" nil org-mode)))
-	 ;; ("$" "$" nil (org-mode latex-mode))
+         ("~" "~" nil org-mode)
+         ("/" "/" nil org-mode)
+         ("=" "=" ":" org-mode) ; Avoid conflict with expand-region, use ':'
+         ("+" "+" "+" org-mode)
+         ("_" "_" nil org-mode)))
+         ;; ("$" "$" nil (org-mode latex-mode))
       (add-hook 'org-mode-hook 'wrap-region-mode))
-
+    (diminish 'wrap-region-mode)
   #+END_SRC
 
 ** projectile (think about removing)
@@ -742,6 +746,39 @@ Updated: <2018-10-01 11:53:57>
      )
    #+END_SRC
 
+** org-gcal
+   https://github.com/myuhe/org-gcal.el
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-gcal
+       :ensure t)
+     ;;  See init_private.el for setup
+   #+END_SRC
+
+*** org-gcal Usage
+   - *org-gcal-sync*: Sync between Org and Gcal. before syncing, execute
+     org-gcal-fetch
+
+   - *org-gcal-fetch*: Fetch Google calendar events and populate
+     org-gcal-file-alist locations. The org files in org-gcal-file-alist should
+     be blank or all of their headlines should have timestamps.
+
+   - *org-gcal-post-at-point*: Post/edit org block at point to Google calendar.
+
+   - *org-gcal-delete-at-point*: Delete Gcal event at point.
+
+   - *org-gcal-refresh-token*: Refresh the OAuth token. OAuth token expired in
+     3600 seconds, You should refresh token on a regular basis.
+   
+** TRY file-tree neo-tree?
+   
+
+** TRY move-text
+   https://github.com/emacsfodder/move-text
+
+   #+BEGIN_SRC emacs-lisp
+   
+   #+END_SRC
 ** TRY ob-ipython - jupyter for org-mode
    - https://github.com/gregsexton/ob-ipython
    - http://cachestocaches.com/2018/6/org-literate-programming/
