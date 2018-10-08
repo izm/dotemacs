@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-10-07 17:21:17>
+Updated: <2018-10-08 00:35:28>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -769,16 +769,32 @@ Updated: <2018-10-07 17:21:17>
 
    - *org-gcal-refresh-token*: Refresh the OAuth token. OAuth token expired in
      3600 seconds, You should refresh token on a regular basis.
-   
-** TRY file-tree neo-tree?
-   
 
-** TRY move-text
+** move-text
+
    https://github.com/emacsfodder/move-text
 
+   M-UP and M-DOWN to move lines/regions
+
    #+BEGIN_SRC emacs-lisp
-   
+   (use-package move-text
+     :ensure t)
+   (move-text-default-bindings)
    #+END_SRC
+
+sdf
+   
+** neotree
+   https://github.com/jaypei/emacs-neotree
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package neotree
+       :ensure t
+       :bind ("<f8>" . neotree-toggle)
+       )
+
+   #+END_SRC
+
 ** TRY ob-ipython - jupyter for org-mode
    - https://github.com/gregsexton/ob-ipython
    - http://cachestocaches.com/2018/6/org-literate-programming/
