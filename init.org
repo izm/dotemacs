@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-10-08 00:35:28>
+Updated: <2018-10-08 10:27:14>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -720,8 +720,9 @@ Updated: <2018-10-08 00:35:28>
      #+BEGIN_SRC emacs-lisp
        (use-package ace-window
          :ensure t
-         :bind ("M-o" . ace-window )                     ; replace facemenu-keymap binding
+         :bind ("M-o" . ace-window )           ; replace facemenu-keymap binding
          )
+       (setq aw-scope 'frame)                  ; Only consider current frame's windows
      #+END_SRC
 
 ** magit - Git integration
@@ -938,6 +939,10 @@ sdf
 
      ;; Enable single-key commands at beginning of headers
      (setq org-use-speed-commands t)
+
+     ;; Try org-indirect-buffer-display options
+     (setq org-indirect-buffer-display 'new-frame)
+     (setq org-src-window-setup 'other-frame)
    #+END_SRC
 
 ** Agenda
