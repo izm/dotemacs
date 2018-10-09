@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-10-08 10:27:14>
+Updated: <2018-10-09 12:52:47>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -822,7 +822,18 @@ sdf
 
    #+BEGIN_SRC emacs-lisp
      (use-package helpful
-       :ensure t)
+       :ensure t
+
+       ;; replace default help functions
+       :bind (("C-h f" . helpful-callable)
+              ("C-h v" . helpful-variable)
+              ("C-h k" . helpful-key)
+
+              ;; additional
+              ("C-c C-d" . helpful-at-point) ;
+              ;; ("C-h F" . helpful-function) ; replace
+              ;; ("C-h C" . helpful-command) ; 
+              ))
    #+END_SRC
 
 ** TRY org-listcruncher - Parse emacs org list contents into table
@@ -1092,6 +1103,8 @@ sdf
     - https://github.com/proofit404/company-anaconda
     - https://github.com/proofit404/anaconda-mode
   - [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html][Ivy, Counsel, Swiper]] - counsel alternatives to built-ins
+  - http://www.bartuka.com/pages-output/personal-emacs-configuration/ \\
+    highlight, erc, custom functions
 
 
 # Local Variables:
