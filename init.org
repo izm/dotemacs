@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-10-09 12:52:47>
+Updated: <2018-10-18 10:35:11>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -100,6 +100,10 @@ Updated: <2018-10-09 12:52:47>
      (setq inhibit-startup-screen t)    ; skip startup screen
      (setq tool-bar-mode nil)           ; Remove clunky toolbar and icons
      (show-paren-mode t)                ; highlight matching parentheses
+     (setq show-paren-delay 0)
+     (setq show-paren-when-point-inside-paren t)
+     (setq show-paren-when-point-in-periphery t)
+     (setq show-paren-style 'mixed)
      (global-hl-line-mode t)            ; highlight current line
      (setq visible-bell t)              ; blink, don't bark
      (setq x-stretch-cursor t)          ; cursor width will match tab character width
@@ -121,6 +125,8 @@ Updated: <2018-10-09 12:52:47>
 
      ;; see file-local variable: time-stamp-pattern, time-stamp-start, etc
      (add-hook 'before-save-hook 'time-stamp) ; update timestamps of set format before saving
+
+     (setq delete-by-moving-to-trash t)     ; move files to trash instead of deleting
 
    #+END_SRC
 
