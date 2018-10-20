@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-10-18 10:35:11>
+Updated: <2018-10-20 14:15:04>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -600,11 +600,11 @@ Updated: <2018-10-18 10:35:11>
        :ensure t
        :config
        ;; use ivy completion on any command using 'completing-read-function'
-       (ivy-mode 1)                          
+       (ivy-mode 1)
+       (counsel-mode 1) ; use counsel equivalents of existing Emacs functions
        (setq ivy-use-virtual-buffers t)
        (setq ivy-count-format "%d/%d ")      ; current/total match number
        (setq enable-recursive-minibuffers t)
-       (counsel-mode 1) ; use counsel equivalents of existing Emacs functions
        :bind (("C-s" . swiper)               ; Replace isearch-forward
               ))
      (diminish 'ivy-mode)
