@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-10-20 14:15:04>
+Updated: <2018-10-22 16:40:50>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -596,19 +596,22 @@ Updated: <2018-10-20 14:15:04>
     - https://github.com/abo-abo/swiper
 
    #+BEGIN_SRC emacs-lisp
-     (use-package counsel
+     (use-package counsel                    ; requires swiper, which requires ivy
        :ensure t
+       :demand
        :config
-       ;; use ivy completion on any command using 'completing-read-function'
-       (ivy-mode 1)
-       (counsel-mode 1) ; use counsel equivalents of existing Emacs functions
        (setq ivy-use-virtual-buffers t)
        (setq ivy-count-format "%d/%d ")      ; current/total match number
        (setq enable-recursive-minibuffers t)
+
+       ;; use ivy completion on any command using 'completing-read-function'
+       (ivy-mode 1)
+       (counsel-mode 1) ; use counsel equivalents of existing Emacs functions
+       (diminish 'ivy-mode)
+       (diminish 'counsel-mode)
+
        :bind (("C-s" . swiper)               ; Replace isearch-forward
               ))
-     (diminish 'ivy-mode)
-     (diminish 'counsel-mode)
    #+END_SRC
 
 ** rainbow-mode - Set bg to colour of #00000 string
