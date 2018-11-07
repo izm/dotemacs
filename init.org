@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-10-22 16:40:50>
+Updated: <2018-11-07 13:24:21>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -803,6 +803,18 @@ sdf
        :bind ("<f8>" . neotree-toggle)
        )
 
+   #+END_SRC
+
+** markdown-mode
+   
+   Major mode for editing markdown.
+
+   - https://jblevins.org/projects/markdown-mode/
+   - https://leanpub.com/markdown-mode ← Online book
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package markdown-mode
+       :ensure t)
    #+END_SRC
 
 ** TRY ob-ipython - jupyter for org-mode
