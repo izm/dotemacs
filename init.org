@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-11-07 13:24:21>
+Updated: <2018-11-10 16:21:23>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -1126,7 +1126,8 @@ sdf
   - [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html][Ivy, Counsel, Swiper]] - counsel alternatives to built-ins
   - http://www.bartuka.com/pages-output/personal-emacs-configuration/ \\
     highlight, erc, custom functions
-
+  - EMACS on a Windows USB key: https://gaballench.wordpress.com/2018/11/10/emacs-as-an-operating-system/
+    - includes portable git, LaTeX, AUCTeX, Pandoc, markdown, customizations
 
 # Local Variables:
 # time-stamp-start: "Updated:[ 	]+\\\\?[\"<]+"
