@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-11-16 00:28:53>
+Updated: <2018-11-19 15:12:29>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -824,9 +824,16 @@ sdf
    org-babel integration with Jupyter for evaluating code blocks.
 
    #+BEGIN_SRC emacs-lisp :tangle no
-     ;; INCREDIBLY slow startup time.  Disabled until needed.
+     ;; INCREDIBLY slow startup time.  Disabled, run when needed.
      (use-package ob-ipython
-       :ensure t)
+       :ensure t
+       :config
+       (org-babel-do-load-languages
+        'org-babel-load-languages
+        '((ipython . t)
+          ;; other languages..
+          ))
+       )
    #+END_SRC
 
 ** TRY ob-async - asynchronous execution of org-babel src blocks
@@ -985,6 +992,11 @@ sdf
    #+END_SRC
 
 * Windows
+** Libraries
+   Some things, =eww= (=libxml=), inline images (=libpng=) require libraries not
+   shipped with =emacs= on Windows.  Get those from
+   https://sourceforge.net/projects/ezwinports/ and install them to the
+   =/emacs/bin/= directory.
 ** External Programs
 *** Open with default Windows app (w32-browser)
     - /Control-Enter/ to open with default windows application in dired mode.
