@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-11-19 15:12:29>
+Updated: <2018-11-20 00:39:50>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -596,22 +596,24 @@ Updated: <2018-11-19 15:12:29>
     - https://github.com/abo-abo/swiper
 
    #+BEGIN_SRC emacs-lisp
-     (use-package counsel                    ; requires swiper, which requires ivy
-       :ensure t
-       :demand
-       :config
-       (setq ivy-use-virtual-buffers t)
-       (setq ivy-count-format "%d/%d ")      ; current/total match number
-       (setq enable-recursive-minibuffers t)
+          (use-package counsel                    ; requires swiper, which requires ivy
+            :ensure t
+            :demand
+            :config
+            (setq ivy-use-virtual-buffers t)
+            (setq ivy-count-format "%d/%d ")      ; current/total match number
+            (setq enable-recursive-minibuffers t)
+            (setq ivy-re-builders-alist 
+                  '((t . ivy--regex-fuzzy ))) ; try fuzzy matching
+                  ;'((t . ivy--regex-plus)))
+            ;; use ivy completion on any command using 'completing-read-function'
+            (ivy-mode 1)
+            (counsel-mode 1) ; use counsel equivalents of existing Emacs functions
+            (diminish 'ivy-mode)
+            (diminish 'counsel-mode)
 
-       ;; use ivy completion on any command using 'completing-read-function'
-       (ivy-mode 1)
-       (counsel-mode 1) ; use counsel equivalents of existing Emacs functions
-       (diminish 'ivy-mode)
-       (diminish 'counsel-mode)
-
-       :bind (("C-s" . swiper)               ; Replace isearch-forward
-              ))
+            :bind (("C-s" . swiper)               ; Replace isearch-forward
+                   ))
    #+END_SRC
 
 ** rainbow-mode - Set bg to colour of #00000 string
@@ -824,16 +826,20 @@ sdf
    org-babel integration with Jupyter for evaluating code blocks.
 
    #+BEGIN_SRC emacs-lisp :tangle no
-     ;; INCREDIBLY slow startup time.  Disabled, run when needed.
-     (use-package ob-ipython
-       :ensure t
-       :config
-       (org-babel-do-load-languages
-        'org-babel-load-languages
-        '((ipython . t)
-          ;; other languages..
-          ))
-       )
+        ;; INCREDIBLY slow startup time.  Disabled, run when needed.
+        (use-package ob-ipython
+          :ensure t
+          :config
+          (add-hook 'ob-ipython-mode-hookp
+                    (lambda ()
+                      (company-mode 1)))
+          (org-babel-do-load-languages
+           'org-babel-load-languages
+           '((ipython . t)
+             ;; other languages..
+             ))
+          (add-to-list 'company-backends 'company-ob-ipython)
+          )
    #+END_SRC
 
 ** TRY ob-async - asynchronous execution of org-babel src blocks
