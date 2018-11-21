@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-11-20 00:39:50>
+Updated: <2018-11-20 23:21:40>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -604,8 +604,8 @@ Updated: <2018-11-20 00:39:50>
             (setq ivy-count-format "%d/%d ")      ; current/total match number
             (setq enable-recursive-minibuffers t)
             (setq ivy-re-builders-alist 
-                  '((t . ivy--regex-fuzzy ))) ; try fuzzy matching
-                  ;'((t . ivy--regex-plus)))
+                  '((t . ivy--regex-plus)))
+                  ;'((t . ivy--regex-fuzzy ))) ; try fuzzy matching
             ;; use ivy completion on any command using 'completing-read-function'
             (ivy-mode 1)
             (counsel-mode 1) ; use counsel equivalents of existing Emacs functions
