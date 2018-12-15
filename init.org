@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-11-22 16:40:31>
+Updated: <2018-12-14 13:44:31>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -72,7 +72,7 @@ Updated: <2018-11-22 16:40:31>
 
 * Private
   Load things that should be slightly more private.
-  #+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp :output nil
     ;; ensure init_private.el is loaded
     (setq init_private_loaded
           (load
@@ -80,6 +80,8 @@ Updated: <2018-11-22 16:40:31>
                    "init_private.el")))
     ;; defines: my/user-dir, my/on-work-pc, my/user-name, my/computer-name, my/org-directory
   #+END_SRC
+
+
 
 * Emacs - General
 
@@ -923,23 +925,33 @@ sdf
 
    - [[https://www.gnu.org/software/emacs/manual/html_node/org/Template-elements.html][Capture Template Elements]]
 
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :results output silent
      (setq org-capture-templates
-	   '(("t"				; key
-	      "Task"				; description
-	      entry				; type
-	      ;; heading type and title
-	      (file+headline org-default-notes-file "Tasks") ; target
-	      "* TODO %?\n  %i\n  %a"	; template
-	      ;; optional property list  ; properties
-	      )
-	     ("j"
-	      "Learning Journal"
-	      entry
-	      (file+datetree org-default-notes-file "Learning Journal")
-	      "* %?\n  Entered on %U\n  - Active Region: %i\n  - Created while at: %a\n" ; %a stores link, %i is active region
-	      )
-	     ))
+           `(("t"				; key
+              "Task (work)"                  ; description
+              entry				; type
+              ;; heading type and title
+              (file+headline ,(concat my/org-directory "/work.org") "Inbox") ; target
+              "* TODO %?\n  %i\n  %a\n"	; template
+              ;; optional property list  ; properties
+              :prepend t                     ; insert at head of list
+              )
+             ("T"				; key
+              "Task (general)"               ; description
+              entry				; type
+              ;; heading type and title
+              (file+headline org-default-notes-file "Tasks") ; target
+              "* TODO %?\n  %i\n  %a\n"                      ; template
+              ;; optional property list  ; properties
+              :prepend t                     ; insert at head of list
+              )
+             ("j"
+              "Learning Journal"
+              entry
+              (file+datetree org-default-notes-file "Learning Journal")
+              "* %?\n  Entered on %U\n  - Active Region: %i\n  - Created while at: %a\n" ; %a stores link, %i is active region
+              )
+             ))
    #+END_SRC
 
 ** Other
