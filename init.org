@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2018-12-14 13:44:31>
+Updated: <2019-01-24 17:41:12>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -271,6 +271,8 @@ Updated: <2018-12-14 13:44:31>
            (used-mode . python-mode))
           ("Emacs Lisp"
            (used-mode . emacs-lisp-mode))
+          ("Images"
+           (used-mode . image-mode))
           ))))
 
      (setq ibuffer-saved-filters
