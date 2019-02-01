@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2019-01-24 17:41:12>
+Updated: <2019-02-01 10:42:47>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -902,11 +902,11 @@ sdf
 
    #+BEGIN_SRC emacs-lisp
      (setq org-export-initial-scope 'subtree)
-
+     (setq org-use-subsuperscripts '{})      ; require {} wrapper for ^super/_sub scripts
      ;; postamble
      (setq org-html-postamble 't)
      (setq org-html-postamble-format
-	   '(("en" "<p class=\"author\">%a</p> <p class=\"date\">%T</p>")))
+           '(("en" "<p class=\"author\">%a</p> <p class=\"date\">%T</p>")))
 
    #+END_SRC
 
