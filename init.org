@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2019-02-01 10:42:47>
+Updated: <2019-02-08 17:42:23>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -87,8 +87,48 @@ Updated: <2019-02-01 10:42:47>
 
 ** User - name, email
    #+BEGIN_SRC emacs-lisp
-   (setq user-full-name "Steven Brown")
-   (setq user-mail-address "steven.w.j.brown@gmail.com")
+     (setq user-full-name "Steven Brown")
+     (setq user-mail-address "steven.w.j.brown@gmail.com")
+   #+END_SRC
+
+** Calendar
+   #+BEGIN_SRC emacs-lisp
+     (setq holiday-general-holidays nil)     ; Remove US defaults, add back some later
+
+     ;; `calendar-holidays' initialized from multiple *holidays lists.  used in both
+     ;; calendar and org agenda.  Once loaded, `calendar-holidays' must be modified
+     ;; directly.
+     (setq holiday-local-holidays            ; Canada/BC Holidays
+           '((holiday-fixed 1 1 "New Year's Day")
+             (holiday-float 2 1 3 "Family Day")
+             (holiday-easter-etc -2 "Good Friday")
+             (holiday-easter-etc 1 "Easter Monday")
+             (holiday-float 5 1 -2 "Victoria Day")
+             (holiday-fixed 6 21 "Aboriginal Day")
+             (holiday-fixed 7 1 "Canada Day")
+             (holiday-float 8 1 1 "BC Day")
+             (holiday-float 9 1 1 "Labour Day")
+             (holiday-float 10 1 2 "Thanksgiving (Canadian)")
+             (holiday-fixed 11 11 "Remembrance Day")
+             (holiday-fixed 12 25 "Christmas")
+             (holiday-fixed 12 26 "Boxing Day")))
+
+     (setq holiday-other-holidays            ; US and shared non-Stats
+           '((holiday-float 1 1 3 "Martin Luther King Day (US)")
+             (holiday-fixed 2 2 "Groundhog Day")
+             (holiday-fixed 2 14 "Valentine's Day")
+             (holiday-float 2 1 3 "President's Day (US)")
+             (holiday-fixed 3 17 "St. Patrick's Day")
+             (holiday-fixed 4 1 "April Fools' Day")
+             (holiday-float 5 0 2 "Mother's Day")
+             (holiday-float 5 1 -1 "Memorial Day (US)")
+             (holiday-fixed 6 14 "Flag Day (US)")
+             (holiday-float 6 0 3 "Father's Day")
+             (holiday-fixed 7 4 "Independence Day (US)")
+             (holiday-float 10 1 2 "Columbus Day (US)")
+             (holiday-fixed 10 31 "Halloween")
+             (holiday-fixed 11 11 "Veteran's Day (US)")
+             (holiday-float 11 4 4 "Thanksgiving (US)")))
    #+END_SRC
 
 ** General - colour, lines, columns, backups, frame
