@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | NOTE OLD
 
-Updated: <2019-02-08 17:42:23>
+Updated: <2019-02-15 15:14:35>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -861,6 +861,25 @@ sdf
    #+BEGIN_SRC emacs-lisp
      (use-package markdown-mode
        :ensure t)
+   #+END_SRC
+
+** dictionary and thesaurus lookup
+   #+BEGIN_SRC emacs-lisp
+     (use-package dictionary :ensure t
+       :init
+       :config
+       ;; :bind ("" . dictionary-search)
+       ;; ("" . dictionary-match-words)
+       )
+
+     ;; These didn't work, and I don't want any more external dependecies.
+     ;; (use-package synosaurus :ensure t
+     ;;   :init 
+     ;;   :config
+     ;;   (setq synosaurus-backend 'synosaurus-backend-openthesaurus)
+     ;;   )
+
+     ;; (use-package synonymous :ensure t)
    #+END_SRC
 
 ** TRY ob-ipython - jupyter for org-mode
