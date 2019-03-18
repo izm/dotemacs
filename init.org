@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
-#+TODO: TODO TRY | NOTE OLD
+#+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-02-15 15:14:35>
+Updated: <2019-03-18 15:20:37>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -243,39 +243,13 @@ Updated: <2019-02-15 15:14:35>
    #+BEGIN_SRC emacs-lisp
      ;; (unless custom-enabled-themes
      ;;   (load-theme 'material t nil))		; load & enable theme, if nothing already set
-
-     (defun my/disable-all-themes (&optional theme-list)
-       "Disable all themes in theme-list and call powerline-revert."
-       ;; TODO: Call with custom-enabled-themes if called without argument.
-       (if (and (eq (car theme-list) nil)
-                (fboundp 'powerline-reset))
-           (powerline-reset)                ; Only called once last theme is disabled
-         (disable-theme (car theme-list))
-         (my/disable-all-themes (cdr theme-list))))
-
-     (defun my/load-theme (theme)
-       "Load a theme and reset powerline, if enabled."
-       (progn
-         (my/disable-all-themes custom-enabled-themes)
-         (load-theme theme t)
-         (when (fboundp 'powerline-reset) (powerline-reset))))
-
-     (defun my/load-theme-advice-after (theme &optional no-confirm no-enable)
-       "Reset/update packages' themes, if needed and available."
-       (progn 
-         (when (fboundp 'powerline-reset) (powerline-reset))))
-
-     (advice-add 'load-theme :after #'my/load-theme-advice-after)
-     ;(advice-add 'disable-theme :after #'(when (fboundp 'powerline-reset) (powerline-reset)))
      (setq custom-theme-directory user-emacs-directory)
+     (load-theme 'two-fifteen t)
    #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle no :results silent
-  ;; TESTING
-  (spaceline-spacemacs-theme)
-  (advice-remove 'load-theme 'my/load-theme-advice-after)
-  (my/load-theme 'two-fifteen)
-  (my/disable-all-themes custom-enabled-themes)
+  ;; TESTING, not exported
+  (load-theme 'two-fifteen t)
 
 #+END_SRC
 
@@ -346,21 +320,21 @@ Updated: <2019-02-15 15:14:35>
    #+BEGIN_SRC emacs-lisp
      (use-package material-theme :ensure t :defer t)
      (use-package leuven-theme :ensure t :defer t)
-     (use-package spacemacs-theme
-       :ensure t
-       :defer t
-       ;; :init (load-theme 'spacemacs-dark t)
-       )
+     ;; (use-package spacemacs-theme
+     ;;   :ensure t
+     ;;   :defer t
+     ;;   ;; :init (load-theme 'spacemacs-dark t)
+     ;;   )
    #+END_SRC
 
 ** OLD paredit - Intense parentheses mode (not enabled)
    CLOSED: [2018-05-20 Sun 18:37]
    - http://danmidwood.com/content/2014/11/21/animated-paredit.html (super cool animated gifs)
    - disabling paredit, will use smartparens if I need it.
-   #+BEGIN_SRC emacs-lisp
-     ;; (use-package paredit
-     ;;   :ensure t
-     ;;   :defer t)
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (use-package paredit
+       :ensure t
+       :defer t)
    #+END_SRC
 
 ** diminish
@@ -463,12 +437,14 @@ Updated: <2019-02-15 15:14:35>
    #+BEGIN_SRC emacs-lisp
      (use-package anaconda-mode
        :ensure t
+       :defer t
        :config
        (add-hook 'python-mode-hook 'anaconda-mode)        ; doc lookup, definition jump, etc
        (add-hook 'python-mode-hook 'anaconda-eldoc-mode)) ; argument prompt in mini-buffer
 
      (use-package company-anaconda
        :ensure t
+       :defer t
        :config
        (eval-after-load 'company
          '(add-to-list 'company-backends 'company-anaconda)))
@@ -501,9 +477,11 @@ Updated: <2019-02-15 15:14:35>
        :ensure t)
    #+END_SRC
 
-** ein - Emacs iron python notebook (Jupyter)
+** SLOW ein - Emacs iron python notebook (Jupyter)
+   CLOSED: [2019-03-17 Sun 10:55]
    - Jupyter Notebooks in emacs!  Added [2017-10-19 Thu]
-   #+BEGIN_SRC emacs-lisp
+   - Slow. Include only when needed or designated configs
+   #+BEGIN_SRC emacs-lisp :tangle no
      ;; Jupyter python  ;added 2017-10-17
      (use-package ein
        :ensure t
@@ -556,8 +534,20 @@ Updated: <2019-02-15 15:14:35>
        (beacon-mode 0))                    ; causes slow updates on some comps
    #+END_SRC
 
-** spaceline - (Powerline) modeline
+** doom-modeline
    #+BEGIN_SRC emacs-lisp
+     (use-package doom-modeline
+       :ensure t
+       :config
+       (setq doom-modeline-icon nil)
+       (doom-modeline-mode)
+       )
+   #+END_SRC
+
+** OLD spaceline - (Powerline) modeline
+   CLOSED: [2019-03-18 Mon 14:12]
+   Ditched in favour of =doom-modeline=
+   #+BEGIN_SRC emacs-lisp :tangle no
      (use-package spaceline
        :ensure t
        :config
@@ -666,7 +656,8 @@ Updated: <2019-02-15 15:14:35>
    (use-package rainbow-mode :ensure t)
    #+END_SRC
 
-** selected-packages [*has to be manually updated*]
+** NOTE selected-packages [*has to be manually updated*]
+   CLOSED: [2019-03-17 Sun 11:01]
     =package-selected-packages= is used by ‘package-autoremove’ to decide which
     packages are no longer needed.  But there was an issue with use-package not
     adding packages to =package-selected-packages=, so it has to be done
@@ -802,10 +793,11 @@ Updated: <2019-02-15 15:14:35>
      )
    #+END_SRC
 
-** org-gcal
+** SLOW org-gcal
+   CLOSED: [2019-03-17 Sun 11:08]
    https://github.com/myuhe/org-gcal.el
 
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle no
      (use-package org-gcal
        :ensure t)
      ;;  See init_private.el for setup
@@ -863,7 +855,8 @@ sdf
        :ensure t)
    #+END_SRC
 
-** dictionary and thesaurus lookup
+** NOTE dictionary and thesaurus lookup
+   CLOSED: [2019-03-17 Sun 10:56]
    #+BEGIN_SRC emacs-lisp
      (use-package dictionary :ensure t
        :init
@@ -871,18 +864,21 @@ sdf
        ;; :bind ("" . dictionary-search)
        ;; ("" . dictionary-match-words)
        )
-
-     ;; These didn't work, and I don't want any more external dependecies.
-     ;; (use-package synosaurus :ensure t
-     ;;   :init 
-     ;;   :config
-     ;;   (setq synosaurus-backend 'synosaurus-backend-openthesaurus)
-     ;;   )
-
-     ;; (use-package synonymous :ensure t)
    #+END_SRC
 
-** TRY ob-ipython - jupyter for org-mode
+   #+BEGIN_SRC emacs-lisp :tangle no
+     ;; These didn't work, and I don't want any more external dependecies.
+     (use-package synosaurus :ensure t
+       :init 
+       :config
+       (setq synosaurus-backend 'synosaurus-backend-openthesaurus)
+       )
+
+     (use-package synonymous :ensure t)
+   #+END_SRC       
+
+** SLOW ob-ipython - jupyter for org-mode
+   CLOSED: [2019-03-17 Sun 11:00]
    - https://github.com/gregsexton/ob-ipython
    - http://cachestocaches.com/2018/6/org-literate-programming/
 
@@ -905,7 +901,8 @@ sdf
           )
    #+END_SRC
 
-** TRY ob-async - asynchronous execution of org-babel src blocks
+** SLOW ob-async - asynchronous execution of org-babel src blocks
+   CLOSED: [2019-03-17 Sun 11:00]
    https://github.com/astahlman/ob-async
 
    #+BEGIN_SRC emacs-lisp :tangle no
@@ -1164,9 +1161,9 @@ sdf
   After environment setup is complete, do any remaining things like opening
   files.
   #+BEGIN_SRC emacs-lisp
-    (my/disable-all-themes custom-enabled-themes) ; just in case multiple
-    (my/load-theme 'two-fifteen)                  ; load starting theme
-
+    ;(my/disable-all-themes custom-enabled-themes) ; just in case multiple
+    ;(my/load-theme 'two-fifteen)                  ; load starting theme
+    
     ;; Open a couple files
     (dired (concat my/org-directory "/*.org")) ; filter to .org files in org
 
