@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-03-18 15:20:37>
+Updated: <2019-03-18 22:49:29>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -540,7 +540,8 @@ Updated: <2019-03-18 15:20:37>
        :ensure t
        :config
        (setq doom-modeline-icon nil)
-       (doom-modeline-mode)
+       :hook
+       (after-init . doom-modeline-mode)
        )
    #+END_SRC
 
@@ -712,9 +713,11 @@ Updated: <2019-03-18 15:20:37>
     (diminish 'wrap-region-mode)
   #+END_SRC
 
-** projectile (think about removing)
+** SLOW projectile
+   CLOSED: [2019-03-18 Mon 22:47]
+   - https://krsoninikhil.github.io/2018/12/15/easy-moving-from-vscode-to-emacs/
    - some performance issues on lesser computers.  Will have to investigate
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle no
      (use-package projectile
        :ensure t				; ensure package is downloaded
        :defer t
@@ -929,10 +932,30 @@ sdf
               ;; ("C-h C" . helpful-command) ; 
               ))
    #+END_SRC
+** multiple-cursors
+   http://stable.melpa.org/#/multiple-cursors
+   #+BEGIN_SRC emacs-lisp
+     (use-package multiple-cursors
+       :ensure t
+       :defer t
+       :init
+       :config
+       :bind (
+              ("C-|" . 'mc/edit-lines)
+              ("C->" . 'mc/mark-next-like-this)
+              ("C-<" . 'mc/mark-previous-like-this)
+              ("C-c C-<" . 'mc/mark-all-like-this)
+              ("C-S-<mouse-1>" . 'mc/add-cursor-on-click)
+              )
+       )
+   #+END_SRC
+
+   #+RESULTS:
+   : mc/add-cursor-on-click
 
 ** TRY org-listcruncher - Parse emacs org list contents into table
    https://github.com/dfeich/org-listcruncher
-** TRY multi-cursors
+
 ** TRY gnus
 ** TRY erc
    - https://www.emacswiki.org/emacs/EmacsChannel
