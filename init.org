@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-04-01 12:34:31>
+Updated: <2019-04-01 13:44:45>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -1182,6 +1182,21 @@ sdf
                   ("en_GB" ,(concat (file-name-as-directory cygwin-root) "usr/share/myspell/en_GB.aff"))
                   ))
           ))
+    #+END_SRC
+
+*** PlantUML & Ditaa Diagramming (Java)
+    Look for Java JAR files, set variables if found.  Currently keep location
+    simple across all setups.  PlantUML requires graphviz, which can be
+    installed on Cygwin on Windows.
+
+    #+BEGIN_SRC emacs-lisp
+      (let* ((plantuml-filepath (expand-file-name "~/plantuml.jar"))
+             (ditaa-filepath (expand-file-name "~/ditaa0_9.jar")))
+        (if (file-readable-p plantuml-filepath)
+            (setq org-plantuml-jar-path plantuml-filepath))
+        (if (file-readable-p ditaa-filepath)
+            (setq org-ditaa-jar-path ditaa-filepath))
+        )
     #+END_SRC
 
 * Finally
