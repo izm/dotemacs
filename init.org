@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-03-18 22:49:29>
+Updated: <2019-04-01 12:34:31>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -1067,7 +1067,11 @@ sdf
       'org-babel-load-languages
       '((emacs-lisp . t)
         (python . t)
-        (ipython . t)))
+        (ipython . t)
+        (ditaa . t)
+        (plantuml . t)
+        )
+      )
 
      ;; Don't prompt before running org code blocks w/C-c C-c
      (setq org-confirm-babel-evaluate nil)
