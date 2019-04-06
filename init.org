@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-04-01 13:44:45>
+Updated: <2019-04-06 12:16:23>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -253,6 +253,28 @@ Updated: <2019-04-01 13:44:45>
 
 #+END_SRC
 
+** Keybindings
+   Navigating links easy-mode, and consistent between different reading-modes.
+   #+BEGIN_SRC emacs-lisp :results output silent
+     ;; l = back (last), r (reverse?) = forward
+
+     ;; Info-mode convenience
+     (define-key Info-mode-map (kbd "u") 'Info-up)
+     (define-key Info-mode-map (kbd "j") 'Info-next-reference)
+     (define-key Info-mode-map (kbd "k") 'Info-prev-reference)
+
+     ;; help-mode
+     (define-key help-mode-map (kbd "j") 'forward-button)
+     (define-key help-mode-map (kbd "k") 'backward-button)
+
+     ;; apropos-mode
+     (define-key apropos-mode-map (kbd "j") 'forward-button)
+     (define-key apropos-mode-map (kbd "k") 'backward-button)
+
+     ;; help-mode
+     (define-key helpful-mode-map (kbd "j") 'forward-button)
+     (define-key helpful-mode-map (kbd "k") 'backward-button)
+   #+END_SRC
 
 ** UTF-8
 
