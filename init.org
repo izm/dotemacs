@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-04-06 12:16:23>
+Updated: <2019-04-07 15:30:41>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -252,29 +252,6 @@ Updated: <2019-04-06 12:16:23>
   (load-theme 'two-fifteen t)
 
 #+END_SRC
-
-** Keybindings
-   Navigating links easy-mode, and consistent between different reading-modes.
-   #+BEGIN_SRC emacs-lisp :results output silent
-     ;; l = back (last), r (reverse?) = forward
-
-     ;; Info-mode convenience
-     (define-key Info-mode-map (kbd "u") 'Info-up)
-     (define-key Info-mode-map (kbd "j") 'Info-next-reference)
-     (define-key Info-mode-map (kbd "k") 'Info-prev-reference)
-
-     ;; help-mode
-     (define-key help-mode-map (kbd "j") 'forward-button)
-     (define-key help-mode-map (kbd "k") 'backward-button)
-
-     ;; apropos-mode
-     (define-key apropos-mode-map (kbd "j") 'forward-button)
-     (define-key apropos-mode-map (kbd "k") 'backward-button)
-
-     ;; help-mode
-     (define-key helpful-mode-map (kbd "j") 'forward-button)
-     (define-key helpful-mode-map (kbd "k") 'backward-button)
-   #+END_SRC
 
 ** UTF-8
 
@@ -1223,7 +1200,8 @@ sdf
 
 * Finally
   After environment setup is complete, do any remaining things like opening
-  files.
+  files and setting key maps.
+
   #+BEGIN_SRC emacs-lisp
     ;(my/disable-all-themes custom-enabled-themes) ; just in case multiple
     ;(my/load-theme 'two-fifteen)                  ; load starting theme
@@ -1238,6 +1216,38 @@ sdf
       (find-file (concat my/org-directory "/private.org")))
   #+END_SRC
 
+** Keybindings
+   Navigating links and buttons easily and consistently between different special modes.
+
+   If moving this block before modes are initialized,
+   =(derived-mode-init-mode-variables 'Info-mode)= should be called before each
+   mapping.
+   
+   #+BEGIN_SRC emacs-lisp :results output silent
+     ;; l = back (last), r (reverse?) = forward
+
+     ;; Info-mode
+     (derived-mode-init-mode-variables 'Info-mode)
+     (define-key Info-mode-map (kbd "u") 'Info-up)
+     (define-key Info-mode-map (kbd "j") 'Info-next-reference)
+     (define-key Info-mode-map (kbd "k") 'Info-prev-reference)
+
+     ;; help-mode
+     (derived-mode-init-mode-variables 'help-mode)
+     (define-key help-mode-map (kbd "j") 'forward-button)
+     (define-key help-mode-map (kbd "k") 'backward-button)
+
+     ;; apropos-mode
+     (derived-mode-init-mode-variables 'apropos-mode)
+     (define-key apropos-mode-map (kbd "j") 'forward-button)
+     (define-key apropos-mode-map (kbd "k") 'backward-button)
+
+     ;; helpful-mode
+     (derived-mode-init-mode-variables 'helpful-mode)
+     (define-key helpful-mode-map (kbd "j") 'forward-button)
+     (define-key helpful-mode-map (kbd "k") 'backward-button)
+   #+END_SRC
+
 * Notes
 
   | Key       | What                                                |
@@ -1245,6 +1255,8 @@ sdf
   | C-c '     | narrow on code block in sibling window (and return) |
   | C-c C-v t | tangle                                              |
   | C-c C-v f | tangle into specific filename, like "init.el"       |
+  | C-c C-v n | org-babel-next-src-block                            |
+  | C-c C-v p | org-babel-previous-src-block                        |
 
   *Converting from .emacs or init.el*
   : (custom-set-variables
