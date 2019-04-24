@@ -1,7 +1,7 @@
-#+STARTUP: hidestars
+v#+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-04-15 14:39:29>
+Updated: <2019-04-23 12:27:35>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -955,6 +955,18 @@ sdf
 
    #+RESULTS:
    : mc/add-cursor-on-click
+
+** pyvenv
+   #+BEGIN_SRC emacs-lisp
+   (use-package pyvenv
+   :ensure t
+   :defer t
+   :init
+   (setenv "WORKON_HOME" (expand-file-name "~/AppData/Local/Continuum/Anaconda2/envs/"))
+   :config
+   :bind
+   )
+   #+END_SRC
 
 ** TRY org-listcruncher - Parse emacs org list contents into table
    https://github.com/dfeich/org-listcruncher
