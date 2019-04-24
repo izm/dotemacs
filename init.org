@@ -1,7 +1,7 @@
 v#+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-04-23 12:27:35>
+Updated: <2019-04-23 23:26:02>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -615,6 +615,7 @@ Updated: <2019-04-23 12:27:35>
    #+BEGIN_SRC emacs-lisp
      (use-package diff-hl
        :ensure t
+       :defer t
        :config
        (diff-hl-flydiff-mode)
        ;(global-diff-hl-mode)  ;; slow on lesser computers
