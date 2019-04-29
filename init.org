@@ -1,7 +1,7 @@
-v#+STARTUP: hidestars
+#+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-04-23 23:26:02>
+Updated: <2019-04-28 11:36:14>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
