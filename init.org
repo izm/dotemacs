@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-04-28 11:36:14>
+Updated: <2019-05-05 15:32:03>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -172,6 +172,8 @@ Updated: <2019-04-28 11:36:14>
      (add-hook 'before-save-hook 'time-stamp) ; update timestamps of set format before saving
 
      (setq delete-by-moving-to-trash t)     ; move files to trash instead of deleting
+
+     (add-hook 'image-mode-hook 'auto-revert-mode) ; update image buffers when files change
 
    #+END_SRC
 
