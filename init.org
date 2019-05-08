@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-05-05 15:32:03>
+Updated: <2019-05-08 09:28:54>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -1043,6 +1043,14 @@ sdf
               "* TODO %?\n  %i\n  %a\n"                      ; template
               ;; optional property list  ; properties
               :prepend t                     ; insert at head of list
+              )
+             ("m"				; key
+              "Meeting (work)"               ; description
+              entry                          ; type
+              ;; heading type and title
+              (file+headline ,(concat my/org-directory "/work.org") "MINUTES & MEETINGS") ; target
+              "* %?\n  %^T  (entered %U from %a)\n  %i\n" ; template
+              :prepend t
               )
              ("j"
               "Learning Journal"
