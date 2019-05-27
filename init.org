@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-05-08 09:28:54>
+Updated: <2019-05-27 11:41:09>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -1055,7 +1055,7 @@ sdf
              ("j"
               "Learning Journal"
               entry
-              (file+datetree org-default-notes-file "Learning Journal")
+              (file+olp+datetree org-default-notes-file "Learning Journal")
               "* %?\n  Entered on %U\n  - Active Region: %i\n  - Created while at: %a\n" ; %a stores link, %i is active region
               )
              ))
