@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-05-27 11:41:09>
+Updated: <2019-06-11 09:41:37>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -1031,7 +1031,7 @@ sdf
               entry				; type
               ;; heading type and title
               (file+headline ,(concat my/org-directory "/work.org") "Inbox") ; target
-              "* TODO %?\n  %i\n  %a\n"	; template
+              "* TODO %?\n   %i\n  %a\n\n"	; template
               ;; optional property list  ; properties
               :prepend t                     ; insert at head of list
               )
@@ -1040,7 +1040,7 @@ sdf
               entry				; type
               ;; heading type and title
               (file+headline org-default-notes-file "Tasks") ; target
-              "* TODO %?\n  %i\n  %a\n"                      ; template
+              "* TODO %?\n   %i\n  %a\n\n"                      ; template
               ;; optional property list  ; properties
               :prepend t                     ; insert at head of list
               )
@@ -1049,14 +1049,14 @@ sdf
               entry                          ; type
               ;; heading type and title
               (file+headline ,(concat my/org-directory "/work.org") "MINUTES & MEETINGS") ; target
-              "* %?\n  %^T  (entered %U from %a)\n  %i\n" ; template
+              "* %?\n  %^T  (entered %U from %a)\n   %i\n\n" ; template
               :prepend t
               )
              ("j"
               "Learning Journal"
               entry
               (file+olp+datetree org-default-notes-file "Learning Journal")
-              "* %?\n  Entered on %U\n  - Active Region: %i\n  - Created while at: %a\n" ; %a stores link, %i is active region
+              "* %?\n  Entered on %U\n  - Active Region: %i\n  - Created while at: %a\n\n" ; %a stores link, %i is active region
               )
              ))
    #+END_SRC
