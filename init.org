@@ -1,12 +1,12 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-06-11 09:41:37>
+Updated: <2019-06-22 11:55:00>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
   directory, =~/init.d/=.
-
+  
    #+BEGIN_SRC emacs-lisp :tangle no :results output silent
      ;; Tangle this file into init.el, then load it.
      ;; Output logged in *Messages* buffer
@@ -1004,7 +1004,6 @@ sdf
      (setq org-html-postamble 't)
      (setq org-html-postamble-format
            '(("en" "<p class=\"author\">%a</p> <p class=\"date\">%T</p>")))
-
    #+END_SRC
 
 ** Files
@@ -1112,12 +1111,14 @@ sdf
      ;; Try org-indirect-buffer-display options
      (setq org-indirect-buffer-display 'new-frame)
      (setq org-src-window-setup 'other-frame)
+
+     ;; Alphabetical plain list options!
+     (setq org-list-allow-alphabetical t)
    #+END_SRC
 
 ** Agenda
    #+BEGIN_SRC emacs-lisp
    (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
-
    #+END_SRC
 
 * Windows
