@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-07-09 17:19:29>
+Updated: <2019-07-13 10:45:41>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -961,14 +961,18 @@ sdf
 
 ** pyvenv
    #+BEGIN_SRC emacs-lisp
-   (use-package pyvenv
-   :ensure t
-   :defer t
-   :init
-   (setenv "WORKON_HOME" (expand-file-name "~/AppData/Local/Continuum/Anaconda2/envs/"))
-   :config
-   :bind
-   )
+     (use-package pyvenv
+     :ensure t
+     :defer t
+     :init
+     (setenv "WORKON_HOME"
+             (expand-file-name
+              (file-name-as-directory
+               (concat my/user-dir
+                       "/AppData/Local/Continuum/Anaconda2/envs/"))))
+     :config
+     :bind
+     )
    #+END_SRC
 
 ** TRY org-listcruncher - Parse emacs org list contents into table
