@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-07-13 10:45:41>
+Updated: <2019-07-16 09:59:44>
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -1126,11 +1126,26 @@ sdf
    #+END_SRC
 
 * Windows
-** Libraries
+** OLD Libraries
+   CLOSED: [2019-07-16 Tue 09:59]
+   Note: this seems to not be necessary with version 26.1+....
+
    Some things, =eww= (=libxml=), inline images (=libpng=) require libraries not
    shipped with =emacs= on Windows.  Get those from
    https://sourceforge.net/projects/ezwinports/ and install them to the
    =/emacs/bin/= directory.
+** Task Bar shortcut
+   =runemacs.exe= will hide the terminal window, but if you pin the shortcut to
+   the taskbar, it will be =emacs.exe=.  The following steps ensures emacs icon
+   can be used to launch emacs and browse open windows.
+
+   https://emacs.stackexchange.com/questions/2221/running-emacs-from-windows-taskbar
+
+   1. Run runemacs.exe with no pre-existing icon in the taskbar.
+   2. Right click on the running Emacs icon in the taskbar, and click on "pin this program to taskbar."
+   3. Close Emacs
+   4. Shift right-click on the pinned Emacs icon on the taskbar, click on Properties, and change the target from emacs.exe to runemacs.exe.
+
 ** External Programs
 *** Open with default Windows app (w32-browser)
     - /Control-Enter/ to open with default windows application in dired mode.
