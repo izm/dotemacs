@@ -1,7 +1,8 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-07-16 09:59:44>
+Updated: <2019-08-06 11:23:33>
+
 
 * init.org
   This file must be tangled into =init.el= in the emacs configuration
@@ -232,6 +233,13 @@ Updated: <2019-07-16 09:59:44>
     #+BEGIN_SRC emacs-lisp :tangle no :results output silent
       ;; (set-frame-font "Lucida Console-14")
       (set-frame-font "Consolas-13")
+      (set-frame-font "Source Code Pro 12")
+      (set-frame-font "Liberation Mono 12")
+      (set-frame-font "Fira Mono 12")
+      (set-frame-font "Anonymous Pro 14")
+      ;(set-frame-font "M+ 1m 14")
+      ;; (set-frame-font "Inconsolata 12")
+      ;; (set-frame-font "Ubuntu Mono 13")
     #+END_SRC
 
 *** Look at installed fonts
