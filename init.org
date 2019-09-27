@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-08-06 11:23:33>
+Updated: <2019-09-27 10:12:07>
 
 
 * init.org
@@ -1130,7 +1130,9 @@ sdf
 
 ** Agenda
    #+BEGIN_SRC emacs-lisp
-   (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
+     (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
+     ;; Don't remind me of weekly tasks immediately after completion
+     (setq org-deadline-warning-days 5)
    #+END_SRC
 
 * Windows
