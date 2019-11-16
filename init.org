@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-09-27 10:12:07>
+Updated: <2019-11-13 10:18:36>
 
 
 * init.org
@@ -530,7 +530,7 @@ Updated: <2019-09-27 10:12:07>
    - [[https://github.com/org2blog/org2blog][org2blog]]
    #+BEGIN_SRC emacs-lisp
      (use-package org2blog
-       :ensure t
+       :ensure nil
        :defer 1
        :init
        :config
