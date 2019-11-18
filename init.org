@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-11-13 10:18:36>
+Updated: <2019-11-18 00:31:04>
 
 
 * init.org
@@ -989,7 +989,12 @@ sdf
 ** TRY gnus
 ** TRY erc
    - https://www.emacswiki.org/emacs/EmacsChannel
-
+** TRY god-mode, objed
+   Modal editing in an emacs-y way.
+   #+BEGIN_SRC emacs-lisp
+     (use-package god-mode :ensure t)
+     (use-package objed :ensure t)
+   #+END_SRC
 * Dired
 
   Let =dired= try to guess target (copy and rename ops) directory when
