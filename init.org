@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-11-24 21:12:36>
+Updated: <2019-11-26 00:41:31>
 
 
 * init.org
@@ -260,13 +260,18 @@ Updated: <2019-11-24 21:12:36>
      ;;   (load-theme 'material t nil))		; load & enable theme, if nothing already set
      (setq custom-theme-directory user-emacs-directory)
      (load-theme 'two-fifteen t)
+
+     (setq window-divider-default-right-width 4)
+     (setq window-divider-default-bottom-width 1)
+     (setq window-divider-default-places 'right-only)
+     (window-divider-mode 1)
    #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :tangle no :results silent
-  ;; TESTING, not exported
-  (load-theme 'two-fifteen t)
+   #+BEGIN_SRC emacs-lisp :tangle no :results silent
+     ;; TESTING, not exported
+     (load-theme 'two-fifteen t)
 
-#+END_SRC
+   #+END_SRC
 
 ** UTF-8
 
@@ -327,6 +332,18 @@ Updated: <2019-11-24 21:12:36>
   If there is a compile error, or "tar not found," try
   =package-refresh-contents= to refresh the package database.
 
+** TRY org-listcruncher - Parse emacs org list contents into table
+   https://github.com/dfeich/org-listcruncher
+
+** TRY gnus - RSS reader
+** TRY erc - IRC client
+   - https://www.emacswiki.org/emacs/EmacsChannel
+** TRY god-mode, objed - modal navigation and editing
+   Modal editing in an emacs-y way.
+   #+BEGIN_SRC emacs-lisp
+     (use-package god-mode :ensure t)
+     (use-package objed :ensure t)
+   #+END_SRC
 ** themes
 
    Place to put themes 100% decided on.
@@ -341,22 +358,11 @@ Updated: <2019-11-24 21:12:36>
      ;;   )
    #+END_SRC
 
-** OLD paredit - Intense parentheses mode (not enabled)
-   CLOSED: [2018-05-20 Sun 18:37]
-   - http://danmidwood.com/content/2014/11/21/animated-paredit.html (super cool animated gifs)
-   - disabling paredit, will use smartparens if I need it.
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (use-package paredit
-       :ensure t
-       :defer t)
-   #+END_SRC
-
 ** diminish
+   Hides or renames minor modes.
    #+BEGIN_SRC emacs-lisp
    (use-package diminish :ensure t)
    #+END_SRC
-   
-** TODO delight
 
 ** smartparens - Minor mode to work with pairs
    - https://github.com/Fuco1/smartparens (more animated gif guides)
@@ -380,16 +386,6 @@ Updated: <2019-11-24 21:12:36>
        :config
        (which-key-mode))
 
-   #+END_SRC
-
-** OLD jedi - Auto-completion backend
-   CLOSED: [2018-05-20 Sun 18:46]
-   This is an ac (autocomplete)  backend, and we want to try company.
-
-   #+BEGIN_SRC emacs-lisp
-     ;; remove jedi ac package if present, we're going to use company
-     (when (featurep 'jedi)
-         (package-delete jedi))
    #+END_SRC
 
 ** company - Auto-completion front-end
@@ -491,30 +487,6 @@ Updated: <2019-11-24 21:12:36>
        :ensure t)
    #+END_SRC
 
-** SLOW ein - Emacs iron python notebook (Jupyter)
-   CLOSED: [2019-03-17 Sun 10:55]
-   - Jupyter Notebooks in emacs!  Added [2017-10-19 Thu]
-   - Slow. Include only when needed or designated configs
-   #+BEGIN_SRC emacs-lisp :tangle no
-     ;; Jupyter python  ;added 2017-10-17
-     (use-package ein
-       :ensure t
-       :defer t
-       ;; :backends ein:company-backend
-       :init
-       (require 'ein-connect)     ; not sure why this is needed suddenly..?
-
-       ;; Fix Null value passed to ein:get-ipython-major-version #work pc
-       ;; https://github.com/millejoh/emacs-ipython-notebook/issues/176
-       ;; (ein:force-ipython-version-check)
-
-       :config
-       ;; (advice-add 'request--netscape-cookie-parse :around #'fix-request-netscape-cookie-parse)
-       (setq ein:completion-backend 'ein:use-company-backend)
-       )
-
-   #+END_SRC
-
 ** smartscan - Simple word-instance jumping
    - easily move between like-symbols
    - *NOTE*: currently conflicts with ein checkpoint bindings.
@@ -548,7 +520,7 @@ Updated: <2019-11-24 21:12:36>
        (beacon-mode 0))                    ; causes slow updates on some comps
    #+END_SRC
 
-** doom-modeline
+** doom-modeline - Clean minimal modeline
    #+BEGIN_SRC emacs-lisp
      (use-package doom-modeline
        :ensure t
@@ -559,51 +531,12 @@ Updated: <2019-11-24 21:12:36>
        )
    #+END_SRC
 
-** OLD spaceline - (Powerline) modeline
-   CLOSED: [2019-03-18 Mon 14:12]
-   Ditched in favour of =doom-modeline=
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (use-package spaceline
-       :ensure t
-       :config
-       (require 'spaceline-config)
-       (setq powerline-default-separator 'wave)
-       (spaceline-spacemacs-theme))          ; quickly makes modeline pretty
-   #+END_SRC
-
-** OLD anzu - Count isearch matches
-   CLOSED: [2018-05-20 Sun 18:38]
-   - https://github.com/syohex/emacs-anzu
-   - Show current match and total matches for various search modes.
-   - Superceded by Swiper
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (use-package anzu
-       :ensure nil
-       :config
-       (global-anzu-mode +1))
-
-   #+END_SRC
-
 ** origami - Code folding
    - https://github.com/gregsexton/origami.el
 
    #+BEGIN_SRC emacs-lisp
      (use-package origami
        :ensure t)
-   #+END_SRC
-
-** OLD smex - Fuzzy =M-x= function matching
-   CLOSED: [2018-10-07 Sun 15:22]
-   - https://github.com/nonsequitur/smex
-   - Ultra-lightweight =M-x= enhancement
-   - Superceded by Swiper & Counsel
-
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (use-package smex
-       :ensure t
-       :bind (;("M-x" . smex) replaced w/counsel
-              ("M-X" . smex-major-mode-commands)
-              ("C-c C-c M-x" . execute-extended-command)))
    #+END_SRC
 
 ** flycheck - Syntax-checking
@@ -667,33 +600,11 @@ Updated: <2019-11-24 21:12:36>
    #+END_SRC
 
 ** rainbow-mode - Set bg to colour of #00000 string
-   http://elpa.gnu.org/packages/rainbow-mode.html
+   - http://elpa.gnu.org/packages/rainbow-mode.html
+   - This is very useful when modifying themes.
    #+BEGIN_SRC emacs-lisp
    (use-package rainbow-mode :ensure t)
    #+END_SRC
-
-** NOTE selected-packages [*has to be manually updated*]
-   CLOSED: [2019-03-17 Sun 11:01]
-    =package-selected-packages= is used by ‘package-autoremove’ to decide which
-    packages are no longer needed.  But there was an issue with use-package not
-    adding packages to =package-selected-packages=, so it has to be done
-    manually..
-
-    You can use it to (re)install packages on other machines by
-    running ‘package-install-selected-packages’.
-
-    See currently activated packages with =package-activated-list=.
-
-    - [ ] Superceded by =use-package=?
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (setq package-selected-packages
-	    (quote
-	     (org-bullets tangotango-theme leuven-theme eziam-theme alect-themes
-			  atom-one-dark-theme borland-blue-theme material-theme
-			  helm helm-projectile expand-region org-projectile
-			  projectile web-mode)))
-    #+END_SRC
 
 ** expand-region - Select "up"
 
@@ -727,21 +638,6 @@ Updated: <2019-11-24 21:12:36>
       (add-hook 'org-mode-hook 'wrap-region-mode))
     (diminish 'wrap-region-mode)
   #+END_SRC
-
-** SLOW projectile
-   CLOSED: [2019-03-18 Mon 22:47]
-   - https://krsoninikhil.github.io/2018/12/15/easy-moving-from-vscode-to-emacs/
-   - some performance issues on lesser computers.  Will have to investigate
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (use-package projectile
-       :ensure t				; ensure package is downloaded
-       :defer t
-       :init					; pre-load config
-       (setq projectile-enable-caching t)	; resolve missing projects
-       ;; (projectile-mode +1)			; global projectil mode
-       :config nil				; post-load config
-       )
-   #+END_SRC
 
 ** org-bullets - Unicode org-mode bullets
 
@@ -811,30 +707,16 @@ Updated: <2019-11-24 21:12:36>
      )
    #+END_SRC
 
-** SLOW org-gcal
-   CLOSED: [2019-03-17 Sun 11:08]
-   https://github.com/myuhe/org-gcal.el
+** neotree - File tree explorer bound to <F8>
+   https://github.com/jaypei/emacs-neotree
 
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (use-package org-gcal
-       :ensure t)
-     ;;  See init_private.el for setup
+   #+BEGIN_SRC emacs-lisp
+     (use-package neotree
+       :ensure t
+       :bind ("<f8>" . neotree-toggle)
+       )
+
    #+END_SRC
-
-*** org-gcal Usage
-   - *org-gcal-sync*: Sync between Org and Gcal. before syncing, execute
-     org-gcal-fetch
-
-   - *org-gcal-fetch*: Fetch Google calendar events and populate
-     org-gcal-file-alist locations. The org files in org-gcal-file-alist should
-     be blank or all of their headlines should have timestamps.
-
-   - *org-gcal-post-at-point*: Post/edit org block at point to Google calendar.
-
-   - *org-gcal-delete-at-point*: Delete Gcal event at point.
-
-   - *org-gcal-refresh-token*: Refresh the OAuth token. OAuth token expired in
-     3600 seconds, You should refresh token on a regular basis.
 
 ** move-text
 
@@ -850,17 +732,6 @@ Updated: <2019-11-24 21:12:36>
 
 sdf
    
-** neotree
-   https://github.com/jaypei/emacs-neotree
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package neotree
-       :ensure t
-       :bind ("<f8>" . neotree-toggle)
-       )
-
-   #+END_SRC
-
 ** markdown-mode
    
    Major mode for editing markdown.
@@ -870,62 +741,6 @@ sdf
 
    #+BEGIN_SRC emacs-lisp
      (use-package markdown-mode
-       :ensure t)
-   #+END_SRC
-
-** NOTE dictionary and thesaurus lookup
-   CLOSED: [2019-03-17 Sun 10:56]
-   #+BEGIN_SRC emacs-lisp
-     (use-package dictionary :ensure t
-       :init
-       :config
-       ;; :bind ("" . dictionary-search)
-       ;; ("" . dictionary-match-words)
-       )
-   #+END_SRC
-
-   #+BEGIN_SRC emacs-lisp :tangle no
-     ;; These didn't work, and I don't want any more external dependecies.
-     (use-package synosaurus :ensure t
-       :init 
-       :config
-       (setq synosaurus-backend 'synosaurus-backend-openthesaurus)
-       )
-
-     (use-package synonymous :ensure t)
-   #+END_SRC       
-
-** SLOW ob-ipython - jupyter for org-mode
-   CLOSED: [2019-03-17 Sun 11:00]
-   - https://github.com/gregsexton/ob-ipython
-   - http://cachestocaches.com/2018/6/org-literate-programming/
-
-   org-babel integration with Jupyter for evaluating code blocks.
-
-   #+BEGIN_SRC emacs-lisp :tangle no
-        ;; INCREDIBLY slow startup time.  Disabled, run when needed.
-        (use-package ob-ipython
-          :ensure t
-          :config
-          (add-hook 'ob-ipython-mode-hookp
-                    (lambda ()
-                      (company-mode 1)))
-          (org-babel-do-load-languages
-           'org-babel-load-languages
-           '((ipython . t)
-             ;; other languages..
-             ))
-          (add-to-list 'company-backends 'company-ob-ipython)
-          )
-   #+END_SRC
-
-** SLOW ob-async - asynchronous execution of org-babel src blocks
-   CLOSED: [2019-03-17 Sun 11:00]
-   https://github.com/astahlman/ob-async
-
-   #+BEGIN_SRC emacs-lisp :tangle no
-     ;; INCREDIBLY slow startup time.  Disabled until needed.
-     (use-package ob-async
        :ensure t)
    #+END_SRC
 
@@ -984,18 +799,200 @@ sdf
      )
    #+END_SRC
 
-** TRY org-listcruncher - Parse emacs org list contents into table
-   https://github.com/dfeich/org-listcruncher
+** OLD Packages that have been superceded
+*** OLD spaceline - (Powerline) modeline
+    CLOSED: [2019-03-18 Mon 14:12]
+    Ditched in favour of =doom-modeline=
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (use-package spaceline
+        :ensure t
+        :config
+        (require 'spaceline-config)
+        (setq powerline-default-separator 'wave)
+        (spaceline-spacemacs-theme))          ; quickly makes modeline pretty
+    #+END_SRC
 
-** TRY gnus
-** TRY erc
-   - https://www.emacswiki.org/emacs/EmacsChannel
-** TRY god-mode, objed
-   Modal editing in an emacs-y way.
+*** OLD anzu - Count isearch matches
+    CLOSED: [2018-05-20 Sun 18:38]
+    - https://github.com/syohex/emacs-anzu
+    - Show current match and total matches for various search modes.
+    - Superceded by Swiper
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (use-package anzu
+        :ensure nil
+        :config
+        (global-anzu-mode +1))
+
+    #+END_SRC
+
+*** OLD smex - Fuzzy =M-x= function matching
+    CLOSED: [2018-10-07 Sun 15:22]
+    - https://github.com/nonsequitur/smex
+    - Ultra-lightweight =M-x= enhancement
+    - Superceded by Swiper & Counsel
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (use-package smex
+        :ensure t
+        :bind (;("M-x" . smex) replaced w/counsel
+               ("M-X" . smex-major-mode-commands)
+               ("C-c C-c M-x" . execute-extended-command)))
+    #+END_SRC
+
+*** NOTE [#B] selected-packages [*has to be manually updated*]
+    CLOSED: [2019-03-17 Sun 11:01]
+     =package-selected-packages= is used by ‘package-autoremove’ to decide which
+     packages are no longer needed.  But there was an issue with use-package not
+     adding packages to =package-selected-packages=, so it has to be done
+     manually..
+
+     You can use it to (re)install packages on other machines by
+     running ‘package-install-selected-packages’.
+
+     See currently activated packages with =package-activated-list=.
+
+     - [ ] Superceded by =use-package=?
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (setq package-selected-packages
+	     (quote
+	      (org-bullets tangotango-theme leuven-theme eziam-theme alect-themes
+			   atom-one-dark-theme borland-blue-theme material-theme
+			   helm helm-projectile expand-region org-projectile
+			   projectile web-mode)))
+     #+END_SRC
+
+*** OLD paredit - Intense parentheses mode (not enabled)
+    CLOSED: [2018-05-20 Sun 18:37]
+    - http://danmidwood.com/content/2014/11/21/animated-paredit.html (super cool animated gifs)
+    - disabling paredit, will use smartparens if I need it.
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (use-package paredit
+        :ensure t
+        :defer t)
+    #+END_SRC
+
+** NOTE dictionary and thesaurus lookup
+   CLOSED: [2019-03-17 Sun 10:56]
    #+BEGIN_SRC emacs-lisp
-     (use-package god-mode :ensure t)
-     (use-package objed :ensure t)
+     (use-package dictionary :ensure t
+       :init
+       :config
+       ;; :bind ("" . dictionary-search)
+       ;; ("" . dictionary-match-words)
+       )
    #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+     ;; These didn't work, and I don't want any more external dependecies.
+     (use-package synosaurus :ensure t
+       :init 
+       :config
+       (setq synosaurus-backend 'synosaurus-backend-openthesaurus)
+       )
+
+     (use-package synonymous :ensure t)
+   #+END_SRC       
+
+** SLOW ein - Emacs iron python notebook (Jupyter)
+   CLOSED: [2019-03-17 Sun 10:55]
+   - Jupyter Notebooks in emacs!  Added [2017-10-19 Thu]
+   - Slow. Include only when needed or designated configs
+   #+BEGIN_SRC emacs-lisp :tangle no
+     ;; Jupyter python  ;added 2017-10-17
+     (use-package ein
+       :ensure t
+       :defer t
+       ;; :backends ein:company-backend
+       :init
+       (require 'ein-connect)     ; not sure why this is needed suddenly..?
+
+       ;; Fix Null value passed to ein:get-ipython-major-version #work pc
+       ;; https://github.com/millejoh/emacs-ipython-notebook/issues/176
+       ;; (ein:force-ipython-version-check)
+
+       :config
+       ;; (advice-add 'request--netscape-cookie-parse :around #'fix-request-netscape-cookie-parse)
+       (setq ein:completion-backend 'ein:use-company-backend)
+       )
+
+   #+END_SRC
+
+** SLOW projectile
+   CLOSED: [2019-03-18 Mon 22:47]
+   - https://krsoninikhil.github.io/2018/12/15/easy-moving-from-vscode-to-emacs/
+   - some performance issues on lesser computers.  Will have to investigate
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (use-package projectile
+       :ensure t				; ensure package is downloaded
+       :defer t
+       :init					; pre-load config
+       (setq projectile-enable-caching t)	; resolve missing projects
+       ;; (projectile-mode +1)			; global projectil mode
+       :config nil				; post-load config
+       )
+   #+END_SRC
+
+** SLOW org-gcal
+   CLOSED: [2019-03-17 Sun 11:08]
+   https://github.com/myuhe/org-gcal.el
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (use-package org-gcal
+       :ensure t)
+     ;;  See init_private.el for setup
+   #+END_SRC
+
+*** org-gcal Usage
+   - *org-gcal-sync*: Sync between Org and Gcal. before syncing, execute
+     org-gcal-fetch
+
+   - *org-gcal-fetch*: Fetch Google calendar events and populate
+     org-gcal-file-alist locations. The org files in org-gcal-file-alist should
+     be blank or all of their headlines should have timestamps.
+
+   - *org-gcal-post-at-point*: Post/edit org block at point to Google calendar.
+
+   - *org-gcal-delete-at-point*: Delete Gcal event at point.
+
+   - *org-gcal-refresh-token*: Refresh the OAuth token. OAuth token expired in
+     3600 seconds, You should refresh token on a regular basis.
+
+** SLOW ob-ipython - jupyter for org-mode
+   CLOSED: [2019-03-17 Sun 11:00]
+   - https://github.com/gregsexton/ob-ipython
+   - http://cachestocaches.com/2018/6/org-literate-programming/
+
+   org-babel integration with Jupyter for evaluating code blocks.
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+        ;; INCREDIBLY slow startup time.  Disabled, run when needed.
+        (use-package ob-ipython
+          :ensure t
+          :config
+          (add-hook 'ob-ipython-mode-hookp
+                    (lambda ()
+                      (company-mode 1)))
+          (org-babel-do-load-languages
+           'org-babel-load-languages
+           '((ipython . t)
+             ;; other languages..
+             ))
+          (add-to-list 'company-backends 'company-ob-ipython)
+          )
+   #+END_SRC
+
+** SLOW ob-async - asynchronous execution of org-babel src blocks
+   CLOSED: [2019-03-17 Sun 11:00]
+   https://github.com/astahlman/ob-async
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+     ;; INCREDIBLY slow startup time.  Disabled until needed.
+     (use-package ob-async
+       :ensure t)
+   #+END_SRC
+
+
 * Dired
 
   Let =dired= try to guess target (copy and rename ops) directory when
