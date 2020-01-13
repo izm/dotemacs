@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2019-11-26 00:41:31>
+Updated: <2020-01-13 00:59:25>
 
 
 * init.org
@@ -177,6 +177,7 @@ Updated: <2019-11-26 00:41:31>
 
      (add-hook 'image-mode-hook 'auto-revert-mode) ; update image buffers when files change
 
+     (setq-default python-indent-offset 4)
    #+END_SRC
 
 ** Fonts
@@ -306,6 +307,10 @@ Updated: <2019-11-26 00:41:31>
            (used-mode . emacs-lisp-mode))
           ("Images"
            (used-mode . image-mode))
+          ("Definitions"
+           (name . "\\*define-it:.*"))
+          ("Help"
+           (name . "\\*Help\\*\\|\\*helpful .*"))
           ))))
 
      (setq ibuffer-saved-filters
@@ -331,6 +336,15 @@ Updated: <2019-11-26 00:41:31>
 
   If there is a compile error, or "tar not found," try
   =package-refresh-contents= to refresh the package database.
+
+** deft
+   quickly browse, filter, and edit plain text notes
+   #+begin_src emacs-lisp
+     (use-package deft
+       :config
+       (setq deft-directory my/org-directory)
+       )
+   #+end_src
 
 ** TRY org-listcruncher - Parse emacs org list contents into table
    https://github.com/dfeich/org-listcruncher
@@ -872,6 +886,17 @@ sdf
         :defer t)
     #+END_SRC
 
+** define-it
+   Define, translate, wiki the word
+   #+begin_src emacs-lisp
+     (use-package define-it :ensure t
+       :config
+       (setq define-it-show-google-translate nil)              ; Disable translate by default
+       (setq google-translate-default-source-language "auto")  ; Auto detect language.
+       (setq google-translate-default-target-language "en")    ; Set your target language.
+       )
+   #+end_src
+
 ** NOTE dictionary and thesaurus lookup
    CLOSED: [2019-03-17 Sun 10:56]
    #+BEGIN_SRC emacs-lisp
@@ -1022,7 +1047,7 @@ sdf
    #+END_SRC
 
 ** Files
-   - [ ] Use platform independent home directory.  (getenv "HOMEPATH")
+
    #+BEGIN_SRC emacs-lisp
      ;; (add-to-list 'load-path "~/../or
      ;; my/org-directory defined in init_private.el
