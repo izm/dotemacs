@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-01-13 00:59:25>
+Updated: <2020-02-08 20:02:11>
 
 
 * init.org
@@ -1110,6 +1110,8 @@ sdf
      (setq org-src-fontify-natively t)	; important for init.org !
      (setq org-hide-emphasis-markers t)      ; hide italic,bold,monospace text
                                              ; formatters
+
+     (setq org-fontify-quote-and-verse-blocks t) ; fontify quote and verse blocks
 
      ;; org-refile (C-c C-w)
      (setq org-refile-targets (quote ((nil :maxlevel . 5)
