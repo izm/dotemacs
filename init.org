@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-02-08 20:02:11>
+Updated: <2020-02-10 23:50:55>
 
 
 * init.org
@@ -588,30 +588,58 @@ Updated: <2020-02-08 20:02:11>
    #+END_SRC
 
 ** Ivy, Counsel, Swiper - Minibuffer completion suite
-   Suite of completion tools.
+   Suite of completion tools.  =counsel= will install others, as it requires
+   =swiper= which requires =ivy=.
     - https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html
     - https://github.com/abo-abo/swiper
 
    #+BEGIN_SRC emacs-lisp
-          (use-package counsel                    ; requires swiper, which requires ivy
-            :ensure t
-            :demand
-            :config
-            (setq ivy-use-virtual-buffers t)
-            (setq ivy-count-format "%d/%d ")      ; current/total match number
-            (setq enable-recursive-minibuffers t)
-            (setq ivy-re-builders-alist 
-                  '((t . ivy--regex-plus)))
-                  ;'((t . ivy--regex-fuzzy ))) ; try fuzzy matching
-            ;; use ivy completion on any command using 'completing-read-function'
-            (ivy-mode 1)
-            (counsel-mode 1) ; use counsel equivalents of existing Emacs functions
-            (diminish 'ivy-mode)
-            (diminish 'counsel-mode)
+     (use-package counsel                    ; requires swiper, which requires ivy
+       :ensure t
+       :demand
+       :config
+       (setq ivy-use-virtual-buffers t)
+       (setq ivy-count-format "%d/%d ")      ; current/total match number
+       (setq enable-recursive-minibuffers t)
+       (setq ivy-re-builders-alist 
+             '((t . ivy--regex-plus)))
+             ;'((t . ivy--regex-fuzzy ))) ; try fuzzy matching
+       ;; use ivy completion on any command using 'completing-read-function'
+       (ivy-mode 1)
+       (counsel-mode 1) ; use counsel equivalents of existing Emacs functions
+  
+       (diminish 'ivy-mode)
+       (diminish 'counsel-mode)
 
-            :bind (("C-s" . swiper)               ; Replace isearch-forward
-                   ))
+       :bind (("C-s" . swiper)               ; Replace isearch-forward
+              ("M-s s" . isearch-forward)
+              ("C-h v" . counsel-describe-variable)
+              ("C-h f" . counsel-describe-function)
+              ("C-h S" . counsel-info-lookup-symbol)
+              ("C-x u" . counsel-unicode-char)
+              ))
    #+END_SRC
+
+** ivy-rich
+   More description to ivy display.
+
+   #+begin_src emacs-lisp
+     (use-package ivy-rich
+       :ensure t
+       :after ivy
+       :config
+       (ivy-rich-mode 1)
+       )
+   #+end_src
+
+** try
+   Try is a package that allows you to try out Emacs packages without installing them.
+
+   #+begin_src emacs-lisp
+     (use-package try
+       :ensure t
+       )
+   #+end_src
 
 ** rainbow-mode - Set bg to colour of #00000 string
    - http://elpa.gnu.org/packages/rainbow-mode.html
