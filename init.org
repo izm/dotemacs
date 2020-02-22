@@ -1,7 +1,7 @@
 #+STARTUP: hidestars
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-02-10 23:50:55>
+Updated: <2020-02-22 15:46:29>
 
 
 * init.org
@@ -1182,7 +1182,7 @@ sdf
 
      ;; <s TAB completion for SRC scode block
      ;; https://orgmode.org/manual/Structure-Templates.html
-     (require 'org-tempo)
+     (require 'org-tempo nil 'noerror)       ; required for org >= 9.2
 
      ;; Try org-indirect-buffer-display options
      (setq org-indirect-buffer-display 'new-frame)
@@ -1301,7 +1301,19 @@ sdf
                   ("en_US" ,(concat (file-name-as-directory cygwin-root) "usr/share/myspell/en_US.aff"))
                   ("en_GB" ,(concat (file-name-as-directory cygwin-root) "usr/share/myspell/en_GB.aff"))
                   ))
+
+          ;; DESKTOP MOD (not tested on other plats
+          ;; not sure why, but this was required after upgrading at some point.
+          ;; hunspell was being called with -i NIL, instead of -i utf-8
+          ;; ERROR MSG:
+          ;; ispell-get-decoded-string: No data for dictionary "en_CA" in
+          ;; ‘ispell-local-dictionary-alist’ or ‘ispell-dictionary-alist’
+          (setq ispell-dictionary-alist
+                '(("en_CA" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil
+                   ("-d" "en_CA") nil utf-8))
+                )
           ))
+
     #+END_SRC
 
 *** PlantUML & Ditaa Diagramming (Java)
