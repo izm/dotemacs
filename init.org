@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-03-05 06:38:32>
+Updated: <2020-03-30 09:34:19>
 
 
 * init.org
@@ -1150,64 +1150,67 @@ Also useful:
   - [[https://orgmode.org/manual/Speed-keys.html][Org Speed Keys]]
 
     #+BEGIN_SRC emacs-lisp
-       (setq org-ellipsis " ⤵")			;⤵, ▐, ►, ▽, ◿, ◹, », ↵, ≋, …, ⋞, ⊡, ⊹, ⊘
+      (setq org-ellipsis " ⤵")			;⤵, ▐, ►, ▽, ◿, ◹, », ↵, ≋, …, ⋞, ⊡, ⊹, ⊘
 
-       ;; fontify (pretty formating) code in code blocks
-       (setq org-src-fontify-natively t)	; important for init.org !
-       (setq org-hide-emphasis-markers t)      ; hide italic,bold,monospace text
-                                               ; formatters
+      ;; fontify (pretty formating) code in code blocks
+      (setq org-src-fontify-natively t)	; important for init.org !
+      (setq org-hide-emphasis-markers t)      ; hide italic,bold,monospace text
+                                              ; formatters
 
-       (setq org-fontify-quote-and-verse-blocks t) ; fontify quote and verse blocks
+      (setq org-fontify-quote-and-verse-blocks t) ; fontify quote and verse blocks
 
-       ;; org-refile (C-c C-w)
-       (setq org-refile-targets (quote ((nil :maxlevel . 5)
-                                        (org-agenda-files :maxlevel . 5))))
-       (setq org-outline-path-complete-in-steps nil) ; prevent org interfering w/ivy
-       (setq org-refile-use-outline-path 'file) ; refile paths begin with the file name
-       (setq org-refile-allow-creating-parent-nodes 'confirm) ; confirm creation of new headings
-       (setq org-reverse-note-order t)         ; new notes at top of file or entry
+      ;; org-refile (C-c C-w)
+      (setq org-refile-targets (quote ((nil :maxlevel . 5)
+                                       (org-agenda-files :maxlevel . 5))))
+      (setq org-outline-path-complete-in-steps nil) ; prevent org interfering w/ivy
+      (setq org-refile-use-outline-path 'file) ; refile paths begin with the file name
+      (setq org-refile-allow-creating-parent-nodes 'confirm) ; confirm creation of new headings
+      (setq org-reverse-note-order t)         ; new notes at top of file or entry
 
-       ;; org-mode customization
-       (setq org-log-done 'time)         ; add time stamp when task moves to DONE state
-       (setq org-todo-keywords           ; default TODO keywords
-              '((sequence "TODO(t)" "STARTD(s)" "WAITING(w)" "|" "DONE(d)" "DELEGATED(e)" "CANCELLED(c)")))
+      ;; org-mode customization
+      (setq org-log-done 'time)         ; add time stamp when task moves to DONE state
+      (setq org-todo-keywords           ; default TODO keywords
+             '((sequence "TODO(t)" "STARTD(s)" "WAITING(w)" "|" "DONE(d)" "DELEGATED(e)" "CANCELLED(c)")))
 
-       ;org-mode keybindings
-       (define-key global-map "\C-cc" 'org-capture)    ; todo: move to use-package :bind ?
-       (define-key global-map "\C-ca" 'org-agenda)     ;
-       (define-key global-map "\C-cl" 'org-store-link) ;
+      ;org-mode keybindings
+      (define-key global-map "\C-cc" 'org-capture)    ; todo: move to use-package :bind ?
+      (define-key global-map "\C-ca" 'org-agenda)     ;
+      (define-key global-map "\C-cl" 'org-store-link) ;
 
-       ;; Add python to list of languages for org-babel to load
-       (org-babel-do-load-languages
-        'org-babel-load-languages
-        '((emacs-lisp . t)
-          (python . t)
-          (ipython . t)
-          (ditaa . t)
-          (plantuml . t)
-          )
-        )
+      ;; Add python to list of languages for org-babel to load
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       '((emacs-lisp . t)
+         (python . t)
+         (ipython . t)
+         (ditaa . t)
+         (plantuml . t)
+         )
+       )
 
-       ;; Don't prompt before running org code blocks w/C-c C-c
-       (setq org-confirm-babel-evaluate nil)
+      ;; Don't prompt before running org code blocks w/C-c C-c
+      (setq org-confirm-babel-evaluate nil)
 
-       ;; http://cachestocaches.com/2018/6/org-literate-programming/
-       ;; Fix an incompatibility between the ob-async and ob-ipython packages
-       (setq ob-async-no-async-languages-alist '("ipython"))
+      ;; http://cachestocaches.com/2018/6/org-literate-programming/
+      ;; Fix an incompatibility between the ob-async and ob-ipython packages
+      (setq ob-async-no-async-languages-alist '("ipython"))
 
-       ;; Enable single-key commands at beginning of headers
-       (setq org-use-speed-commands t)
+      ;; Enable single-key commands at beginning of headers
+      (setq org-use-speed-commands t)
 
-       ;; <s TAB completion for SRC scode block
-       ;; https://orgmode.org/manual/Structure-Templates.html
-       (require 'org-tempo nil 'noerror)       ; required for org >= 9.2
+      ;; <s TAB completion for SRC scode block
+      ;; https://orgmode.org/manual/Structure-Templates.html
+      (require 'org-tempo nil 'noerror)       ; required for org >= 9.2
 
-       ;; Try org-indirect-buffer-display options
-       (setq org-indirect-buffer-display 'new-frame)
-       (setq org-src-window-setup 'other-frame)
+      ;; Try org-indirect-buffer-display options
+      (setq org-indirect-buffer-display 'new-frame)
+      (setq org-src-window-setup 'other-frame)
 
-       ;; Alphabetical plain list options!
-       (setq org-list-allow-alphabetical t)
+      ;; Alphabetical plain list options!
+      (setq org-list-allow-alphabetical t)
+
+      ;; Use org-specific beginning-of-line/end-of-line, before true ^/$
+      (setq org-special-ctrl-a/e 't)
     #+END_SRC
 
 ** Agenda
