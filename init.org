@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-03-31 11:18:18>
+Updated: <2020-04-03 19:59:09>
 
 
 * init.org
@@ -1209,7 +1209,7 @@ Also useful:
   (setq org-list-allow-alphabetical t)
 
   ;; Use org-specific beginning-of-line/end-of-line, before true ^/$
-  (setq org-special-ctrl-a/e 't)
+  (setq org-special-ctrl-a/e 'reversed)
 #+END_SRC
 
 ** Agenda
