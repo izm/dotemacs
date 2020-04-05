@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-04-03 19:59:09>
+Updated: <2020-04-05 15:56:44>
 
 
 * init.org
@@ -343,6 +343,8 @@ If there is a compile error, or "tar not found," try
     :config
     ;; (setq elfeed-feeds
     ;;       '("https://sachachua.com/blog/feed/" "https://planet.emacslife.com/atom.xml"))
+    (define-key elfeed-show-mode-map (kbd "j") 'shr-next-link)
+    (define-key elfeed-show-mode-map (kbd "k") 'shr-previous-link)
     )
 
   (use-package elfeed-org
