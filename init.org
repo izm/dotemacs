@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-04-05 15:56:44>
+Updated: <2020-04-07 01:58:01>
 
 
 * init.org
@@ -1171,9 +1171,9 @@ Also useful:
   ;; org-mode customization
   (setq org-log-done 'time)         ; add time stamp when task moves to DONE state
   (setq org-todo-keywords           ; default TODO keywords
-         '((sequence "TODO(t)" "STARTD(s)" "WAITING(w)" "|" "DONE(d)" "DELEGATED(e)" "CANCELLED(c)")))
+        '((sequence "TODO(t)" "STARTD(s)" "WAITING(w)" "|" "DONE(d)" "DELEGATED(e)" "CANCELLED(c)")))
 
-  ;org-mode keybindings
+                                          ;org-mode keybindings
   (define-key global-map "\C-cc" 'org-capture)    ; todo: move to use-package :bind ?
   (define-key global-map "\C-ca" 'org-agenda)     ;
   (define-key global-map "\C-cl" 'org-store-link) ;
@@ -1212,6 +1212,10 @@ Also useful:
 
   ;; Use org-specific beginning-of-line/end-of-line, before true ^/$
   (setq org-special-ctrl-a/e 'reversed)
+
+  (setq org-startup-indented t)
+  (setq org-src-tab-acts-natively t)
+  (setq org-hide-leading-stars t)
 #+END_SRC
 
 ** Agenda
