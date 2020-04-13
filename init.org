@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-04-11 00:10:36>
+Updated: <2020-04-12 23:34:00>
 
 
 * init.org
@@ -336,6 +336,25 @@ Some good programming fonts [[https://blog.checkio.org/top-10-most-popular-codin
 If there is a compile error, or "tar not found," try
 =package-refresh-contents= to refresh the package database.
 
+** command-log-mode
+Use for demoing emacs; keystrokes get logged into a designated buffer, along
+with the command bound to them.
+
+#+begin_src emacs-lisp
+(use-package command-log-mode)
+#+end_src
+
+** visual-fill-column
+Instead of wrapping lines at the window edge, which is the standard behaviour of
+`visual-line-mode', it wraps lines at `fill-column'.  Must be enabled after
+enabling visual-line-mode.  I leave it off by default, but want it available
+depending on the situation.
+
+#+begin_src emacs-lisp
+  (use-package visual-fill-column
+    :ensure t)
+#+end_src
+
 ** elfeed - RSS reader
 #+begin_src emacs-lisp
   (unless my/on-work-pc
@@ -365,12 +384,8 @@ quickly browse, filter, and edit plain text notes
     )
 #+end_src
 
-** TRY org-listcruncher - Parse emacs org list contents into table
-https://github.com/dfeich/org-listcruncher
-
-** TRY gnus - RSS reader
 ** TRY erc - IRC client
-- https://www.emacswiki.org/emacs/EmacsChannel
+- [[info:erc#Top][info:erc#Top]]
 ** TRY god-mode, objed - modal navigation and editing
 Modal editing in an emacs-y way.
 #+BEGIN_SRC emacs-lisp
@@ -761,7 +776,9 @@ in HOME directory (=C:/Users/Username/AppData/Roaming/= on /Windows 10/)
 #+END_SRC
 
 ** yasnippet
-   
+- Do we really need the thousands of snippets from [[https://github.com/AndreaCrotti/yasnippet-snippets][yasnippet-snippets]]?
+- [ ] Cherry pick a few, put into custom directory.
+
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
@@ -790,8 +807,6 @@ M-UP and M-DOWN to move lines/regions
     :ensure t)
   (move-text-default-bindings)
 #+END_SRC
-
-sdf
    
 ** markdown-mode
    
@@ -824,7 +839,8 @@ https://github.com/Wilfred/helpful
            ))
 #+END_SRC
 ** multiple-cursors
-http://stable.melpa.org/#/multiple-cursors
+- https://github.com/magnars/multiple-cursors.el/
+
 #+BEGIN_SRC emacs-lisp
   (use-package multiple-cursors
     :ensure t
@@ -860,79 +876,6 @@ http://stable.melpa.org/#/multiple-cursors
   )
 #+END_SRC
 
-** OLD Packages that have been superceded
-*** OLD spaceline - (Powerline) modeline
-CLOSED: [2019-03-18 Mon 14:12]
-Ditched in favour of =doom-modeline=
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package spaceline
-    :ensure t
-    :config
-    (require 'spaceline-config)
-    (setq powerline-default-separator 'wave)
-    (spaceline-spacemacs-theme))          ; quickly makes modeline pretty
-#+END_SRC
-
-*** OLD anzu - Count isearch matches
-CLOSED: [2018-05-20 Sun 18:38]
-- https://github.com/syohex/emacs-anzu
-- Show current match and total matches for various search modes.
-- Superceded by Swiper
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package anzu
-    :ensure nil
-    :config
-    (global-anzu-mode +1))
-
-#+END_SRC
-
-*** OLD smex - Fuzzy =M-x= function matching
-CLOSED: [2018-10-07 Sun 15:22]
-- https://github.com/nonsequitur/smex
-- Ultra-lightweight =M-x= enhancement
-- Superceded by Swiper & Counsel
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package smex
-    :ensure t
-    :bind (;("M-x" . smex) replaced w/counsel
-           ("M-X" . smex-major-mode-commands)
-           ("C-c C-c M-x" . execute-extended-command)))
-#+END_SRC
-
-*** NOTE [#B] selected-packages [*has to be manually updated*]
-CLOSED: [2019-03-17 Sun 11:01]
-=package-selected-packages= is used by ‘package-autoremove’ to decide which
-packages are no longer needed.  But there was an issue with use-package not
-adding packages to =package-selected-packages=, so it has to be done
-manually..
-
-You can use it to (re)install packages on other machines by
-running ‘package-install-selected-packages’.
-
-See currently activated packages with =package-activated-list=.
-
-- [ ] Superceded by =use-package=?
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq package-selected-packages
-        (quote
-         (org-bullets tangotango-theme leuven-theme eziam-theme alect-themes
-                      atom-one-dark-theme borland-blue-theme material-theme
-                      helm helm-projectile expand-region org-projectile
-                      projectile web-mode)))
-#+END_SRC
-
-*** OLD paredit - Intense parentheses mode (not enabled)
-CLOSED: [2018-05-20 Sun 18:37]
-- http://danmidwood.com/content/2014/11/21/animated-paredit.html (super cool animated gifs)
-- disabling paredit, will use smartparens if I need it.
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package paredit
-    :ensure t
-    :defer t)
-#+END_SRC
-
 ** define-it
 Define, translate, wiki the word
 #+begin_src emacs-lisp
@@ -944,27 +887,6 @@ Define, translate, wiki the word
     )
 #+end_src
 
-** NOTE dictionary and thesaurus lookup
-CLOSED: [2019-03-17 Sun 10:56]
-#+BEGIN_SRC emacs-lisp
-  (use-package dictionary :ensure t
-    :init
-    :config
-    ;; :bind ("" . dictionary-search)
-    ;; ("" . dictionary-match-words)
-    )
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;; These didn't work, and I don't want any more external dependecies.
-  (use-package synosaurus :ensure t
-    :init 
-    :config
-    (setq synosaurus-backend 'synosaurus-backend-openthesaurus)
-    )
-
-  (use-package synonymous :ensure t)
-#+END_SRC       
 
 ** SLOW ein - Emacs iron python notebook (Jupyter)
 CLOSED: [2019-03-17 Sun 10:55]
@@ -1064,6 +986,79 @@ https://github.com/astahlman/ob-async
     :ensure t)
 #+END_SRC
 
+
+** OLD Packages that have been superceded
+*** OLD spaceline - (Powerline) modeline
+CLOSED: [2019-03-18 Mon 14:12]
+Ditched in favour of =doom-modeline=
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package spaceline
+    :ensure t
+    :config
+    (require 'spaceline-config)
+    (setq powerline-default-separator 'wave)
+    (spaceline-spacemacs-theme))          ; quickly makes modeline pretty
+#+END_SRC
+
+*** OLD anzu - Count isearch matches
+CLOSED: [2018-05-20 Sun 18:38]
+- https://github.com/syohex/emacs-anzu
+- Show current match and total matches for various search modes.
+- Superceded by Swiper
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package anzu
+    :ensure nil
+    :config
+    (global-anzu-mode +1))
+
+#+END_SRC
+
+*** OLD smex - Fuzzy =M-x= function matching
+CLOSED: [2018-10-07 Sun 15:22]
+- https://github.com/nonsequitur/smex
+- Ultra-lightweight =M-x= enhancement
+- Superceded by Swiper & Counsel
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package smex
+    :ensure t
+    :bind (;("M-x" . smex) replaced w/counsel
+           ("M-X" . smex-major-mode-commands)
+           ("C-c C-c M-x" . execute-extended-command)))
+#+END_SRC
+
+*** NOTE [#B] selected-packages [*has to be manually updated*]
+CLOSED: [2019-03-17 Sun 11:01]
+=package-selected-packages= is used by ‘package-autoremove’ to decide which
+packages are no longer needed.  But there was an issue with use-package not
+adding packages to =package-selected-packages=, so it has to be done
+manually..
+
+You can use it to (re)install packages on other machines by
+running ‘package-install-selected-packages’.
+
+See currently activated packages with =package-activated-list=.
+
+- [ ] Superceded by =use-package=?
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (setq package-selected-packages
+        (quote
+         (org-bullets tangotango-theme leuven-theme eziam-theme alect-themes
+                      atom-one-dark-theme borland-blue-theme material-theme
+                      helm helm-projectile expand-region org-projectile
+                      projectile web-mode)))
+#+END_SRC
+
+*** OLD paredit - Intense parentheses mode (not enabled)
+CLOSED: [2018-05-20 Sun 18:37]
+- http://danmidwood.com/content/2014/11/21/animated-paredit.html (super cool animated gifs)
+- disabling paredit, will use smartparens if I need it.
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package paredit
+    :ensure t
+    :defer t)
+#+END_SRC
 
 * Dired
 
