@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-04-12 23:34:00>
+Updated: <2020-04-15 09:40:03>
 
 
 * init.org
@@ -1366,6 +1366,16 @@ installed on Cygwin on Windows.
          (concat user-emacs-directory "my-custom.el")))
   (if (file-exists-p custom-file) (load custom-file))
 #+END_SRC
+
+* my/ functions
+#+begin_src emacs-lisp
+(defun my/now ()
+    "Return the current date and time appropriate for placing in
+Windows file names."
+    (interactive)
+    (insert-before-markers 
+     (format-time-string "%Y-%m-%d--%H-%M-%S" (current-time))))
+#+end_src
 
 * Finally
 After environment setup is complete, do any remaining things like opening
