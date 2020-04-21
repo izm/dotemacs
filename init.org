@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-04-15 09:40:03>
+Updated: <2020-04-21 00:51:21>
 
 
 * init.org
@@ -202,46 +202,46 @@ Some good programming fonts [[https://blog.checkio.org/top-10-most-popular-codin
   ;; 0123456789abcdefghijklmnopqrstuvwxyz [] () :;,. !@#$^&*
   ;; 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ {} <> "'`  ~-_/|\?
 
-  ;; (set-face-attribute 'default t :font "DejaVu Sans Mono" :height +1)
   (setq default-font-name nil)
   (cond
+   ;; First choice
    ((find-font (font-spec :name "DejaVu Sans Mono"))
     (setq default-font-name "DejaVu Sans Mono")
     (setq default-font-size "12"))
 
+   ;; Second choice
    ((find-font (font-spec :name "Consolas"))
     (setq default-font-name "Consolas")
     (setq default-font-size "13"))
 
-   ;; (set-frame-font "DejaVu Sans Mono-12"))
-   ;; ((find-font (font-spec :name "Lucida Console"))
-   ;;  (set-frame-font "Lucida Console-12"))
-   ;; (setq default-font-name "Lucida Console"))
+   ;; Fallback, if we must...
    ((find-font (font-spec :name "Courier New"))
-    ;; (set-frame-font "Courier New-12"))
     (setq default-font-name "Courier New")
     (setq default-font-size "12"))
    )
-  ;; (setq initial-frame-alist '((top . 1) (left . 1) (width . 80) (height . 55)))
+
   (when default-font-name
     (add-to-list 'default-frame-alist
-                 (cons 'font (concat default-font-name
-                                     "-"
-                                     (or default-font-size "12")))))
-  ;; (set-face-attribute 'default t :family "Monospace" :height +1)
+                 (cons 'font
+                       (concat default-font-name "-"
+                               (or default-font-size "12")))))
 #+END_SRC
 
 *** Try a font
+Use =eval-last-sexp= (=C-x C-e=) to try the different fonts: [[info:emacs#Lisp Eval][info:emacs#Lisp Eval]]
+
 #+BEGIN_SRC emacs-lisp :tangle no :results output silent
-  ;; (set-frame-font "Lucida Console-14")
   (set-frame-font "Consolas-13")
   (set-frame-font "Source Code Pro 12")
   (set-frame-font "Liberation Mono 12")
   (set-frame-font "Fira Mono 12")
-  (set-frame-font "Anonymous Pro 14")
-  ;(set-frame-font "M+ 1m 14")
-  ;; (set-frame-font "Inconsolata 12")
-  ;; (set-frame-font "Ubuntu Mono 13")
+  (set-frame-font "Anonymous Pro 13")
+  (set-frame-font "DejaVu Sans Mono-12")
+  (set-frame-font "Lucida Console-12")
+  (set-frame-font "Inconsolata 12")
+  (set-frame-font "M+ 1m 14")
+  (set-frame-font "Ubuntu Mono 13")
+  (set-frame-font "Courier New-12")
 #+END_SRC
 
 *** Look at installed fonts
@@ -260,17 +260,12 @@ Some good programming fonts [[https://blog.checkio.org/top-10-most-popular-codin
   ;; (unless custom-enabled-themes
   ;;   (load-theme 'material t nil))		; load & enable theme, if nothing already set
   (setq custom-theme-directory user-emacs-directory)
-  (load-theme 'two-fifteen t)
+  (load-theme 'two-fifteen t)             ; current theme, work-in-progress
 
   (setq window-divider-default-right-width 4)
   (setq window-divider-default-bottom-width 1)
   (setq window-divider-default-places 'right-only)
   (window-divider-mode 1)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp :tangle no :results silent
-  ;; TESTING, not exported
-  (load-theme 'two-fifteen t)
 #+END_SRC
 
 ** UTF-8
@@ -1382,11 +1377,10 @@ After environment setup is complete, do any remaining things like opening
 files and setting key maps.
 
 #+BEGIN_SRC emacs-lisp
-  ;(my/disable-all-themes custom-enabled-themes) ; just in case multiple
-  ;(my/load-theme 'two-fifteen)                  ; load starting theme
+  ;; Open a couple files and buffers
 
-  ;; Open a couple files
-  (dired (concat my/org-directory "/*.org")) ; filter to .org files in org
+  ;; dired filtered to .org files in org
+  (dired (concat my/org-directory "/*.org"))
 
   ;; open init config
   (if (file-exists-p (concat my/user-dir "/Projects/dotemacs/init.org"))
