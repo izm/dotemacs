@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-04-21 00:51:21>
+Updated: <2020-04-26 13:30:26>
 
 
 * init.org
@@ -220,6 +220,11 @@ Some good programming fonts [[https://blog.checkio.org/top-10-most-popular-codin
     (setq default-font-size "12"))
    )
 
+  ;; variable pitch font
+  (cond
+   ((find-font (font-spec :name "Calibri"))
+    (set-face-attribute 'variable-pitch nil :family "Calibri")))
+
   (when default-font-name
     (add-to-list 'default-frame-alist
                  (cons 'font
@@ -359,6 +364,16 @@ depending on the situation.
       ;;       '("https://sachachua.com/blog/feed/" "https://planet.emacslife.com/atom.xml"))
       (define-key elfeed-show-mode-map (kbd "j") 'shr-next-link)
       (define-key elfeed-show-mode-map (kbd "k") 'shr-previous-link)
+      (define-key elfeed-show-mode-map (kbd "e") 'eww)
+
+      (add-hook 'elfeed-show-mode-hook
+                (lambda ()
+                  (progn
+                    (visual-line-mode t)
+                    (when (fboundp 'visual-fill-column-mode)
+                      (visual-fill-column-mode t))
+                    (text-scale-increase 1)
+                    )))
       )
 
     (use-package elfeed-org
@@ -367,7 +382,7 @@ depending on the situation.
       (elfeed-org)
       (setq rmh-elfeed-org-files (list (concat my/org-directory "/elfeed.org")))
       )
-  )
+    )
 #+end_src
 
 ** deft
