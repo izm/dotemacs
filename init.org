@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-04-26 13:30:26>
+Updated: <2020-05-10 22:16:54>
 
 
 * init.org
@@ -491,31 +491,34 @@ Hides or renames minor modes.
     :ensure t)
 #+END_SRC
 
-** anaconda-mode - Python programming 
-- https://github.com/proofit404/anaconda-mode
-- https://github.com/proofit404/company-anaconda
-- https://emacs.stackexchange.com/questions/27834/spacemacs-company-anaconda-doesnt-work
+** language server - lsp-mode or eglot
+- https://github.com/emacs-lsp/lsp-mode
+- https://github.com/emacs-lsp/lsp-ui (troubleshooting on windows)
 
-  # pip install --upgrade jedi json-rpc service_factory
-  # python -m pip install --upgrade pip
+Trying =lsp-mode= and =eglot= instead of =anaconda-mode=.  =lsp-mode= seems to require Emacs 27 (recommended ~15x faster).
 
-- https://www.reddit.com/r/emacs/comments/5slhkb/what_is_your_preferred_setup_for_python/
-- https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Blang/python#auto-completion-anaconda-dependencies
+#+begin_src emacs-lisp
+  (use-package eglot)
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
-  (use-package anaconda-mode
-    :ensure t
-    :defer t
-    :config
-    (add-hook 'python-mode-hook 'anaconda-mode)        ; doc lookup, definition jump, etc
-    (add-hook 'python-mode-hook 'anaconda-eldoc-mode)) ; argument prompt in mini-buffer
+Trying to manage system-level packages with =conda=, not =pip=
+- pip uninstall python-language-server (if installed) 
+- conda install python-language-server
+- [ ] maybe use ms python language server?
 
-  (use-package company-anaconda
-    :ensure t
-    :defer t
-    :config
-    (eval-after-load 'company
-      '(add-to-list 'company-backends 'company-anaconda)))
+#+BEGIN_SRC emacs-lisp :tangle no
+    (use-package lsp-mode
+      :hook ((python-mode . lsp-deferred)
+             ;; which-key integration
+             (lsp-mode . lsp-enable-which-key-integration))
+      :commands (lsp lsp-deferred)
+      :config
+      (setq lsp-keymap-prefix "c-s-l")
+      )
+
+    ;; optional
+    (use-package lsp-ui :commands lsp-ui-mode) ;automatically activated by lsp-mode
+    (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 #+END_SRC
 
 ** esup - Emacs Start Up Profiler
@@ -1409,10 +1412,15 @@ files and setting key maps.
     (find-file (concat my/org-directory "/private.org")))
 
   ;; Reset garbage collection threshold
-  (add-hook 'emacs-startup-hook
-            (lambda ()
-              (setq gc-cons-threshold 16777216
-                    gc-cons-percentage 0.1)))
+  ;; (add-hook 'emacs-startup-hook
+  ;;           (lambda ()
+  ;;             (setq gc-cons-threshold 16777216 ;16MB
+  ;;                   gc-cons-percentage 0.1)))
+
+  ;; Recommended settings for performant lsp-mode, trying.
+  (setq gc-cons-threshold 100000000)      ;100MB
+  (when (boundp 'read-process-output-max)         ; Emacs27 req'd to support
+    (setq read-process-output-max (* 1024 1024))) ; 1mb
 #+END_SRC
 
 ** Keybindings
