@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-05-10 22:16:54>
+Updated: <2020-06-01 23:37:01>
 
 
 * init.org
@@ -1248,6 +1248,24 @@ Some things, =eww= (=libxml=), inline images (=libpng=) require libraries not
 shipped with =emacs= on Windows.  Get those from
 https://sourceforge.net/projects/ezwinports/ and install them to the
 =/emacs/bin/= directory.
+** Tramp / Putty
+- https://www.emacswiki.org/emacs/Tramp_on_Windows,
+- [[https://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/][remote file permissions]]
+
+Install PuTTY and use =plink=.  Trying to use Tramp with =ssh= on windows causes
+emacs to hang.
+
+#+begin_src emacs-lisp
+(when (eq window-system 'w32)
+  (setq tramp-default-method "plink"))
+#+end_src
+
+ie. =find-file /plink:user@host:/home/dir/=
+
+Optional: Generate a key, upload to remote host, add to =.ssh/allowed_keys=, then connect with just =plink mysession= for passwordless login.
+
+=find-file /plink:mysession:/home/dir/=
+
 ** Task Bar shortcut
 =runemacs.exe= will hide the terminal window, but if you pin the shortcut to
 the taskbar, it will be =emacs.exe=.  The following steps ensures emacs icon
