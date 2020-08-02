@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-06-01 23:37:01>
+Updated: <2020-08-01 21:34:34>
 
 
 * init.org
@@ -1200,6 +1200,7 @@ directories to reflect your edits.
      (ipython . t)
      (ditaa . t)
      (plantuml . t)
+     (shell . t)
      )
    )
 
