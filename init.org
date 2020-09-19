@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-08-01 21:34:34>
+Updated: <2020-09-19 14:04:31>
 
 
 * init.org
@@ -1197,7 +1197,7 @@ directories to reflect your edits.
    'org-babel-load-languages
    '((emacs-lisp . t)
      (python . t)
-     (ipython . t)
+     ;; (ipython . t) ;; requires ob-ipython
      (ditaa . t)
      (plantuml . t)
      (shell . t)
@@ -1417,7 +1417,8 @@ files and setting key maps.
   ;; Open a couple files and buffers
 
   ;; dired filtered to .org files in org
-  (dired (concat my/org-directory "/*.org"))
+  (if (file-exists-p my/org-directory)
+       (dired (concat my/org-directory "/*.org")))
 
   ;; open init config
   (if (file-exists-p (concat my/user-dir "/Projects/dotemacs/init.org"))
@@ -1427,8 +1428,10 @@ files and setting key maps.
 
   ;; open org file directory
   (if my/on-work-pc
-      (find-file (concat my/org-directory "/work.org"))
-    (find-file (concat my/org-directory "/private.org")))
+      (if (file-exists-p (concat my/org-directory "/work.org"))
+          (find-file (concat my/org-directory "/work.org")))
+    (if (file-exists-p (concat my/org-directory "/private.org"))
+     (find-file (concat my/org-directory "/private.org"))))
 
   ;; Reset garbage collection threshold
   ;; (add-hook 'emacs-startup-hook
