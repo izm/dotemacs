@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-09-19 14:04:31>
+Updated: <2020-10-13 22:58:34>
 
 
 * init.org
@@ -336,6 +336,15 @@ Use =eval-last-sexp= (=C-x C-e=) to try the different fonts: [[info:emacs#Lisp E
 If there is a compile error, or "tar not found," try
 =package-refresh-contents= to refresh the package database.
 
+** hs-minor-mode
+- =S-<mouse2>= and =C-c @ C-t= also work;  =C-c @ C-a= to toggle all.
+- =C-c C-j= to jump (imenu)
+
+#+begin_src emacs-lisp
+  (add-hook 'python-mode-hook 'hs-minor-mode)
+  (define-key python-mode-map (kbd "<C-tab>") 'hs-toggle-hiding)
+#+end_src
+
 ** command-log-mode
 Use for demoing emacs; keystrokes get logged into a designated buffer, along
 with the command bound to them.
@@ -545,7 +554,7 @@ Trying to manage system-level packages with =conda=, not =pip=
 
 #+BEGIN_SRC emacs-lisp
   (use-package esup
-    :ensure t)
+    :ensure nil)
 #+END_SRC
 
 ** smartscan - Simple word-instance jumping
@@ -594,10 +603,10 @@ Trying to manage system-level packages with =conda=, not =pip=
 
 ** origami - Code folding
 - https://github.com/gregsexton/origami.el
-
+- just use hs-minor-mode?
 #+BEGIN_SRC emacs-lisp
   (use-package origami
-    :ensure t)
+    :ensure nil)
 #+END_SRC
 
 ** flycheck - Syntax-checking
@@ -794,7 +803,7 @@ in HOME directory (=C:/Users/Username/AppData/Roaming/= on /Windows 10/)
 
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
-    :ensure t
+    :ensure nil
   )
 #+END_SRC
 
@@ -946,7 +955,7 @@ https://github.com/myuhe/org-gcal.el
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package org-gcal
-    :ensure t)
+    :ensure nil)
   ;;  See init_private.el for setup
 #+END_SRC
 
@@ -1383,10 +1392,11 @@ installed on Cygwin on Windows.
 #+BEGIN_SRC emacs-lisp
   (let* ((plantuml-filepath (expand-file-name "~/plantuml.jar"))
          (ditaa-filepath (expand-file-name "~/ditaa0_9.jar")))
-    (if (file-readable-p plantuml-filepath)
-        (setq org-plantuml-jar-path plantuml-filepath))
-    (if (file-readable-p ditaa-filepath)
-        (setq org-ditaa-jar-path ditaa-filepath))
+    (when (file-readable-p plantuml-filepath)
+      (setq org-plantuml-jar-path plantuml-filepath)
+      (setq plantuml-default-exec-mode 'jar))
+    (when (file-readable-p ditaa-filepath)
+      (setq org-ditaa-jar-path ditaa-filepath))
     )
 #+END_SRC
 
