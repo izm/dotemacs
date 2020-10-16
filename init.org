@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-10-13 22:58:34>
+Updated: <2020-10-15 22:22:59>
 
 
 * init.org
@@ -336,13 +336,19 @@ Use =eval-last-sexp= (=C-x C-e=) to try the different fonts: [[info:emacs#Lisp E
 If there is a compile error, or "tar not found," try
 =package-refresh-contents= to refresh the package database.
 
+** plantuml-mode
+#+begin_src emacs-lisp
+  (use-package plantuml-mode :ensure t)
+#+end_src
+
 ** hs-minor-mode
 - =S-<mouse2>= and =C-c @ C-t= also work;  =C-c @ C-a= to toggle all.
 - =C-c C-j= to jump (imenu)
 
 #+begin_src emacs-lisp
   (add-hook 'python-mode-hook 'hs-minor-mode)
-  (define-key python-mode-map (kbd "<C-tab>") 'hs-toggle-hiding)
+  (eval-after-load "python"
+    '(define-key python-mode-map (kbd "<C-tab>") 'hs-toggle-hiding))
 #+end_src
 
 ** command-log-mode
@@ -408,8 +414,8 @@ quickly browse, filter, and edit plain text notes
 ** TRY god-mode, objed - modal navigation and editing
 Modal editing in an emacs-y way.
 #+BEGIN_SRC emacs-lisp
-  (use-package god-mode :ensure t)
-  (use-package objed :ensure t)
+  (use-package god-mode :ensure nil :defer t)
+  (use-package objed :ensure nil :defer t)
 #+END_SRC
 ** themes
 
@@ -554,7 +560,9 @@ Trying to manage system-level packages with =conda=, not =pip=
 
 #+BEGIN_SRC emacs-lisp
   (use-package esup
-    :ensure nil)
+    :ensure nil
+    :defer t
+    )
 #+END_SRC
 
 ** smartscan - Simple word-instance jumping
@@ -562,7 +570,7 @@ Trying to manage system-level packages with =conda=, not =pip=
 - *NOTE*: currently conflicts with ein checkpoint bindings.
 #+BEGIN_SRC emacs-lisp
   (use-package smartscan
-    :ensure t
+    :ensure nil
     :defer 1
     ;; :bind (("M-n" . smartscan-symbol-go-forward)
     ;;        ("M-p" . smartscan-symbol-go-backward))
@@ -606,7 +614,9 @@ Trying to manage system-level packages with =conda=, not =pip=
 - just use hs-minor-mode?
 #+BEGIN_SRC emacs-lisp
   (use-package origami
-    :ensure nil)
+    :ensure nil
+    :defer t
+    )
 #+END_SRC
 
 ** flycheck - Syntax-checking
@@ -693,7 +703,8 @@ Try is a package that allows you to try out Emacs packages without installing th
 
 #+begin_src emacs-lisp
   (use-package try
-    :ensure t
+    :ensure t 
+    :defer t
     )
 #+end_src
 
@@ -749,7 +760,6 @@ https://thraxys.wordpress.com/2016/01/14/pimp-up-your-org-agenda/
     ;;  (setq org-bullets-bullet-list '("◉" "◎" "○" "►" "◇"))
     :config
     )
-
 #+END_SRC
 
 ** ace-window - DWIM window switcher
@@ -804,6 +814,7 @@ in HOME directory (=C:/Users/Username/AppData/Roaming/= on /Windows 10/)
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure nil
+    :defer t
   )
 #+END_SRC
 
@@ -860,6 +871,7 @@ https://github.com/Wilfred/helpful
            ;; ("C-h C" . helpful-command) ; 
            ))
 #+END_SRC
+
 ** multiple-cursors
 - https://github.com/magnars/multiple-cursors.el/
 
@@ -901,7 +913,7 @@ https://github.com/Wilfred/helpful
 ** define-it
 Define, translate, wiki the word
 #+begin_src emacs-lisp
-  (use-package define-it :ensure t
+  (use-package define-it :ensure t :defer t
     :config
     (setq define-it-show-google-translate nil)              ; Disable translate by default
     (setq google-translate-default-source-language "auto")  ; Auto detect language.
