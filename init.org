@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-10-15 22:22:59>
+Updated: <2020-10-22 14:39:45>
 
 
 * init.org
@@ -816,6 +816,9 @@ in HOME directory (=C:/Users/Username/AppData/Roaming/= on /Windows 10/)
     :ensure nil
     :defer t
   )
+  ;; add generic fundamental-mode snippets across all modes
+  (add-hook 'yas-minor-mode-hook (lambda ()
+                                   (yas-activate-extra-mode 'fundamental-mode)))
 #+END_SRC
 
 ** neotree - File tree explorer bound to <F8>
