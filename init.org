@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-10-22 14:39:45>
+Updated: <2020-12-02 12:09:36>
 
 
 * init.org
@@ -1255,7 +1255,24 @@ directories to reflect your edits.
   (setq org-startup-indented t)
   (setq org-src-tab-acts-natively t)
   (setq org-hide-leading-stars t)
+
+  ;; Default bullet when demoting item or creating new sub-list
+  (setq org-list-demote-modify-bullet
+        '(
+          ("+" . "-")
+          ("-" . "+")
+          ("*" . "+")
+          ("1." . "a)")
+          ("1)" . "a.")
+          ("a)" . "-")
+          ("A)" . "-")
+          ("a." . "-")
+          ("A." . "-")
+          ))
 #+END_SRC
+
+#+RESULTS:
+: ((+ . -) (- . +) (* . +) (1. . a)) (1) . a.) (a) . -) (A) . -) (a. . -) (A. . -))
 
 ** Agenda
 #+BEGIN_SRC emacs-lisp
