@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2020-12-02 12:09:36>
+Updated: <2021-01-11 13:13:44>
 
 
 * init.org
@@ -29,9 +29,6 @@ directory, =~/init.d/=.
 
 
 ** TODO Tangle to init.el [3/4]
-- [X] Add =:tangle no= to the eval block
-- [X] Remove =:tangle= header from source blocks.
-- [X] Add date completed
 - [ ] Add prompt before overwriting =init.el=.  OR... just do it and backup old one?
 
 * Initialize
@@ -198,38 +195,57 @@ Some good programming fonts [[https://blog.checkio.org/top-10-most-popular-codin
 10. Bitsream Vera Sans Mono
 
 #+BEGIN_SRC emacs-lisp
-  ;; Test char and monospace:
-  ;; 0123456789abcdefghijklmnopqrstuvwxyz [] () :;,. !@#$^&*
-  ;; 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ {} <> "'`  ~-_/|\?
+    ;; Test char and monospace:
+    ;; 0123456789abcdefghijklmnopqrstuvwxyz [] () :;,. !@#$^&*
+    ;; 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ {} <> "'`  ~-_/|\?
 
-  (setq default-font-name nil)
-  (cond
-   ;; First choice
-   ((find-font (font-spec :name "DejaVu Sans Mono"))
-    (setq default-font-name "DejaVu Sans Mono")
-    (setq default-font-size "12"))
+    (setq default-font-name nil)
+    (cond
+     ;; First choice
+     ((find-font (font-spec :name "DejaVu Sans Mono"))
+      (setq default-font-name "DejaVu Sans Mono")
+      (setq default-font-size 12))
 
-   ;; Second choice
-   ((find-font (font-spec :name "Consolas"))
-    (setq default-font-name "Consolas")
-    (setq default-font-size "13"))
+     ;; Second choice
+     ((find-font (font-spec :name "Consolas"))
+      (setq default-font-name "Consolas")
+      (setq default-font-size 13))
 
-   ;; Fallback, if we must...
-   ((find-font (font-spec :name "Courier New"))
-    (setq default-font-name "Courier New")
-    (setq default-font-size "12"))
-   )
+     ;; Fallback, if we must...
+     ((find-font (font-spec :name "Courier New"))
+      (setq default-font-name "Courier New")
+      (setq default-font-size 12))
+     )
 
-  ;; variable pitch font
-  (cond
-   ((find-font (font-spec :name "Calibri"))
-    (set-face-attribute 'variable-pitch nil :family "Calibri")))
+    ;; variable pitch font
+    (cond
+     ((find-font (font-spec :name "Calibri"))
+      (set-face-attribute 'variable-pitch nil 
+                          :family "Calibri"
+                          :height (* 10 (+ 2 default-font-size))
+                          )))
 
-  (when default-font-name
+    (when default-font-name
+      (progn
+        ;; use default font in new frames
+        (add-to-list 'default-frame-alist
+                     `(font . ,(format "%s-%s"
+                                       default-font-name
+                                       (or default-font-size 12))))
+
+        (set-face-attribute 'fixed-pitch nil
+                            :family default-font-name
+                            :height (* 10 default-font-size))))
+
+  ;; FRAME SIZE
+  ;; initial frame should reasonably fit 1080p screencasts
+    (setq initial-frame-alist
+          `((top . 10) (left . 1) (width . 120) (height . 50)))
+    ;; new frames should be slightly smaller, but still usable
     (add-to-list 'default-frame-alist
-                 (cons 'font
-                       (concat default-font-name "-"
-                               (or default-font-size "12")))))
+                 '(width . 110))
+    (add-to-list 'default-frame-alist
+                 '(height . 50))
 #+END_SRC
 
 *** Try a font
@@ -259,7 +275,6 @@ Use =eval-last-sexp= (=C-x C-e=) to try the different fonts: [[info:emacs#Lisp E
 - /Custom Themes/ (not /color-themes/) can be loaded and stacked using =load-theme=.
 - Loaded themes must be unloaded individually by =disable-theme=.
 - Both allow tab-completion for applicable themes.
-- [ ] write script to cycle through installed themes at keypress?
 
 #+BEGIN_SRC emacs-lisp
   ;; (unless custom-enabled-themes
@@ -374,6 +389,7 @@ depending on the situation.
 #+begin_src emacs-lisp
   (unless my/on-work-pc
     (use-package elfeed
+      :defer t
       :config
       ;; (setq elfeed-feeds
       ;;       '("https://sachachua.com/blog/feed/" "https://planet.emacslife.com/atom.xml"))
@@ -393,6 +409,7 @@ depending on the situation.
 
     (use-package elfeed-org
       :after (elfeed)
+      :defer t
       :config
       (elfeed-org)
       (setq rmh-elfeed-org-files (list (concat my/org-directory "/elfeed.org")))
@@ -894,9 +911,6 @@ https://github.com/Wilfred/helpful
     )
 #+END_SRC
 
-#+RESULTS:
-: mc/add-cursor-on-click
-
 ** pyvenv
 #+BEGIN_SRC emacs-lisp
   (use-package pyvenv
@@ -1064,19 +1078,19 @@ CLOSED: [2018-10-07 Sun 15:22]
            ("C-c C-c M-x" . execute-extended-command)))
 #+END_SRC
 
-*** NOTE [#B] selected-packages [*has to be manually updated*]
+*** NOTE [#B] selected-packages
 CLOSED: [2019-03-17 Sun 11:01]
-=package-selected-packages= is used by ‘package-autoremove’ to decide which
-packages are no longer needed.  But there was an issue with use-package not
-adding packages to =package-selected-packages=, so it has to be done
-manually..
+Superceded by =use-package=
+
+=package-selected-packages= is used by =package-autoremove= to whitelist packages
+explicity installed by the user.  But =use-package= does not update
+=package-selected-packages=, so cannot really be used in combination with
+use-package.
 
 You can use it to (re)install packages on other machines by
 running ‘package-install-selected-packages’.
 
 See currently activated packages with =package-activated-list=.
-
-- [ ] Superceded by =use-package=?
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (setq package-selected-packages
@@ -1270,9 +1284,6 @@ directories to reflect your edits.
           ("A." . "-")
           ))
 #+END_SRC
-
-#+RESULTS:
-: ((+ . -) (- . +) (* . +) (1. . a)) (1) . a.) (a) . -) (A) . -) (a. . -) (A. . -))
 
 ** Agenda
 #+BEGIN_SRC emacs-lisp
