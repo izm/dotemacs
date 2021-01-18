@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2021-01-17 22:25:25>
+Updated: <2021-01-18 01:27:03>
 
 
 * init.org
@@ -158,8 +158,17 @@ Load things that should be slightly more private.
   (setq uniquify-buffer-name-style (quote post-forward-angle-brackets))
 
   (desktop-save-mode 0)         ; save the desktop/state of emacs' frames/buffersb
-  (setq backup-directory-alist `(("." . ,(concat user-emacs-directory ".backups")))) ; keep in clean
+
+  ;; backups - filename.ext~
+  (setq backup-directory-alist `(("." . ,(expand-file-name ".backups/" user-emacs-directory)))) ; keep in clean
   (setq backup-by-copying t)              ; vs renaming
+
+  ;; autosaves - #filename.ext#, when autosave mode enabled, saves unsaved changes
+  ;; (setq auto-save-list-file-prefix (expand-file-name ".auto-saves/" user-emacs-directory))
+
+  ;; lock files - .#filename.ext
+  ;; (setq create-lockfiles nil)
+
   (put 'narrow-to-region 'disabled nil)   ; enable narrowing C-x n n
 
   (toggle-scroll-bar 0)
