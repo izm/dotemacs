@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2021-01-11 13:13:44>
+Updated: <2021-01-17 22:25:25>
 
 
 * init.org
@@ -412,7 +412,7 @@ depending on the situation.
       :defer t
       :config
       (elfeed-org)
-      (setq rmh-elfeed-org-files (list (concat my/org-directory "/elfeed.org")))
+      (setq rmh-elfeed-org-files (list (concat my/org-directory "elfeed.org")))
       )
     )
 #+end_src
@@ -921,7 +921,7 @@ https://github.com/Wilfred/helpful
           (expand-file-name
            (file-name-as-directory
             (concat my/user-dir
-                    "/AppData/Local/Continuum/Anaconda2/envs/"))))
+                    "AppData/Local/Continuum/Anaconda2/envs/"))))
   :config
   :bind
   )
@@ -1151,11 +1151,11 @@ directories to reflect your edits.
   ;; (add-to-list 'load-path "~/../or
   ;; my/org-directory defined in init_private.el
   (setq org-agenda-files (list
-                          (concat my/org-directory "/notes.org")    ; Home/Learn/Everything
-                          (concat my/org-directory "/work.org")     ; Work
-                          (concat my/org-directory "/agenda.org")))  ; Life Stuff - rename to 'personal'?
+                          (concat my/org-directory "notes.org")    ; Home/Learn/Everything
+                          (concat my/org-directory "work.org")     ; Work
+                          (concat my/org-directory "agenda.org")))  ; Life Stuff - rename to 'personal'?
 
-  (setq org-default-notes-file (concat my/org-directory "/captured.org")) ; Unsorted  Notes
+  (setq org-default-notes-file (concat my/org-directory "captured.org")) ; Unsorted  Notes
 #+END_SRC
 
 ** Capture
@@ -1168,7 +1168,7 @@ directories to reflect your edits.
            "Task (work)"                  ; description
            entry				; type
            ;; heading type and title
-           (file+headline ,(concat my/org-directory "/work.org") "Inbox") ; target
+           (file+headline ,(concat my/org-directory "work.org") "Inbox") ; target
            "* TODO %?\n%i\n%a\n\n"	; template
            ;; optional property list  ; properties
            :prepend t                     ; insert at head of list
@@ -1186,7 +1186,7 @@ directories to reflect your edits.
            "Meeting (work)"               ; description
            entry                          ; type
            ;; heading type and title
-           (file+headline ,(concat my/org-directory "/work.org") "MINUTES & MEETINGS") ; target
+           (file+headline ,(concat my/org-directory "work.org") "MINUTES & MEETINGS") ; target
            "* %?\n%^T  (entered %U from %a)\n%i\n\n" ; template
            :prepend t
            )
@@ -1471,20 +1471,20 @@ files and setting key maps.
 
   ;; dired filtered to .org files in org
   (if (file-exists-p my/org-directory)
-       (dired (concat my/org-directory "/*.org")))
+       (dired (concat my/org-directory "*.org")))
 
   ;; open init config
-  (if (file-exists-p (concat my/user-dir "/Projects/dotemacs/init.org"))
-      (find-file (concat my/user-dir "/Projects/dotemacs/init.org")))
+  (if (file-exists-p (concat my/user-dir "Projects/dotemacs/init.org"))
+      (find-file (concat my/user-dir "Projects/dotemacs/init.org")))
   (if (file-exists-p "~/.emacs.d/init_private.el")
       (find-file "~/.emacs.d/init_private.el"))
 
   ;; open org file directory
   (if my/on-work-pc
-      (if (file-exists-p (concat my/org-directory "/work.org"))
-          (find-file (concat my/org-directory "/work.org")))
-    (if (file-exists-p (concat my/org-directory "/private.org"))
-     (find-file (concat my/org-directory "/private.org"))))
+      (if (file-exists-p (concat my/org-directory "work.org"))
+          (find-file (concat my/org-directory "work.org")))
+    (if (file-exists-p (concat my/org-directory "private.org"))
+     (find-file (concat my/org-directory "private.org"))))
 
   ;; Reset garbage collection threshold
   ;; (add-hook 'emacs-startup-hook
