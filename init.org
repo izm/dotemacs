@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2021-01-18 01:27:03>
+Updated: <2021-02-22 10:19:39>
 
 
 * init.org
@@ -143,7 +143,6 @@ Load things that should be slightly more private.
   (set-default 'truncate-lines t)    ; truncate long lines, don't wrap them
   (setq column-number-mode t)        ; show column numbers in modeline
   (setq inhibit-startup-screen t)    ; skip startup screen
-  (setq tool-bar-mode nil)           ; Remove clunky toolbar and icons
   (show-paren-mode t)                ; highlight matching parentheses
   (setq show-paren-delay 0)
   (setq show-paren-when-point-inside-paren t)
@@ -172,7 +171,7 @@ Load things that should be slightly more private.
   (put 'narrow-to-region 'disabled nil)   ; enable narrowing C-x n n
 
   (toggle-scroll-bar 0)
-  (tool-bar-mode 0)
+  (tool-bar-mode 0)                      ; Remove clunky toolbar and icons
   (global-eldoc-mode 1)                  ; highlight parameters in minibuffer
   (setq reb-re-syntax 'string)           ; C-c TAB to cycle when in regexp-builder
 
