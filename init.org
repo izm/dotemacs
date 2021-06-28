@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2021-05-27 11:51:17>
+Updated: <2021-06-27 18:31:18>
 
 
 * init.org
@@ -30,6 +30,25 @@ directory, =~/init.d/=.
 
 ** TODO Tangle to init.el [3/4]
 - [ ] Add prompt before overwriting =init.el=.  OR... just do it and backup old one?
+
+* my/ functions
+#+begin_src emacs-lisp
+(defun my/now ()
+  "Return the current date and time appropriate for placing in Windows file names."
+  (interactive)
+  (insert-before-markers 
+   (format-time-string "%Y-%m-%d--%H-%M-%S" (current-time))))
+
+
+(defun my/use-first-directory (dirlist)
+  "Return first valid directory that exists in `dirlist'.  If no directory is valid & exists, return nil.
+
+  `dirlist' is a list of string paths to test with file-exists-p.
+"
+  (catch 'match-found    
+    (dolist (d dirlist)
+      (if (file-exists-p d) (throw 'match-found d)))))
+#+end_src
 
 * Initialize
 ** OLD package - REQUIRED
@@ -1551,16 +1570,6 @@ installed on Cygwin on Windows.
        (concat user-emacs-directory "my-custom.el")))
 (if (file-exists-p custom-file) (load custom-file))
 #+END_SRC
-
-* my/ functions
-#+begin_src emacs-lisp
-(defun my/now ()
-  "Return the current date and time appropriate for placing in
-Windows file names."
-  (interactive)
-  (insert-before-markers 
-   (format-time-string "%Y-%m-%d--%H-%M-%S" (current-time))))
-#+end_src
 
 * Finally
 After environment setup is complete, do any remaining things like opening
