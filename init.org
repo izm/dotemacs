@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2021-06-27 18:31:18>
+Updated: <2021-07-26 12:44:36>
 
 
 * init.org
@@ -1222,7 +1222,7 @@ Let =dired= try to guess target (copy and rename ops) directory when
 two =dired= buffers open.
 
 Super useful!
-- wdired-mode: 
+- wdired-mode:
 
 #+begin_quote
 In WDired mode, you can edit the names of the files in the
@@ -1234,6 +1234,28 @@ directories to reflect your edits.
 #+BEGIN_SRC emacs-lisp
 (setq dired-dwim-target t)		; guess target directory
 (define-key dired-mode-map (kbd "C-c w") 'wdired-change-to-wdired-mode)
+;; https://www.gnu.org/software/emacs/manual/html_node/dired-x/
+(add-hook 'dired-load-hook
+          (lambda ()
+            ;; Use dired-x-find-file over find-file
+            (setq dired-x-hands-off-my-keys nil) ; must be done before loading dired-x
+            ;; Set dired-x global variables here.  For example:
+            ;; (setq dired-guess-shell-gnutar "gtar")
+            ))
+(load "dired-x")
+(add-hook 'dired-mode-hook
+          (lambda ()
+            ;; Set dired-x buffer-local variables here.  For example:
+            (dired-omit-mode 1)
+            ))
+(autoload 'dired-jump "dired-x"
+  "Jump to Dired buffer corresponding to current buffer." t)
+
+(autoload 'dired-jump-other-window "dired-x"
+  "Like \\[dired-jump] (dired-jump) but in other window." t)
+
+(define-key global-map "\C-x\C-j" 'dired-jump)
+(define-key global-map "\C-x4\C-j" 'dired-jump-other-window)
 #+END_SRC
 
 * Org Mode
