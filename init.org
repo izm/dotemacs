@@ -793,16 +793,16 @@ Example of how =use-package= can replace =require= and
 (diminish 'wrap-region-mode)
 #+END_SRC
 
-** org-bullets - Unicode org-mode bullets
-
+** org-superstar - Unicode org-mode bullets
+/Previously org-bullets./
 https://thraxys.wordpress.com/2016/01/14/pimp-up-your-org-agenda/
 
 #+BEGIN_SRC emacs-lisp
-(use-package org-bullets
+(use-package org-superstar
   :ensure t
   :init
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode t)))
-  ;;  (setq org-bullets-bullet-list '("◉" "◎" "○" "►" "◇"))
+  (add-hook 'org-mode-hook (lambda () (org-superstar-mode t)))
+  ;;  (setq org-superstar-headline-bullets-list '("◉" "◎" "○" "►" "◇"))
   :config
   )
 #+END_SRC
