@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2021-07-26 12:44:36>
+Updated: <2021-10-27 09:59:51>
 
 
 * init.org
@@ -1306,6 +1306,15 @@ directories to reflect your edits.
          ;; heading type and title
          (file+headline org-default-notes-file "Tasks") ; target
          "* TODO %?\n%i\n%a\n\n"                      ; template
+         ;; optional property list  ; properties
+         :prepend t                     ; insert at head of list
+         )
+        ("n"				; key
+         "C365 Task (no-status, manually set to NEW)"                  ; description
+         entry				; type
+         ;; heading type and title
+         (file+headline ,(concat my/org-directory "C365_tracker.org") "Tasks") ; target
+         "* %?\n%i\n%a\n\n"	; template
          ;; optional property list  ; properties
          :prepend t                     ; insert at head of list
          )
