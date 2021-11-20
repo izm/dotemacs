@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2021-11-19 19:23:10>
+Updated: <2021-11-19 21:31:15>
 
 
 * init.org
@@ -802,8 +802,9 @@ https://thraxys.wordpress.com/2016/01/14/pimp-up-your-org-agenda/
   :ensure t
   :init
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode t)))
-  ;;  (setq org-superstar-headline-bullets-list '("◉" "◎" "○" "►" "◇"))
   :config
+  (setq org-superstar-headline-bullets-list '(9655));'("◉" "◎" "○" "►" "◇"))
+  (setq org-superstar-item-bullet-alist '((42 . 8226) (43 . 9656) (45 . 8211))) ; •, ▸, –
   )
 #+END_SRC
 
