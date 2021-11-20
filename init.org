@@ -1,7 +1,7 @@
-#+STARTUP: hidestars indent
+#+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2021-10-27 09:59:51>
+Updated: <2021-11-19 19:23:10>
 
 
 * init.org
@@ -1043,6 +1043,11 @@ Define, translate, wiki the word
   )
 #+end_src
 
+** org-variable-pitch
+Use "org-variable-pitch-minor-mode" instead of "variable-pitch-mode" for proper list bullet alignment.
+#+begin_src emacs-lisp
+(use-package org-variable-pitch :ensure t)
+#+end_src
 
 ** SLOW ein - Emacs iron python notebook (Jupyter)
 CLOSED: [2019-03-17 Sun 10:55]
