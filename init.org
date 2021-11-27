@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2021-11-19 21:31:15>
+Updated: <2021-11-26 18:08:59>
 
 
 * init.org
@@ -43,11 +43,22 @@ directory, =~/init.d/=.
 (defun my/use-first-directory (dirlist)
   "Return first valid directory that exists in `dirlist'.  If no directory is valid & exists, return nil.
 
-  `dirlist' is a list of string paths to test with file-exists-p.
-"
+  `dirlist' is a list of string paths to test with file-exists-p. "
   (catch 'match-found    
     (dolist (d dirlist)
       (if (file-exists-p d) (throw 'match-found d)))))
+
+
+(defun my/display-startup-time ()
+  (let ((startup-secs (time-subtract after-init-time before-init-time)))
+    (message "Emacs loaded in %s (%s) with %d garbage collections lasting %s"
+             (format "%.2fs" (float-time startup-secs))
+             (format "%.2fmin" (/ (float-time startup-secs) 60.0))
+             gcs-done
+             (format "%.2fs" gc-elapsed)
+             )))
+
+(add-hook 'emacs-startup-hook #'my/display-startup-time)
 #+end_src
 
 * Initialize
@@ -168,7 +179,7 @@ Load things that should be slightly more private.
 (setq show-paren-when-point-inside-paren t)
 (setq show-paren-when-point-in-periphery t)
 (setq show-paren-style 'parenthesis)    ; "mixed" and "expression" is far too obnoxious for incomplete expressions
-(global-hl-line-mode t)            ; highlight current line
+;(global-hl-line-mode t)            ; highlight current line
 (setq visible-bell t)              ; blink, don't bark
 (setq x-stretch-cursor t)          ; cursor width will match tab character width
 (set-default 'indent-tabs-mode nil)
@@ -263,7 +274,7 @@ Some good programming fonts [[https://blog.checkio.org/top-10-most-popular-codin
 
     (set-face-attribute 'fixed-pitch nil
                         :family default-font-name
-                        :height (* 10 default-font-size))))
+                        :height 'unspecified)))
 
 ;; FRAME SIZE
 ;; initial frame should reasonably fit 1080p screencasts
@@ -379,12 +390,8 @@ Use =eval-last-sexp= (=C-x C-e=) to try the different fonts: [[info:emacs#Lisp E
 If there is a compile error, or "tar not found," try
 =package-refresh-contents= to refresh the package database.
 
-** plantuml-mode
-#+begin_src emacs-lisp
-(use-package plantuml-mode :ensure t)
-#+end_src
-
 ** hs-minor-mode
+Emacs Built-in.
 - =S-<mouse2>= and =C-c @ C-t= also work;  =C-c @ C-a= to toggle all.
 - =C-c C-j= to jump (imenu)
 
@@ -394,12 +401,26 @@ If there is a compile error, or "tar not found," try
   '(define-key python-mode-map (kbd "<C-tab>") 'hs-toggle-hiding))
 #+end_src
 
+** diminish
+Hides or renames minor modes. 
+Required for =:diminish= parameter in use-package calls.
+#+BEGIN_SRC emacs-lisp
+(use-package diminish :ensure t)
+#+END_SRC
+
+** plantuml-mode
+#+begin_src emacs-lisp
+(use-package plantuml-mode 
+  :mode ("\\.org\\'" . org-mode)
+  )
+#+end_src
+
 ** command-log-mode
 Use for demoing emacs; keystrokes get logged into a designated buffer, along
 with the command bound to them.
 
 #+begin_src emacs-lisp
-(use-package command-log-mode)
+(use-package command-log-mode :defer t)
 #+end_src
 
 ** visual-fill-column
@@ -410,7 +431,7 @@ depending on the situation.
 
 #+begin_src emacs-lisp
 (use-package visual-fill-column
-  :ensure t)
+  :defer t)
 #+end_src
 
 ** elfeed - RSS reader
@@ -449,6 +470,7 @@ depending on the situation.
 quickly browse, filter, and edit plain text notes
 #+begin_src emacs-lisp
 (use-package deft
+  :defer t
   :config
   (setq deft-directory my/org-directory)
   )
@@ -474,12 +496,6 @@ Place to put themes 100% decided on.
 ;;   :defer t
 ;;   ;; :init (load-theme 'spacemacs-dark t)
 ;;   )
-#+END_SRC
-
-** diminish
-Hides or renames minor modes.
-#+BEGIN_SRC emacs-lisp
-(use-package diminish :ensure t)
 #+END_SRC
 
 ** smartparens - Minor mode to work with pairs
@@ -511,35 +527,37 @@ Hides or renames minor modes.
 - [[https://emacs.stackexchange.com/questions/9835/how-can-i-prevent-company-mode-completing-numbers/9845][Reducing noise in returned results]]
 
 #+BEGIN_SRC emacs-lisp
-(use-package company
-  :ensure t
-  :diminish company-mode
-  ;; (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
-  ;; (add-hook 'ein:connect-mode-hook 'company-mode) ; Can't figure out company-jedi + ein
-
-  :config
-  (setq company-idle-delay 0.5)
-  (setq company-minimum-prefix-length 1)
-  (global-company-mode 1)
-  )
-
-(use-package company-quickhelp
-  :ensure t
-  :defer 2
-  :config
-  (company-quickhelp-mode 1)
-  (setq company-quickhelp-delay 1.5)
-  )
-
-;; Reduce noise in candidate suggestions
-(push (apply-partially
-       #'cl-remove-if
-       (lambda (c)
-         (or (string-match-p "[^\x00-\x7F]+" c) ;non-ansii candidates
-             (string-match-p "0-9+" c)        ;candidates containing numbers
-             (if (equal major-mode "org")       ;
-                 (>= (length c) 15))))) ; candidates >= 15 chars in org-mode
-      company-transformers)
+  (use-package company
+    :ensure t
+    ;;:defer 1
+    :diminish company-mode
+    ;; (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
+    ;; (add-hook 'ein:connect-mode-hook 'company-mode) ; Can't figure out company-jedi + ein
+  
+    :config
+    (setq company-idle-delay 0.5)
+    (setq company-minimum-prefix-length 1)
+    (global-company-mode 1)
+  
+    ;; Reduce noise in candidate suggestions
+    (push (apply-partially
+           #'cl-remove-if
+           (lambda (c)
+             (or (string-match-p "[^\x00-\x7F]+" c) ;non-ansii candidates
+                 (string-match-p "0-9+" c)        ;candidates containing numbers
+                 (if (equal major-mode "org")       ;
+                     (>= (length c) 15))))) ; candidates >= 15 chars in org-mode
+          company-transformers)
+    )
+  
+  (use-package company-quickhelp
+    :ensure t
+    ; :requires company-mode  ; 
+    :after company-mode
+    :config
+    (company-quickhelp-mode 1)
+    (setq company-quickhelp-delay 1.5)
+    )
 #+END_SRC
 
 ** iedit - Simple refactoring
@@ -557,7 +575,7 @@ Hides or renames minor modes.
 
 Trying =lsp-mode= and =eglot= instead of =anaconda-mode=.  =lsp-mode= seems to require Emacs 27 (recommended ~15x faster).
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package eglot)
 #+end_src
 
@@ -757,7 +775,9 @@ Try is a package that allows you to try out Emacs packages without installing th
 - http://elpa.gnu.org/packages/rainbow-mode.html
 - This is very useful when modifying themes.
 #+BEGIN_SRC emacs-lisp
-(use-package rainbow-mode :ensure t)
+(use-package rainbow-mode 
+  :ensure t 
+  :defer t)
 #+END_SRC
 
 ** expand-region - Select "up"
@@ -800,10 +820,11 @@ https://thraxys.wordpress.com/2016/01/14/pimp-up-your-org-agenda/
 #+BEGIN_SRC emacs-lisp
 (use-package org-superstar
   :ensure t
+  :defer t
   :init
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode t)))
   :config
-  (setq org-superstar-headline-bullets-list '(9655));'("◉" "◎" "○" "►" "◇"))
+  (setq org-superstar-headline-bullets-list '(9655)); 9655 ▶ '("◉" "◎" "○" "►" "◇"))
   (setq org-superstar-item-bullet-alist '((42 . 8226) (43 . 9656) (45 . 8211))) ; •, ▸, –
   )
 #+END_SRC
@@ -976,7 +997,9 @@ Major mode for editing markdown.
 
 #+BEGIN_SRC emacs-lisp
 (use-package markdown-mode
-  :ensure t)
+  :ensure t
+  :defer t
+)
 #+END_SRC
 
 ** helpful - adding more info to emacs help
@@ -1047,12 +1070,22 @@ Define, translate, wiki the word
 ** org-variable-pitch
 Use "org-variable-pitch-minor-mode" instead of "variable-pitch-mode" for proper list bullet alignment.
 #+begin_src emacs-lisp
-(use-package org-variable-pitch :ensure t)
+(use-package org-variable-pitch
+  :ensure t
+  :defer t
+  :config
+  (progn
+    (set-face-attribute 'org-variable-pitch-fixed-face nil :inherit 'fixed-pitch :height 'unspecified)
+    ;(set-face-attribute 'org-variable-pitch-fixed-face nil :inherit 'fixed-pitch)
+    ;(add-hook 'after-init-hook #'org-variable-pitch-setup)
+  ))
 #+end_src
 
 ** SLOW ein - Emacs iron python notebook (Jupyter)
 CLOSED: [2019-03-17 Sun 10:55]
 - Jupyter Notebooks in emacs!  Added [2017-10-19 Thu]
+  dfs
+
 - Slow. Include only when needed or designated configs
 #+BEGIN_SRC emacs-lisp :tangle no
 ;; Jupyter python  ;added 2017-10-17
@@ -1614,31 +1647,34 @@ files and setting key maps.
 
 #+BEGIN_SRC emacs-lisp
 ;; Open a couple files and buffers
+(let (start-time (current-time))
+  (progn
+    (message "%s Opening files & dired.." (format-time-string "%H:%M:%S" start-time))
 
-;; dired filtered to .org files in org
-(if (file-exists-p my/org-directory)
-    (dired (concat my/org-directory "*.org")))
+    ;; dired filtered to .org files in org
+    (if (file-exists-p my/org-directory)
+        (dired (concat my/org-directory "*.org")))
 
-;; open init config
-(if (file-exists-p (concat my/user-dir "Projects/dotemacs/init.org"))
-    (find-file (concat my/user-dir "Projects/dotemacs/init.org")))
-(if (file-exists-p "~/.emacs.d/init_private.el")
-    (find-file "~/.emacs.d/init_private.el"))
+    ;; open init config
+    (if (file-exists-p (concat my/user-dir "Projects/dotemacs/init.org"))
+        (find-file (concat my/user-dir "Projects/dotemacs/init.org")))
+    (if (file-exists-p "~/.emacs.d/init_private.el")
+        (find-file "~/.emacs.d/init_private.el"))
 
-;; open org file directory
-(if my/on-work-pc
-    (if (file-exists-p (concat my/org-directory "work.org"))
-        (find-file (concat my/org-directory "work.org")))
-  (if (file-exists-p (concat my/org-directory "private.org"))
-      (find-file (concat my/org-directory "private.org"))))
+    ;; open org file directory
+    (if my/on-work-pc
+        (if (file-exists-p (concat my/org-directory "work.org"))
+            (find-file (concat my/org-directory "work.org")))
+      (if (file-exists-p (concat my/org-directory "private.org"))
+          (find-file (concat my/org-directory "private.org"))))
+
+    (message "%s Done opening files.. (%s)" (format-time-string "%H:%M:%S" (current-time))
+             (format "%.2fs" (float-time (time-subtract (current-time) start-time))))
+    ))
 
 ;; Reset garbage collection threshold
-;; (add-hook 'emacs-startup-hook
-;;           (lambda ()
-;;             (setq gc-cons-threshold 16777216 ;16MB
-;;                   gc-cons-percentage 0.1)))
-
 ;; Recommended settings for performant lsp-mode, trying.
+(message "%s Resetting garbage collector." (format-time-string "%H:%M:%S" (current-time)))
 (setq gc-cons-threshold 100000000)      ;100MB
 (when (boundp 'read-process-output-max)         ; Emacs27 req'd to support
   (setq read-process-output-max (* 1024 1024))) ; 1mb
@@ -1677,6 +1713,21 @@ mapping.
 #+END_SRC
 
 * Notes
+
+Benchmarking
+
+#+begin_src emacs-lisp :tangle no
+;; chunks to debug different lisp pieces
+(benchmark-run
+    (find-file-noselect (concat "c:/Users/steven.brown/" "Projects/dotemacs/init.org"))) ; (time gcs gc-time)
+
+(let ((start-time (current-time)))
+  (progn
+    (message "Loading...")
+    (require 'org-variable-pitch)
+    (message (format "Loaded in %.2fs" (float-time (time-subtract (current-time) start-time))))
+    ))
+#+end_src
 
 | Key       | What                                                |
 |-----------+-----------------------------------------------------|
