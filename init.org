@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2021-11-26 18:08:59>
+Updated: <2021-11-30 01:23:37>
 
 
 * init.org
@@ -277,14 +277,14 @@ Some good programming fonts [[https://blog.checkio.org/top-10-most-popular-codin
                         :height 'unspecified)))
 
 ;; FRAME SIZE
-;; initial frame should reasonably fit 1080p screencasts
+;; initial frame should reasonably fit various laptop screens (smaller than 1080p)
 (setq initial-frame-alist
-      `((top . 10) (left . 1) (width . 120) (height . 50)))
+      `((top . 10) (left . 1) (width . 130) (height . 47)))
 ;; new frames should be slightly smaller, but still usable
 (add-to-list 'default-frame-alist
              '(width . 110))
 (add-to-list 'default-frame-alist
-             '(height . 50))
+             '(height . 45))
 #+END_SRC
 
 *** Try a font
