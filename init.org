@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2021-11-30 01:23:37>
+Updated: <2022-01-07 02:40:43>
 
 
 * init.org
@@ -125,7 +125,7 @@ Load things that should be slightly more private.
 (setq user-mail-address "steven.w.j.brown@gmail.com")
 #+END_SRC
 
-** Calendar
+** Calendar & Diary
 #+BEGIN_SRC emacs-lisp
 (setq holiday-general-holidays nil)     ; Remove US defaults, add back some later
 
@@ -163,6 +163,22 @@ Load things that should be slightly more private.
         (holiday-fixed 10 31 "Halloween")
         (holiday-fixed 11 11 "Veteran's Day (US)")
         (holiday-float 11 4 4 "Thanksgiving (US)")))
+
+(setq calendar-date-style 'iso)
+(setq diary-comment-start ";;")         ; Since diary supports lisp, use lisp style comments
+(setq calendar-latitude 49.3)
+(setq calendar-longitude -123.1)
+;; (setq calendar-daylight-savings-starts ?)
+;; (setq calendar-daylight-savings-ends ?)
+;; (setq calendar-week-start-day 0) ; Start on Monday?
+
+;; (defface myface/calendar-anniversary-mark
+;;   '((default :inherit ?)
+;;     (((class color) (min-colors 88) (background dark))
+;;      :background )
+;;     (((class color) (min-colors 88) (background light))
+;;      :background ))
+;;     "My custom face for calendar anniversaries.")
 #+END_SRC
 
 ** General - colour, lines, columns, backups, frame
