@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2022-01-07 02:40:43>
+Updated: <2022-01-23 00:30:47>
 
 
 * init.org
@@ -83,9 +83,6 @@ packages.
   ;; melpa vs elpa
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.org/packages/") t)
-  ;; newer org-mode
-  (add-to-list 'package-archives
-               '("org" . "https://orgmode.org/elpa/") t)
   (package-initialize))
 #+END_SRC
 
@@ -166,10 +163,15 @@ Load things that should be slightly more private.
 
 (setq calendar-date-style 'iso)
 (setq diary-comment-start ";;")         ; Since diary supports lisp, use lisp style comments
+(setq diary-comment-end "")             ; end of line
 (setq calendar-latitude 49.3)
 (setq calendar-longitude -123.1)
-;; (setq calendar-daylight-savings-starts ?)
-;; (setq calendar-daylight-savings-ends ?)
+(setq calendar-daylight-savings-starts '(calendar-nth-named-day 2 0 3 year)) ; 2nd Sunday in Mar
+(setq calendar-daylight-savings-ends '(calendar-nth-named-day 1 0 11 year))  ; 1st Sunday in Nov
+(setq calendar-daylight-time-offset 60)
+(setq calendar-daylight-savings-starts-time 120)
+(setq calendar-daylight-savings-ends-time 120)
+(setq org-agenda-include-diary t)       ; include diary entries in org-agenda
 ;; (setq calendar-week-start-day 0) ; Start on Monday?
 
 ;; (defface myface/calendar-anniversary-mark
