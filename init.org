@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2022-08-31 13:40:24>
+Updated: <2023-09-20 00:13:18>
 
 
 * init.org
@@ -125,6 +125,11 @@ Load things that should be slightly more private.
 ** Calendar & Diary
 #+BEGIN_SRC emacs-lisp
 (setq holiday-general-holidays nil)     ; Remove US defaults, add back some later
+(setq holiday-christian-holidays nil)   ; Remove a bunch of other holidays we don't need, don't add them back
+(setq holiday-hebrew-holidays nil)
+(setq holiday-islamic-holidays nil)
+(setq holiday-bahai-holidays nil)
+(setq holiday-oriental-holidays nil)
 
 ;; `calendar-holidays' initialized from multiple *holidays lists.  used in both
 ;; calendar and org agenda.  Once loaded, `calendar-holidays' must be modified
@@ -602,7 +607,7 @@ Trying to manage system-level packages with =conda=, not =pip=
 - conda install python-language-server
 - [ ] maybe use ms python language server?
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp
 (use-package lsp-mode
   :hook ((python-mode . lsp-deferred)
          ;; which-key integration
