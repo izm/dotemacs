@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2023-09-20 00:13:18>
+Updated: <2023-11-18 13:15:47>
 
 
 * init.org
@@ -51,7 +51,8 @@ directory, =~/init.d/=.
 
 (defun my/display-startup-time ()
   (let ((startup-secs (time-subtract after-init-time before-init-time)))
-    (message "Emacs loaded in %s (%s) with %d garbage collections lasting %s"
+    (message "Emacs %s loaded in %s (%s) with %d garbage collections lasting %s"
+             emacs-version
              (format "%.2fs" (float-time startup-secs))
              (format "%.2fmin" (/ (float-time startup-secs) 60.0))
              gcs-done
@@ -1588,6 +1589,20 @@ https://emacs.stackexchange.com/questions/2221/running-emacs-from-windows-taskba
 (setq ispell-dictionary "en_CA")
 #+END_SRC
 
+*** Git for Windows
+Includes a bash environment with various tools that can be an alternative to a full cygwin environment.
+
+#+begin_src emacs-lisp
+;; Add git-for-windows usr/bin directory to PATH, which includes diff & other tools
+(let* ((git-win-usr-bin-path (file-name-concat my/git4win-directory "usr/bin")))
+  (if (file-exists-p git-win-usr-bin-path)
+      (setenv "PATH" 
+              (concat
+               (getenv "PATH")
+               path-separator
+               git-win-usr-bin-path))))
+#+end_src
+
 *** Cygwin
 
 https://www.emacswiki.org/emacs/NTEmacsWithCygwin#toc2
@@ -1684,8 +1699,9 @@ files and setting key maps.
     (message "%s Opening files & dired.." (format-time-string "%H:%M:%S" start-time))
 
     ;; dired filtered to .org files in org
-    (if (file-exists-p my/org-directory)
-        (dired (concat my/org-directory "*.org")))
+    (if (and (stringp my/org-directory) (file-exists-p my/org-directory))
+        (dired (concat my/org-directory "*.org"))
+      (warn "my/org-directory not set."))
 
     ;; open init config
     (if (file-exists-p (concat my/user-dir "Projects/dotemacs/init.org"))
