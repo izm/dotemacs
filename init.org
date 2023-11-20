@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2023-11-18 13:15:47>
+Updated: <2023-11-20 09:46:43>
 
 
 * init.org
@@ -1346,10 +1346,12 @@ directories to reflect your edits.
 #+BEGIN_SRC emacs-lisp
 ;; (add-to-list 'load-path "~/../or
 ;; my/org-directory defined in init_private.el
-(setq org-agenda-files (list
-                        (concat my/org-directory "notes.org")    ; Home/Learn/Everything
-                        (concat my/org-directory "work.org")     ; Work
-                        (concat my/org-directory "agenda.org")))  ; Life Stuff - rename to 'personal'?
+
+;; (add-hook 'org-mode-hook 'wrap-region-mode)
+(setq org-agenda-files
+      (list
+       (concat my/org-directory "work.org")     ; Work
+       (concat my/org-directory "agenda.org")))  ; Life Stuff - rename to 'personal'?
 
 (setq org-default-notes-file (concat my/org-directory "captured.org")) ; Unsorted  Notes
 #+END_SRC
