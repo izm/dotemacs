@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2023-11-20 09:46:43>
+Updated: <2023-11-25 23:38:04>
 
 
 * init.org
@@ -610,12 +610,14 @@ Trying to manage system-level packages with =conda=, not =pip=
 
 #+BEGIN_SRC emacs-lisp
 (use-package lsp-mode
+  :init
+  (setq lsp-keymap-prefix "C-M l")
   :hook ((python-mode . lsp-deferred)
          ;; which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
   :config
-  (setq lsp-keymap-prefix "c-s-l")
+
   )
 
 ;; optional
@@ -756,7 +758,6 @@ Suite of completion tools.  =counsel= will install others, as it requires
   (setq enable-recursive-minibuffers t)
   (setq ivy-re-builders-alist 
         '((t . ivy--regex-plus)))
-                                        ;'((t . ivy--regex-fuzzy ))) ; try fuzzy matching
   ;; use ivy completion on any command using 'completing-read-function'
   (ivy-mode 1)
   (counsel-mode 1) ; use counsel equivalents of existing Emacs functions
@@ -770,6 +771,7 @@ Suite of completion tools.  =counsel= will install others, as it requires
          ("C-h f" . counsel-describe-function)
          ("C-h S" . counsel-info-lookup-symbol)
          ("C-x u" . counsel-unicode-char)
+         ("C-x d" . counsel-dired)
          ))
 #+END_SRC
 
@@ -782,6 +784,7 @@ More description to ivy display.
   :after ivy
   :config
   (ivy-rich-mode 1)
+  (setq ivy-rich-project-root-cache-mode t)
   )
 #+end_src
 
@@ -1111,6 +1114,42 @@ Use "org-variable-pitch-minor-mode" instead of "variable-pitch-mode" for proper 
   ))
 #+end_src
 
+** All-the-icons
+#+begin_src emacs-lisp
+(use-package all-the-icons
+  :defer t
+  :config
+  (setq all-the-icons-color-icons 't)
+  (setq all-the-icons-dired-monochrome nil)
+  )
+
+(use-package all-the-icons-dired
+  :defer t
+  :config
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  )
+
+(use-package all-the-icons-completion
+  :defer t
+  :config
+  (all-the-icons-completion-mode)
+  ;; (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
+  )
+
+(use-package all-the-icons-ivy-rich
+  :defer t
+  :init (all-the-icons-ivy-rich-mode 1)
+  :config
+  (setq all-the-icons-ivy-rich-icon t)
+  (setq all-the-icons-ivy-rich-color-icon t)
+  ;; If you experience a slow down in performance when rendering multiple icons simultaneously,
+  ;; you can try setting the following variable
+  ;; (setq inhibit-compacting-font-caches t)
+  )
+  
+#+end_src
+
+
 ** SLOW ein - Emacs iron python notebook (Jupyter)
 CLOSED: [2019-03-17 Sun 10:55]
 - Jupyter Notebooks in emacs!  Added [2017-10-19 Thu]
@@ -1302,6 +1341,7 @@ directories to reflect your edits.
 
 #+BEGIN_SRC emacs-lisp
 (setq dired-dwim-target t)		; guess target directory
+(setq ls-lisp-dirs-first 't)
 (define-key dired-mode-map (kbd "C-c w") 'wdired-change-to-wdired-mode)
 ;; https://www.gnu.org/software/emacs/manual/html_node/dired-x/
 (add-hook 'dired-load-hook
@@ -1315,7 +1355,8 @@ directories to reflect your edits.
 (add-hook 'dired-mode-hook
           (lambda ()
             ;; Set dired-x buffer-local variables here.  For example:
-            (dired-omit-mode 1)
+            (dired-omit-mode 1)         ; hides dll, o, ... files by default, can be toggled
+            ;; See `dired-omit-extensions'
             ))
 (autoload 'dired-jump "dired-x"
   "Jump to Dired buffer corresponding to current buffer." t)
@@ -1587,8 +1628,12 @@ https://emacs.stackexchange.com/questions/2221/running-emacs-from-windows-taskba
 
 #+BEGIN_SRC emacs-lisp
 (setenv "LANG" "en_CA.UTF-8")
-(setq-default ispell-program-name "hunspell")
 (setq ispell-dictionary "en_CA")
+
+;; Standalone Hunspell 
+(setq ispell-program-name "C:/Users/steven.brown/Apps/hunspell/bin/hunspell")
+;; Add en_CA .aff and .dic files to standalone hunspell folder `hunspell/share/hunspell'
+;; Default Personal Dictionary: `~/hunspell_locale' (ie. `~/hunspell_en_CA')
 #+END_SRC
 
 *** Git for Windows
@@ -1688,6 +1733,10 @@ installed on Cygwin on Windows.
       (expand-file-name
        (concat user-emacs-directory "my-custom.el")))
 (if (file-exists-p custom-file) (load custom-file))
+
+;; Correct recent emacs defaults from python3
+(setq python-shell-interpreter "python")
+(setq python-interpreter "python")
 #+END_SRC
 
 * Finally
