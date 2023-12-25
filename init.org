@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2023-11-25 23:38:04>
+Updated: <2023-12-25 15:39:55>
 
 
 * init.org
@@ -1125,7 +1125,7 @@ Use "org-variable-pitch-minor-mode" instead of "variable-pitch-mode" for proper 
 
 (use-package all-the-icons-dired
   :defer t
-  :config
+  :init
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   )
 
