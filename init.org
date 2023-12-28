@@ -1,8 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2023-12-25 15:39:55>
-
+Updated: <2023-12-28 11:30:01>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1459,8 +1458,14 @@ directories to reflect your edits.
 
 ** Other
 - [[https://orgmode.org/manual/Speed-keys.html][Org Speed Keys]]
-
+- Been having unfolding issues recently, temporarily resolved by evaluating one of:
+  #+begin_src emacs-lisp :tangle no
+  (setq org-fold-core-style 'text-properties) ; faster, default
+  (setq org-fold-core-style 'overlays)        ; less error-prone?
+  #+end_src
+  
 #+BEGIN_SRC emacs-lisp
+(setq org-fold-core-style 'text-properties)
 (setq org-ellipsis " ⤵")			;⤵, ▐, ►, ▽, ◿, ◹, », ↵, ≋, …, ⋞, ⊡, ⊹, ⊘
 
 ;; fontify (pretty formating) code in code blocks
