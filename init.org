@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2023-12-28 11:30:01>
+Updated: <2024-01-04 23:01:18>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -550,40 +550,43 @@ Place to put themes 100% decided on.
 - [[https://emacs.stackexchange.com/questions/9835/how-can-i-prevent-company-mode-completing-numbers/9845][Reducing noise in returned results]]
 
 #+BEGIN_SRC emacs-lisp
-  (use-package company
-    :ensure t
-    ;;:defer 1
-    :diminish company-mode
-    ;; (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
-    ;; (add-hook 'ein:connect-mode-hook 'company-mode) ; Can't figure out company-jedi + ein
+(use-package company
+  :ensure t
+  :diminish company-mode
+
+  :config
+  (setq company-idle-delay 0.5)
+  (setq company-minimum-prefix-length 1)
+  (global-company-mode 1)
   
-    :config
-    (setq company-idle-delay 0.5)
-    (setq company-minimum-prefix-length 1)
-    (global-company-mode 1)
+  ;; Still have C-M-i bound to defaut complete-symbol
+  (keymap-set company-mode-map "M-/" 'company-complete) ;
+  (keymap-set company-mode-map "C-M-/" 'company-abbrev) ; use in place of abbrev-mode
+  ;; (keymap-global-set "<tab>" 'company-indent-or-complete-common)
   
-    ;; Reduce noise in candidate suggestions
-    (push (apply-partially
-           #'cl-remove-if
-           (lambda (c)
-             (or (string-match-p "[^\x00-\x7F]+" c) ;non-ansii candidates
-                 (string-match-p "0-9+" c)        ;candidates containing numbers
-                 (if (equal major-mode "org")       ;
-                     (>= (length c) 15))))) ; candidates >= 15 chars in org-mode
-          company-transformers)
-    )
-  
-  (use-package company-quickhelp
-    :ensure t
-    ; :requires company-mode  ; 
-    :after company-mode
-    :config
-    (company-quickhelp-mode 1)
-    (setq company-quickhelp-delay 1.5)
-    )
+  ;; Reduce noise in candidate suggestions
+  (push (apply-partially
+         #'cl-remove-if
+         (lambda (c)
+           (or (string-match-p "[^\x00-\x7F]+" c) ;non-ansii candidates
+               (string-match-p "0-9+" c)        ;candidates containing numbers
+               (if (equal major-mode "org")       ;
+                   (>= (length c) 15))))) ; candidates >= 15 chars in org-mode
+        company-transformers)
+  )
+
+(use-package company-quickhelp
+  :ensure t
+  ; :requires company-mode  ; 
+  :after company-mode
+  :config
+  (company-quickhelp-mode 1)
+  (setq company-quickhelp-delay 1.5)
+  )
 #+END_SRC
 
 ** iedit - Simple refactoring
+
 - https://github.com/victorhge/iedit
 - =C-;= at symbol to start refactor, again to finish.
 
@@ -592,31 +595,23 @@ Place to put themes 100% decided on.
   :ensure t)
 #+END_SRC
 
-** language server - lsp-mode or eglot
-- https://github.com/emacs-lsp/lsp-mode
-- https://github.com/emacs-lsp/lsp-ui (troubleshooting on windows)
+** Language Server
 
-Trying =lsp-mode= and =eglot= instead of =anaconda-mode=.  =lsp-mode= seems to require Emacs 27 (recommended ~15x faster).
+=lsp-mode= performance seems good since Emacs 27 JSON improvements.
 
-#+begin_src emacs-lisp :tangle no
-(use-package eglot)
-#+end_src
-
-Trying to manage system-level packages with =conda=, not =pip=
-- pip uninstall python-language-server (if installed) 
-- conda install python-language-server
-- [ ] maybe use ms python language server?
+- https://emacs-lsp.github.io/lsp-mode/
+- pip: =pip install/uninstall python-language-server=
+- conda: =conda install/uninstall python-language-server=
 
 #+BEGIN_SRC emacs-lisp
 (use-package lsp-mode
   :init
-  (setq lsp-keymap-prefix "C-M l")
+  (setq lsp-keymap-prefix "C-c i")
   :hook ((python-mode . lsp-deferred)
          ;; which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
   :config
-
   )
 
 ;; optional
@@ -624,38 +619,11 @@ Trying to manage system-level packages with =conda=, not =pip=
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 #+END_SRC
 
-** esup - Emacs Start Up Profiler
-
-- https://github.com/jschaf/esup
-- =M-x esup=
-- =C-u M-x esup= to use custom file
-- HOME PC:
-  : Total User Startup Time: 0.285sec     Total Number of GC Pauses: 8     Total GC Time: 0.047sec
-
-  - HOME Laptop, battery:
-    : Total User Startup Time: 20.273sec    Total Number of GC Pauses: 12    Total GC Time: 0.511sec
-
-    : ein-connect.elc:15  6.680sec   32% (x2)
-    : gnus-sum.elc:16  1.953sec   9%
-    : anaconda-mode.elc:16  1.742sec   8%
-
-    - WORK Laptop:
-    : Total User Startup Time: 81.152sec     Total Number of GC Pauses: 17     Total GC Time: 0.504sec
-
-    : ein-connect.elc:15  21.581sec   26% (x2)
-    : anaconda-mode.elc:16  15.036sec   18%
-    : use-package.elc:15  2.944sec   3% (x2)
-
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package esup
-  :ensure nil
-  :defer t
-  )
-#+END_SRC
-
 ** smartscan - Simple word-instance jumping
+
+- http://www.masteringemacs.org/articles/2011/01/14/effective-editing-movement/
 - easily move between like-symbols
-- *NOTE*: currently conflicts with ein checkpoint bindings.
+  
 #+BEGIN_SRC emacs-lisp
 (use-package smartscan
   :ensure nil
@@ -683,7 +651,7 @@ Trying to manage system-level packages with =conda=, not =pip=
 (use-package beacon
   :ensure t
   :init
-  (beacon-mode 0))                    ; causes slow updates on some comps
+  (beacon-mode -1))                    ; can be slow on some comps
 #+END_SRC
 
 ** doom-modeline - Clean minimal modeline
@@ -691,19 +659,9 @@ Trying to manage system-level packages with =conda=, not =pip=
 (use-package doom-modeline
   :ensure t
   :config
-  (setq doom-modeline-icon nil)
+  (setq doom-modeline-icon t)           ; requires nerd-icons
   :hook
   (after-init . doom-modeline-mode)
-  )
-#+END_SRC
-
-** origami - Code folding
-- https://github.com/gregsexton/origami.el
-- just use hs-minor-mode?
-#+BEGIN_SRC emacs-lisp
-(use-package origami
-  :ensure nil
-  :defer t
   )
 #+END_SRC
 
@@ -730,7 +688,7 @@ https://github.com/dgutov/diff-hl
   :defer t
   :config
   (diff-hl-flydiff-mode)
-                                        ;(global-diff-hl-mode)  ;; slow on lesser computers
+  ;(global-diff-hl-mode)  ;; slow on lesser computers
   )
 #+END_SRC
 
@@ -882,8 +840,8 @@ https://thraxys.wordpress.com/2016/01/14/pimp-up-your-org-agenda/
 (use-package ace-window
   :ensure t
   :bind ("M-o" . ace-window )           ; replace facemenu-keymap binding
+  :config (setq aw-scope 'frame)                  ; Only consider current frame's windows
   )
-(setq aw-scope 'frame)                  ; Only consider current frame's windows
 #+END_SRC
 
 ** transpose-frame - transpose windows in frame
@@ -958,10 +916,7 @@ to transpose windows arrangement in currently selected frame:
 (use-package transpose-frame
   :ensure t
   )
-(setq aw-scope 'frame)                  ; Only consider current frame's windows
 #+END_SRC
-
-** transpose-frame
 
 ** magit - Git integration
 A Git version control interface.
@@ -987,8 +942,8 @@ in HOME directory (=C:/Users/Username/AppData/Roaming/= on /Windows 10/)
   :defer t
   )
 ;; add generic fundamental-mode snippets across all modes
-(add-hook 'yas-minor-mode-hook (lambda ()
-                                 (yas-activate-extra-mode 'fundamental-mode)))
+(add-hook 'yas-minor-mode-hook
+          (lambda () (yas-activate-extra-mode 'fundamental-mode)))
 #+END_SRC
 
 ** neotree - File tree explorer bound to <F8>
@@ -999,19 +954,19 @@ https://github.com/jaypei/emacs-neotree
   :ensure t
   :bind ("<f8>" . neotree-toggle)
   )
-
 #+END_SRC
 
 ** move-text
 
 https://github.com/emacsfodder/move-text
-
-M-UP and M-DOWN to move lines/regions
+Ultra simple =M-UP= and =M-DOWN= to move lines/regions
 
 #+BEGIN_SRC emacs-lisp
 (use-package move-text
-  :ensure t)
-(move-text-default-bindings)
+  :ensure t
+  :config
+  (move-text-default-bindings)
+  )
 #+END_SRC
    
 ** markdown-mode
@@ -1029,6 +984,7 @@ Major mode for editing markdown.
 #+END_SRC
 
 ** helpful - adding more info to emacs help
+
 https://github.com/Wilfred/helpful
 
 #+BEGIN_SRC emacs-lisp
@@ -1048,6 +1004,7 @@ https://github.com/Wilfred/helpful
 #+END_SRC
 
 ** multiple-cursors
+
 - https://github.com/magnars/multiple-cursors.el/
 
 #+BEGIN_SRC emacs-lisp
@@ -1072,11 +1029,10 @@ Use =add-dir-local-variable= or add the following to =.dir-locals.el= in python 
 ((python-mode . ((pyvenv-default-virtual-env-name . ".venv"))))
 #+end_src
 
-Create new virtual environment: =python -m venv .venv=.
-Activate: =.venv\Scripts\activate=.
-Install required project dependencies and tools: =pip install python-lsp-server pandas black=.
-
-Open a python file, agree to run =dir-locals= (optionally add permanent flag to not be asked again) then start =lsp=. First =lsp= process will take a while.
+1. Create new virtual environment: =python -m venv .venv=
+2. Activate: =.venv\Scripts\activate=
+3. Install required project dependencies and tools: =pip install python-lsp-server pandas black=
+4. Open a python file, agree to run =dir-locals= (optionally add permanent flag to not be asked again) then start =lsp=. First =lsp= process may take a moment.
 
 #+BEGIN_SRC emacs-lisp
 (use-package pyvenv
@@ -1113,7 +1069,7 @@ Use "org-variable-pitch-minor-mode" instead of "variable-pitch-mode" for proper 
   ))
 #+end_src
 
-** All-the-icons
+** all-the-icons
 #+begin_src emacs-lisp
 (use-package all-the-icons
   :defer t
@@ -1144,10 +1100,16 @@ Use "org-variable-pitch-minor-mode" instead of "variable-pitch-mode" for proper 
   ;; If you experience a slow down in performance when rendering multiple icons simultaneously,
   ;; you can try setting the following variable
   ;; (setq inhibit-compacting-font-caches t)
-  )
-  
+  )  
 #+end_src
 
+** nerd-icons
+Used in doom-modeline. Install package, then run =M-x nerd-icons-install-fonts=, and install =NFM.ttf= font manually.
+#+begin_src emacs-lisp
+(use-package nerd-icons
+  :defer t
+  )
+#+end_src
 
 ** SLOW ein - Emacs iron python notebook (Jupyter)
 CLOSED: [2019-03-17 Sun 10:55]
@@ -1190,31 +1152,6 @@ CLOSED: [2019-03-18 Mon 22:47]
   )
 #+END_SRC
 
-** SLOW org-gcal
-CLOSED: [2019-03-17 Sun 11:08]
-https://github.com/myuhe/org-gcal.el
-
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package org-gcal
-  :ensure nil)
-;;  See init_private.el for setup
-#+END_SRC
-
-*** org-gcal Usage
-- *org-gcal-sync*: Sync between Org and Gcal. before syncing, execute
-  org-gcal-fetch
-
-- *org-gcal-fetch*: Fetch Google calendar events and populate
-  org-gcal-file-alist locations. The org files in org-gcal-file-alist should
-  be blank or all of their headlines should have timestamps.
-
-- *org-gcal-post-at-point*: Post/edit org block at point to Google calendar.
-
-- *org-gcal-delete-at-point*: Delete Gcal event at point.
-
-- *org-gcal-refresh-token*: Refresh the OAuth token. OAuth token expired in
-  3600 seconds, You should refresh token on a regular basis.
-
 ** SLOW ob-ipython - jupyter for org-mode
 CLOSED: [2019-03-17 Sun 11:00]
 - https://github.com/gregsexton/ob-ipython
@@ -1249,79 +1186,6 @@ https://github.com/astahlman/ob-async
   :ensure t)
 #+END_SRC
 
-
-** OLD Packages that have been superceded
-*** OLD spaceline - (Powerline) modeline
-CLOSED: [2019-03-18 Mon 14:12]
-Ditched in favour of =doom-modeline=
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package spaceline
-  :ensure t
-  :config
-  (require 'spaceline-config)
-  (setq powerline-default-separator 'wave)
-  (spaceline-spacemacs-theme))          ; quickly makes modeline pretty
-#+END_SRC
-
-*** OLD anzu - Count isearch matches
-CLOSED: [2018-05-20 Sun 18:38]
-- https://github.com/syohex/emacs-anzu
-- Show current match and total matches for various search modes.
-- Superceded by Swiper
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package anzu
-  :ensure nil
-  :config
-  (global-anzu-mode +1))
-
-#+END_SRC
-
-*** OLD smex - Fuzzy =M-x= function matching
-CLOSED: [2018-10-07 Sun 15:22]
-- https://github.com/nonsequitur/smex
-- Ultra-lightweight =M-x= enhancement
-- Superceded by Swiper & Counsel
-
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package smex
-  :ensure t
-  :bind (;("M-x" . smex) replaced w/counsel
-         ("M-X" . smex-major-mode-commands)
-         ("C-c C-c M-x" . execute-extended-command)))
-#+END_SRC
-
-*** NOTE [#B] selected-packages
-CLOSED: [2019-03-17 Sun 11:01]
-Superceded by =use-package=
-
-=package-selected-packages= is used by =package-autoremove= to whitelist packages
-explicity installed by the user.  But =use-package= does not update
-=package-selected-packages=, so cannot really be used in combination with
-use-package.
-
-You can use it to (re)install packages on other machines by
-running ‘package-install-selected-packages’.
-
-See currently activated packages with =package-activated-list=.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-(setq package-selected-packages
-      (quote
-       (org-bullets tangotango-theme leuven-theme eziam-theme alect-themes
-                    atom-one-dark-theme borland-blue-theme material-theme
-                    helm helm-projectile expand-region org-projectile
-                    projectile web-mode)))
-#+END_SRC
-
-*** OLD paredit - Intense parentheses mode (not enabled)
-CLOSED: [2018-05-20 Sun 18:37]
-- http://danmidwood.com/content/2014/11/21/animated-paredit.html (super cool animated gifs)
-- disabling paredit, will use smartparens if I need it.
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package paredit
-  :ensure t
-  :defer t)
-#+END_SRC
 
 * Dired
 
@@ -1393,7 +1257,7 @@ directories to reflect your edits.
        (concat my/org-directory "work.org")     ; Work
        (concat my/org-directory "agenda.org")))  ; Life Stuff - rename to 'personal'?
 
-(setq org-default-notes-file (concat my/org-directory "captured.org")) ; Unsorted  Notes
+(setq org-default-notes-file (concat my/org-directory "captured.org")) ; Unsorted notes
 #+END_SRC
 
 ** Capture
@@ -1563,14 +1427,6 @@ directories to reflect your edits.
 #+END_SRC
 
 * Windows
-** OLD Libraries
-CLOSED: [2019-07-16 Tue 09:59]
-Note: this seems to not be necessary with version 26.1+....
-
-Some things, =eww= (=libxml=), inline images (=libpng=) require libraries not
-shipped with =emacs= on Windows.  Get those from
-https://sourceforge.net/projects/ezwinports/ and install them to the
-=/emacs/bin/= directory.
 ** Tramp / Putty
 - https://www.emacswiki.org/emacs/Tramp_on_Windows,
 - [[https://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/][remote file permissions]]
@@ -1642,7 +1498,7 @@ https://emacs.stackexchange.com/questions/2221/running-emacs-from-windows-taskba
 #+END_SRC
 
 *** Git for Windows
-Includes a bash environment with various tools that can be an alternative to a full cygwin environment.
+Includes a bash environment with various tools that is a /much/ simpler alternative to a full cygwin environment.
 
 #+begin_src emacs-lisp
 ;; Add git-for-windows usr/bin directory to PATH, which includes diff & other tools
@@ -1655,11 +1511,12 @@ Includes a bash environment with various tools that can be an alternative to a f
                git-win-usr-bin-path))))
 #+end_src
 
-*** Cygwin
-
+*** OLD Cygwin
+CLOSED: [2024-01-04 Thu 20:26]
+I would like to remove Cygwin completely, supercede it with Git for Windows, but need to test on various computers.
 https://www.emacswiki.org/emacs/NTEmacsWithCygwin#toc2
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 ;; Sets your shell to use cygwin's bash, if Emacs finds it's running
 ;; under Windows and c:\cygwin exists. Assumes that C:\cygwin\bin is
 ;; not already in your Windows Path (it generally should not be).
@@ -1841,7 +1698,7 @@ Benchmarking
 | C-c C-v n | org-babel-next-src-block                            |
 | C-c C-v p | org-babel-previous-src-block                        |
 
-*Converting from .emacs or init.el*
+*Converting from customize settings*:
 : (custom-set-variables
 :  '(my-variable value)
 :  '(column-number-mode t)
