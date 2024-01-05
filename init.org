@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2024-01-04 23:01:18>
+Updated: <2024-01-05 07:08:16>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -660,8 +660,7 @@ Place to put themes 100% decided on.
   :ensure t
   :config
   (setq doom-modeline-icon t)           ; requires nerd-icons
-  :hook
-  (after-init . doom-modeline-mode)
+  :init (doom-modeline-mode 1)
   )
 #+END_SRC
 
