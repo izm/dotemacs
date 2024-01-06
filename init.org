@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2024-01-05 07:08:16>
+Updated: <2024-01-06 14:46:23>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -256,7 +256,7 @@ Some good programming fonts [[https://blog.checkio.org/top-10-most-popular-codin
 9. Ubuntu Mono
 10. Bitsream Vera Sans Mono
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results none
 ;; Test char and monospace:
 ;; 0123456789abcdefghijklmnopqrstuvwxyz [] () :;,. !@#$^&*
 ;; 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ {} <> "'`  ~-_/|\?
@@ -677,6 +677,45 @@ https://github.com/flycheck/flycheck
   )
 #+END_SRC
 
+** Flake8
+- suppress single warning in source:  =# noqa: F841=
+- [[https://flake8.pycqa.org/en/3.0.2/user/configuration.html][Flake8 config]] on Windows:
+  + =~/.flake8= ← works in lsp, but not command-line (odd)
+  + =project-dir/.flake8= ← works in both lsp and command-line, takes precedence
+- Customizing LSP, if needed:
+  + =lsp-pylsp-configuration-sources=
+  + =lsp-pylsp-plugins-flake8-config=
+
+** python-black
+- lsp formatting didn't work for me, so using dedicated package
+- command-line usage:
+  Preview changes: =black -l 110 --diff --color my_file.py=
+  Commit changes:  =black -l 110 my_file.py=
+- [[https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#configuration-via-a-file][Black TOML config]] on Windows:
+  + =~/.black= ← command-line?
+  + =project-dir/pyproject.toml=
+- =python-black-macchiato= required for indented region formatting, but patch needs to be applied.
+  https://github.com/wbolster/black-macchiato/pull/15
+
+- Functions to consider binding:
+  - python-black-org-mode-block
+  - python-black-on-save-mode-enable-dwim
+  - python-black-statement
+  - python-black-partial-dwim
+  - python-black-on-save-mode
+  - python-black-buffer
+  - python-black-region
+  
+#+begin_src emacs-lisp
+(use-package python-black
+  :ensure t
+  :demand t
+  :after python
+  ;;:hook (python-mode . python-black-on-save-mode-enable-dwim)
+  ;; :bind (("" . f1)
+  ;;        (:: . f2))
+  )
+#+end_src
 ** diff-hl - Highlight diffs
 
 https://github.com/dgutov/diff-hl
