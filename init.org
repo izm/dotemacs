@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2024-01-18 19:34:47>
+Updated: <2024-01-22 20:13:48>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -27,11 +27,11 @@ directory, =~/init.d/=.
 #+END_SRC
 
 
-** TODO Tangle to init.el [3/4]
+** TODO Tangle to init.el [0/1]
 - [ ] Add prompt before overwriting =init.el=.  OR... just do it and backup old one?
 
 * my/ functions
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results output silent
 (defun my/now ()
   "Return the current date and time appropriate for placing in Windows file names."
   (interactive)
@@ -58,8 +58,23 @@ directory, =~/init.d/=.
              (format "%.2fs" gc-elapsed)
              )))
 
+
+(defun my/log-time-of-op-on-file (op file time-format-str)
+  "Call `op' using funcall and pass `file' as parameter. Write times before and after to *Messages."
+  (let* ((op-name (upcase (symbol-name op))))
+    (message "%s  %s %s"
+             (format-time-string time-format-str (current-time))
+             op-name
+             file)
+    (funcall op file)
+    (message "%s  %s done."
+             (format-time-string time-format-str (current-time))
+             op-name)))
+
+
 (add-hook 'emacs-startup-hook #'my/display-startup-time)
 #+end_src
+
 
 * Initialize
 ** OLD package - REQUIRED
@@ -90,7 +105,7 @@ packages.
 - Used instead of =(require 'pkg-name)= primarily for auto-download.
 - https://github.com/jwiegley/use-package
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results output silent
 ;; This is only needed once, near the top of the file
 (eval-when-compile
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
@@ -101,9 +116,10 @@ packages.
 (setq use-package-verbose t)            ; report config loading time in *Messages*
 #+END_SRC
 
+
 * Private
 Load things that should be slightly more private.
-#+BEGIN_SRC emacs-lisp :output nil
+#+BEGIN_SRC emacs-lisp :output nil :results output silent
 ;; ensure init_private.el is loaded
 (setq init_private_loaded
       (load
@@ -113,11 +129,10 @@ Load things that should be slightly more private.
 #+END_SRC
 
 
-
 * Emacs - General
 
 ** User - name, email
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results output silent
 (setq user-full-name "Steven Brown")
 (setq user-mail-address "steven.w.j.brown@gmail.com")
 #+END_SRC
@@ -511,6 +526,7 @@ Modal editing in an emacs-y way.
 (use-package god-mode :ensure nil :defer t)
 (use-package objed :ensure nil :defer t)
 #+END_SRC
+
 ** themes
 
 Place to put themes 100% decided on.
@@ -720,6 +736,7 @@ https://github.com/flycheck/flycheck
   ;;        (:: . f2))
   )
 #+end_src
+
 ** diff-hl - Highlight diffs
 
 https://github.com/dgutov/diff-hl
@@ -839,21 +856,19 @@ Example of how =use-package= can replace =require= and
 (diminish 'wrap-region-mode)
 #+END_SRC
 
-** org-superstar - Unicode org-mode bullets
-/Previously org-bullets./
-https://thraxys.wordpress.com/2016/01/14/pimp-up-your-org-agenda/
+** org-modern
+A modern replacement of org-superstar, which includes far more configurable options.
+#+begin_src emacs-lisp
+(use-package org-modern
+  :ensure t)
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
-(use-package org-superstar
-  :ensure t
-  :defer t
-  :init
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode t)))
-  :config
-  (setq org-superstar-headline-bullets-list '(9655)); 9655 ▶ '("◉" "◎" "○" "►" "◇"))
-  (setq org-superstar-item-bullet-alist '((42 . 8226) (43 . 9656) (45 . 8211))) ; •, ▸, –
-  )
-#+END_SRC
+** rainbow-delimiters
+Rainbow parentheses. Face customization might be required, depending on theme.
+#+begin_src emacs-lisp
+(use-package rainbow-delimiters
+  :ensure t)
+#+end_src
 
 ** ace-window - DWIM window switcher
 - https://github.com/abo-abo/ace-window
@@ -1518,11 +1533,9 @@ https://emacs.stackexchange.com/questions/2221/running-emacs-from-windows-taskba
 
 *** Spelling & Dictionaries (aspell/ispell/hunspell)
 
-- WINDOWS: install hunspell from cygwin, add code below, and update
-  dictionaries to handle apostrophes. ie. =echo I'm | hunspell -d en_CA=
-
-- THANK YOU, ALEX
-  - http://gromnitsky.blogspot.ca/2016/09/emacs-251-hunspell.html
+- WINDOWS: install /standalone/ hunspell from [[https://sourceforge.net/projects/ezwinports/][ezwinports]].
+  - cygwin hunspell caused issues with conflicting line ending formats
+  - dictionaries to handle apostrophes. ie. =echo I'm | hunspell -d en_CA=
 
 - Updated dict from openoffice to handle apostrophes:
   - https://extensions.openoffice.org/en/project/dict-en-fixed
@@ -1534,7 +1547,7 @@ https://emacs.stackexchange.com/questions/2221/running-emacs-from-windows-taskba
 (setq ispell-dictionary "en_CA")
 
 ;; Standalone Hunspell
-(setq ispell-program-name "C:/Users/steven.brown/Apps/hunspell/bin/hunspell")
+(setq ispell-program-name (concat my/user-dir "Apps/hunspell/bin/hunspell"))
 ;; Add en_CA .aff and .dic files to standalone hunspell folder `hunspell/share/hunspell'
 ;; Default Personal Dictionary: `~/hunspell_locale' (ie. `~/hunspell_en_CA')
 #+END_SRC
@@ -1649,31 +1662,38 @@ files and setting key maps.
 
 #+BEGIN_SRC emacs-lisp
 ;; Open a couple files and buffers
-(let (start-time (current-time))
-  (progn
-    (message "%s Opening files & dired.." (format-time-string "%H:%M:%S" start-time))
+(let* ((org-init-file (concat my/user-dir "Projects/dotemacs/init.org"))
+       (init-private-file (concat user-emacs-directory "init_private.el"))
+       (org-work-file (concat my/org-directory "work.org"))
+       (org-private-file (concat my/org-directory "private.org"))
+       (my-time-format-string "%H:%M:%S:%3N"))
 
-    ;; dired filtered to .org files in org
-    (if (and (stringp my/org-directory) (file-exists-p my/org-directory))
-        (dired (concat my/org-directory "*.org"))
-      (warn "my/org-directory not set."))
+  (message "%s  START opening files and directories." (format-time-string my-time-format-string (current-time)))
+  ;; org init file
+  (when (file-exists-p org-init-file)
+    (my/log-time-of-op-on-file 'find-file org-init-file my-time-format-string))
 
-    ;; open init config
-    (if (file-exists-p (concat my/user-dir "Projects/dotemacs/init.org"))
-        (find-file (concat my/user-dir "Projects/dotemacs/init.org")))
-    (if (file-exists-p "~/.emacs.d/init_private.el")
-        (find-file "~/.emacs.d/init_private.el"))
+  ;; additional private .el file loaded by init
+  (when (file-exists-p init-private-file)
+    (my/log-time-of-op-on-file 'find-file init-private-file my-time-format-string))
 
-    ;; open org file directory
-    (if my/on-work-pc
-        (if (file-exists-p (concat my/org-directory "work.org"))
-            (find-file (concat my/org-directory "work.org")))
-      (if (file-exists-p (concat my/org-directory "private.org"))
-          (find-file (concat my/org-directory "private.org"))))
+  ;; ORG DIRECTORY FILES
+  (when (and (file-exists-p my/org-directory)
+             (file-directory-p my/org-directory))
 
-    (message "%s Done opening files.. (%s)" (format-time-string "%H:%M:%S" (current-time))
-             (format "%.2fs" (float-time (time-subtract (current-time) start-time))))
-    ))
+    ;; dired *.org files in org directory
+    (my/log-time-of-op-on-file 'dired my/org-directory my-time-format-string)
+
+    ;; open different org file depedning on work/non-work PC
+    (when (and my/on-work-pc
+               (file-exists-p org-work-file))
+      (my/log-time-of-op-on-file 'find-file org-work-file my-time-format-string))
+
+    (when (and (not my/on-work-pc)
+               (file-exists-p org-private-file))
+      (my/log-time-of-op-on-file 'find-file org-private-file my-time-format-string)))
+
+  (message "%s DONE opening files and directories.. " (format-time-string my-time-format-string (current-time))))
 
 ;; Reset garbage collection threshold
 ;; Recommended settings for performant lsp-mode, trying.
