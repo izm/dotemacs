@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2024-01-22 20:13:48>
+Updated: <2024-02-09 15:48:18>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1379,15 +1379,19 @@ directories to reflect your edits.
 
 ** Other
 - [[https://orgmode.org/manual/Speed-keys.html][Org Speed Keys]]
-- Been having unfolding issues recently, temporarily resolved by evaluating one of:
+- Been having unfolding issues recently, temporarily (sometimes) resolved by evaluating one of:
   #+begin_src emacs-lisp :tangle no
-  (setq org-fold-core-style 'text-properties) ; faster, default
-  (setq org-fold-core-style 'overlays)        ; less error-prone?
+  (setq org-fold-core-style 'text-properties) ; new method, default as of Org 9.6, faster, more features, but has issues on my 4+MB work file
+  (setq org-fold-core-style 'overlays)        ; old method, less error-prone, slower on large files
   #+end_src
+- 'org-fold-core-style' should be set prior to loading org-mode. So to revert back to the old style, set 'overlays in init.
 
 #+BEGIN_SRC emacs-lisp
-(setq org-fold-core-style 'text-properties)
+(setq org-fold-core-style 'overlays)   ; keep using old style for now, 'text-properties seems buggy
 (setq org-ellipsis " ⤵")			;⤵, ▐, ►, ▽, ◿, ◹, », ↵, ≋, …, ⋞, ⊡, ⊹, ⊘
+
+;; use global ids for links
+(setq org-id-link-to-org-use-id 't)
 
 ;; fontify (pretty formating) code in code blocks
 (setq org-src-fontify-natively t)	; important for init.org !
