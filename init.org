@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2024-02-09 15:48:18>
+Updated: <2024-11-08 08:40:23>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -30,7 +30,7 @@ directory, =~/init.d/=.
 ** TODO Tangle to init.el [0/1]
 - [ ] Add prompt before overwriting =init.el=.  OR... just do it and backup old one?
 
-* my/ functions
+* my/* functions
 #+begin_src emacs-lisp :results output silent
 (defun my/now ()
   "Return the current date and time appropriate for placing in Windows file names."
@@ -49,8 +49,9 @@ directory, =~/init.d/=.
 
 
 (defun my/display-startup-time ()
+  "Output emacs init time duration in seconds (and minutes), number and duration of garbage collections."
   (let ((startup-secs (time-subtract after-init-time before-init-time)))
-    (message "Emacs %s loaded in %s (%s) with %d garbage collections lasting %s"
+    (message "Emacs %s loaded in %s (%s). %d garbage collections this session, lasting %s."
              emacs-version
              (format "%.2fs" (float-time startup-secs))
              (format "%.2fmin" (/ (float-time startup-secs) 60.0))
@@ -75,6 +76,102 @@ directory, =~/init.d/=.
 (add-hook 'emacs-startup-hook #'my/display-startup-time)
 #+end_src
 
+* my/org-* functions
+
+#+begin_src emacs-lisp :results output silent
+;; custom elisp
+
+;; Filenames
+;; https://www.gnu.org/software/emacs/manual/html_node/elisp/File-Name-Expansion.html
+
+;; org-mode
+;; Reference
+;; https://orgmode.org/manual/Using-the-Property-API.html
+;; https://orgmode.org/worg/dev/org-element-api.html
+;; http://xahlee.info/emacs/emacs/elisp_parse_org_mode.html
+;; These currently use properties... org elements offer more detail (if needed)... like headline level?
+
+(defun my/org-timestamp-to-string (orgtimestamp &optional fmt)
+  "Take an active or inactive org-timestamp string and format it accordding to fmt.
+If fmt is not provided, use '%Y-%m-%d'."
+  (let ((fmt (or fmt "%Y-%m-%d")))
+      (format-time-string fmt (org-time-string-to-time orgtimestamp))))
+
+
+(defun my/org-duration-string-to-plantuml-gantt (s)
+  "Return 'n days' or 'n weeks' based on `{num}d' or `{num}w' org-effort string `s'.
+Return nil if `s' doesn't match expected format."
+   (string-match "\\([0-9]+\\)\\([d\\|w]\\)" s)
+   (let* (
+         (num (match-string 1 s))
+         (unit (match-string 2 s))
+         (unit-new
+          (cond ((equal unit "d") "days")
+                ((equal unit "w") "weeks"))))
+     (if (and num unit-new)
+         (format "%s %s" num unit-new)
+       nil)
+     ))
+
+
+(defun my/org-headline-to-plantuml-gantt ()
+  "Output PlantUML strings based on the current headline's properties.
+Debug messages to *my/debug* buffer.
+If only effort but no start (scheduled) or end date (deadline) is present, headline is ignored.
+TODO: Provide optional default-date parameter as start or end when effort present?"
+  (interactive)
+  (let* (
+         (headline (org-entry-get nil "ITEM" nil) )
+         (startdate (org-entry-get nil "SCHEDULED" nil))
+         (enddate (org-entry-get nil "DEADLINE" nil))
+         (effort (org-entry-get nil "EFFORT" nil))
+       )
+    (cond ((and startdate (eq nil enddate) (eq nil effort))
+           ;; only startdate is present
+           (princ (format "%s %s" headline "*only startdate --> happens on\n") (get-buffer-create "*my/debug*"))
+           (princ (format "[%s] happens on %s\n" headline (my/org-timestamp-to-string startdate)))
+           )
+          ((and enddate (eq nil startdate) (eq nil effort))
+           ;; only enddate is present
+           (princ (format "%s %s" headline "*only enddate --> happens on\n") (get-buffer-create "*my/debug*"))
+           (princ (format "[%s] happens on %s\n" headline (my/org-timestamp-to-string enddate)))
+           )
+          ((and effort (eq nil startdate) (eq nil enddate))
+           ;; only effort is present, ignore or use a default date?
+           (princ (format "%s %s" headline "*only effort --> ignoring for gantt\n") (get-buffer-create "*my/debug*")))
+          ((and startdate enddate)
+           ;; both startdate and enddate are present
+           (princ (format "[%s] starts %s\n" headline (my/org-timestamp-to-string startdate)))
+           (princ (format "[%s] ends %s\n" headline (my/org-timestamp-to-string enddate)))
+          )
+          ((and (eq nil startdate) enddate effort)
+           ;; startdate missing, enddate and effort present
+           (princ (format "[%s] ends %s\n" headline (my/org-timestamp-to-string enddate)))
+           (princ (format "[%s] lasts %s\n" headline (my/org-duration-string-to-plantuml-gantt effort)))
+          )
+          ((and (eq nil enddate) startdate effort)
+           ;; enddate missing, startdate and effort present           
+           (princ (format "[%s] starts %s\n" headline (my/org-timestamp-to-string startdate)))
+           (princ (format "[%s] lasts %s\n" headline (my/org-duration-string-to-plantuml-gantt effort)))
+           )
+          )
+
+    ;; Below is initial (simpler) one-line per property method
+    ;; (when startdate
+    ;;   (princ (format "[%s] starts on %s\n" headline (my/org-timestamp-to-string startdate))))
+    ;; (when enddate
+    ;;   (princ (format "[%s] ends on %s\n" headline (my/org-timestamp-to-string enddate))))
+    ;; (when effort
+    ;;   (princ (format "[%s] lasts %s\n" headline (my/org-duration-string-to-plantuml-gantt effort))))
+   ))
+
+
+(defun my/org-entries-to-plantuml-gantt ()
+  (interactive)
+  (org-map-entries 'my/org-headline-to-plantuml-gantt nil nil 'archive 'comment)
+  (message "my/org-entries-to-plantuml-gantt complete.")
+  )
+#+end_src
 
 * Initialize
 ** OLD package - REQUIRED
@@ -252,6 +349,8 @@ Load things that should be slightly more private.
 (add-hook 'image-mode-hook 'auto-revert-mode) ; update image buffers when files change
 
 (setq-default python-indent-offset 4)
+(add-hook 'python-mode-hook
+   (lambda () (setq-local comment-inline-offset 2))) ; PEP8 & personal preference
 
 (setq set-mark-command-repeat-pop 't)   ; remove leading modifier key on repeat mark pops
 ;; C-u C-SPC C-SPC to pop local mark twice
@@ -559,6 +658,7 @@ Place to put themes 100% decided on.
 #+BEGIN_SRC emacs-lisp
 (use-package which-key
   :ensure t
+  :defer 1
   :diminish which-key-mode
   :config
   (which-key-mode))
@@ -572,6 +672,7 @@ Place to put themes 100% decided on.
 #+BEGIN_SRC emacs-lisp
 (use-package company
   :ensure t
+  :defer 3
   :diminish company-mode
 
   :config
@@ -612,7 +713,8 @@ Place to put themes 100% decided on.
 
 #+BEGIN_SRC emacs-lisp
 (use-package iedit
-  :ensure t)
+  :ensure t
+  :defer 3)
 #+END_SRC
 
 ** Language Server
@@ -767,7 +869,7 @@ Suite of completion tools.  =counsel= will install others, as it requires
 #+BEGIN_SRC emacs-lisp
 (use-package counsel                    ; requires swiper, which requires ivy
   :ensure t
-  :demand
+  :defer 3
   :config
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "%d/%d ")      ; current/total match number
@@ -860,7 +962,8 @@ Example of how =use-package= can replace =require= and
 A modern replacement of org-superstar, which includes far more configurable options.
 #+begin_src emacs-lisp
 (use-package org-modern
-  :ensure t)
+  :ensure t
+  :defer t)
 #+end_src
 
 ** rainbow-delimiters
@@ -1795,8 +1898,6 @@ Reference:
   - https://github.com/proofit404/company-anaconda
   - https://github.com/proofit404/anaconda-mode
 - [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html][Ivy, Counsel, Swiper]] - counsel alternatives to built-ins
-- http://www.bartuka.com/pages-output/personal-emacs-configuration/ \\
-  highlight, erc, custom functions
 - EMACS on a Windows USB key: https://gaballench.wordpress.com/2018/11/10/emacs-as-an-operating-system/
   - includes portable git, LaTeX, AUCTeX, Pandoc, markdown, customizations
 
