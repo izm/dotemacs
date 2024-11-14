@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2024-11-08 08:40:23>
+Updated: <2024-11-14 00:29:56>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1654,9 +1654,14 @@ https://emacs.stackexchange.com/questions/2221/running-emacs-from-windows-taskba
 (setq ispell-dictionary "en_CA")
 
 ;; Standalone Hunspell
-(setq ispell-program-name (concat my/user-dir "Apps/hunspell/bin/hunspell"))
-;; Add en_CA .aff and .dic files to standalone hunspell folder `hunspell/share/hunspell'
+(setq ispell-program-name (file-name-concat my/user-dir "Apps/hunspell/bin/hunspell"))
+;; Add en_CA .aff and .dic files to standalone hunspell folder:
+;; - The binary may have been comppiled with this as an option: `hunspell/share/hunspell'
+;; - If not, you can set the DICPATH environment variable:
+(setenv "DICPATH" (file-name-concat my/user-dir "/Apps/hunspell/share/dictionaries"))
 ;; Default Personal Dictionary: `~/hunspell_locale' (ie. `~/hunspell_en_CA')
+(setq ispell-personal-dictionary (file-name-concat my/user-dir "hunspell_en_CA"))
+;; NOTE: There's a note that says this file is required to already exist?
 #+END_SRC
 
 *** Git for Windows
@@ -1740,8 +1745,8 @@ simple across all setups.  PlantUML requires graphviz, which can be
 installed on Cygwin on Windows.
 
 #+BEGIN_SRC emacs-lisp
-(let* ((plantuml-filepath (expand-file-name "~/plantuml.jar"))
-       (ditaa-filepath (expand-file-name "~/ditaa0_9.jar")))
+(let* ((plantuml-filepath (file-name-concat my/user-dir "Apps" "PlantUML" "plantuml.jar"))
+       (ditaa-filepath (file-name-concat my/user-dir "Apps" "Ditaa" "ditaa0_9.jar")))
   (when (file-readable-p plantuml-filepath)
     (setq org-plantuml-jar-path plantuml-filepath)
     (setq plantuml-default-exec-mode 'jar))
