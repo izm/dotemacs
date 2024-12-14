@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2024-11-14 00:29:56>
+Updated: <2024-12-13 17:55:12>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1576,6 +1576,9 @@ directories to reflect your edits.
         ("a." . "-")
         ("A." . "-")
         ))
+
+;; My use-case often involves folding plain lists, then using 'org-copy-visible'
+(setq org-cycle-include-plain-lists 'integrate)
 #+END_SRC
 
 ** Agenda
