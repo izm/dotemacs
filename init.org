@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2024-12-18 08:38:44>
+Updated: <2024-12-22 12:32:24>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -10,20 +10,21 @@ directory, =~/init.d/=.
 #+BEGIN_SRC emacs-lisp :tangle no :results output silent
 ;; Tangle this file into init.el, then load it.
 ;; Output logged in *Messages* buffer
-(message "Tangled and Loaded!\n  |- %s\n  |- %s\n  |- %s"
+(message
+ "Tangled and Loaded!\n  |- %s\n  |- %s\n  |- %s"
 
-         ;; tangled file name
-         (car
-          (org-babel-tangle-file
-           buffer-file-name
-           (expand-file-name (concat user-emacs-directory "init.el"))
-           "emacs-lisp"))
+ ;; tangled file name
+ (car
+  (org-babel-tangle-file
+   buffer-file-name
+   (expand-file-name (concat user-emacs-directory "init.el"))
+   "emacs-lisp"))
 
-         ;; date and time of tangle
-         (format-time-string "%Y-%m-%d.%H-%M-%S" (current-time))
+ ;; date and time of tangle
+ (format-time-string "%Y-%m-%d.%H-%M-%S" (current-time))
 
-         ;; load tangled file
-         (load (concat user-emacs-directory "init.el")))
+ ;; load tangled file
+ (load (concat user-emacs-directory "init.el")))
 #+END_SRC
 
 
@@ -348,15 +349,27 @@ Load things that should be slightly more private.
 
 (add-hook 'image-mode-hook 'auto-revert-mode) ; update image buffers when files change
 
+;; python tabs and spacing
 (setq-default python-indent-offset 4)
-(add-hook 'python-mode-hook
-   (lambda () (setq-local comment-inline-offset 2))) ; PEP8 & personal preference
+(add-hook
+ 'python-mode-hook
+ (lambda ()
+   (setq-local comment-inline-offset 2) ; PEP8 & personal preference
+   (setq tab-width 4)
+   (setq python-indent-offset 4)))
+
+;; tree-sitter
+;; pre-compiled grammars: https://github.com/emacs-tree-sitter/tree-sitter-langs/releases
+;; about: https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
+;; font lock: https://www.gnu.org/software/emacs/manual/html_node/emacs/Parser_002dbased-Font-Lock.html
+(add-hook
+ 'python-ts-mode-hook                   ; not sure why this is needed...?
+ (lambda ()
+   (run-hooks 'python-mode-hook)))
 
 (setq set-mark-command-repeat-pop 't)   ; remove leading modifier key on repeat mark pops
 ;; C-u C-SPC C-SPC to pop local mark twice
 ;; C-x C-SPC C-SPC to pop global mark twice
-
-(setq tab-width 4)
 #+END_SRC
 
 ** Fonts
