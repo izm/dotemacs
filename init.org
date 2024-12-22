@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2024-12-13 17:55:12>
+Updated: <2024-12-18 08:38:44>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -355,6 +355,8 @@ Load things that should be slightly more private.
 (setq set-mark-command-repeat-pop 't)   ; remove leading modifier key on repeat mark pops
 ;; C-u C-SPC C-SPC to pop local mark twice
 ;; C-x C-SPC C-SPC to pop global mark twice
+
+(setq tab-width 4)
 #+END_SRC
 
 ** Fonts
