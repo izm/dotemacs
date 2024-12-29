@@ -1,7 +1,7 @@
-#+STARTUP: hidestars indent content
+ #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2024-12-22 12:32:24>
+Updated: <2024-12-29 00:26:37>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -370,6 +370,8 @@ Load things that should be slightly more private.
 (setq set-mark-command-repeat-pop 't)   ; remove leading modifier key on repeat mark pops
 ;; C-u C-SPC C-SPC to pop local mark twice
 ;; C-x C-SPC C-SPC to pop global mark twice
+
+(setq isearch-lazy-count 't)
 #+END_SRC
 
 ** Fonts
@@ -543,8 +545,95 @@ Use =eval-last-sexp= (=C-x C-e=) to try the different fonts: [[info:emacs#Lisp E
 
 * Packages
 
+
 If there is a compile error, or "tar not found," try
 =package-refresh-contents= to refresh the package database.
+
+** Icons 
+#+begin_src emacs-lisp
+;; Icons ======================================================================
+(use-package nerd-icons
+  :ensure t
+  :defer t)
+(use-package nerd-icons-completion
+  :ensure t
+  :if (display-graphic-p)
+  :after marginalia
+  :config
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)
+  )
+(use-package nerd-icons-dired
+  :ensure t
+  :if (display-graphic-p)
+  :hook
+  (dired-mode . nerd-icons-dired-mode)
+  )
+(use-package nerd-icons-corfu
+  :ensure t
+  :if (display-graphic-p)
+  :after corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+#+end_src
+** Completion and Minibuffer (consult, vertico, marginalia, corfu, etc)
+#+begin_src emacs-lisp
+
+;; https://github.com/minad/vertico
+(use-package vertico
+  :ensure t
+  :config
+  (vertico-mode 1))
+
+(use-package orderless
+  :ensure t
+  :config
+  (setq completion-styles '(orderless basic)))
+
+;; https://github.com/minad/marginalia
+(use-package marginalia
+  :ensure t
+  :config
+  (marginalia-mode 1))
+
+;; https://github.com/minad/consult/
+(use-package consult
+  :ensure t
+  :bind (;; A recursive grep
+	 ;;        ("M-s M-g" . consult-grep)
+	 ;;        ;; Search for files names recursively
+	 ;;        ("M-s M-f" . consult-find)
+	 ;;        ;; Search through the outline (headings) of the file
+         ("M-s M-o" . consult-outline)
+	 ;;        ;; Search the current buffer
+         ("M-s M-l" . consult-line)
+	 ;;        ;; Switch to another buffer, or bookmarked file, or recently
+	 ;;        ;; opened file.
+         ("M-s M-b" . consult-buffer)))
+
+;; https://github.com/oantolin/embark
+(use-package embark
+  :ensure t
+  :bind (("C-." . embark-act)
+         :map minibuffer-local-map
+         ("C-c C-c" . embark-collect)
+         ("C-c C-e" . embark-export)))
+
+(use-package embark-consult
+  :ensure t)
+
+;; https://github.com/minad/corfu
+(use-package corfu
+  :ensure t
+  :defer 1
+  :init
+  (global-corfu-mode 1)
+  (corfu-echo-mode 1)
+  (corfu-popupinfo-mode 1))
+
+;; Https://github.com/minad/cape
+(use-package cape
+  :ensure t)
+#+end_src
 
 ** hs-minor-mode
 Emacs Built-in.
@@ -680,47 +769,6 @@ Place to put themes 100% decided on.
 
 #+END_SRC
 
-** company - Auto-completion front-end
-- Replaces emacs' built-in autocomplete (ac)
-- [[https://emacs.stackexchange.com/questions/9835/how-can-i-prevent-company-mode-completing-numbers/9845][Reducing noise in returned results]]
-
-#+BEGIN_SRC emacs-lisp
-(use-package company
-  :ensure t
-  :defer 3
-  :diminish company-mode
-
-  :config
-  (setq company-idle-delay 0.5)
-  (setq company-minimum-prefix-length 1)
-  (global-company-mode 1)
-
-  ;; Still have C-M-i bound to defaut complete-symbol
-  (keymap-set company-mode-map "M-/" 'company-complete) ;
-  (keymap-set company-mode-map "C-M-/" 'company-abbrev) ; use in place of abbrev-mode
-  ;; (keymap-global-set "<tab>" 'company-indent-or-complete-common)
-
-  ;; Reduce noise in candidate suggestions
-  (push (apply-partially
-         #'cl-remove-if
-         (lambda (c)
-           (or (string-match-p "[^\x00-\x7F]+" c) ;non-ansii candidates
-               (string-match-p "0-9+" c)        ;candidates containing numbers
-               (if (equal major-mode "org")       ;
-                   (>= (length c) 15))))) ; candidates >= 15 chars in org-mode
-        company-transformers)
-  )
-
-(use-package company-quickhelp
-  :ensure t
-  ; :requires company-mode  ;
-  :after company-mode
-  :config
-  (company-quickhelp-mode 1)
-  (setq company-quickhelp-delay 1.5)
-  )
-#+END_SRC
-
 ** iedit - Simple refactoring
 
 - https://github.com/victorhge/iedit
@@ -753,7 +801,6 @@ Place to put themes 100% decided on.
 
 ;; optional
 (use-package lsp-ui :commands lsp-ui-mode) ;automatically activated by lsp-mode
-(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 #+END_SRC
 
 ** smartscan - Simple word-instance jumping
@@ -782,14 +829,17 @@ Place to put themes 100% decided on.
   )
 #+END_SRC
 
-** beacon - Highlight cursor when switching windows
-- animated indicator of cursor location when switching windows
-#+BEGIN_SRC emacs-lisp
-(use-package beacon
+** pulsar
+Highlight window jumps.
+#+begin_src emacs-lisp
+(use-package pulsar
   :ensure t
-  :init
-  (beacon-mode -1))                    ; can be slow on some comps
-#+END_SRC
+  :defer 3
+  :config
+  (pulsar-global-mode 1)
+  (setq pulsar-pulse-region-functions '(ace-window avy-goto-char-2))
+  )
+#+end_src
 
 ** doom-modeline - Clean minimal modeline
 #+BEGIN_SRC emacs-lisp
@@ -874,52 +924,6 @@ https://github.com/abo-abo/avy
 (use-package avy :ensure t
   :bind ("C-:" . avy-goto-char-2))
 #+END_SRC
-
-** Ivy, Counsel, Swiper - Minibuffer completion suite
-Suite of completion tools.  =counsel= will install others, as it requires
-=swiper= which requires =ivy=.
-- https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html
-- https://github.com/abo-abo/swiper
-
-#+BEGIN_SRC emacs-lisp
-(use-package counsel                    ; requires swiper, which requires ivy
-  :ensure t
-  :defer 3
-  :config
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "%d/%d ")      ; current/total match number
-  (setq enable-recursive-minibuffers t)
-  (setq ivy-re-builders-alist
-        '((t . ivy--regex-plus)))
-  ;; use ivy completion on any command using 'completing-read-function'
-  (ivy-mode 1)
-  (counsel-mode 1) ; use counsel equivalents of existing Emacs functions
-
-  (diminish 'ivy-mode)
-  (diminish 'counsel-mode)
-
-  :bind (("C-s" . swiper)               ; Replace isearch-forward
-         ("M-s s" . isearch-forward)
-         ("C-h v" . counsel-describe-variable)
-         ("C-h f" . counsel-describe-function)
-         ("C-h S" . counsel-info-lookup-symbol)
-         ("C-x u" . counsel-unicode-char)
-         ("C-x d" . counsel-dired)
-         ))
-#+END_SRC
-
-** ivy-rich
-More description to ivy display.
-
-#+begin_src emacs-lisp
-(use-package ivy-rich
-  :ensure t
-  :after ivy
-  :config
-  (ivy-rich-mode 1)
-  (setq ivy-rich-project-root-cache-mode t)
-  )
-#+end_src
 
 ** try - try package before installing
 Try is a package that allows you to try out Emacs packages without installing them.
@@ -1244,123 +1248,11 @@ Use "org-variable-pitch-minor-mode" instead of "variable-pitch-mode" for proper 
   ))
 #+end_src
 
-** all-the-icons
-#+begin_src emacs-lisp
-(use-package all-the-icons
-  :defer t
-  :config
-  (setq all-the-icons-color-icons 't)
-  (setq all-the-icons-dired-monochrome nil)
-  )
-
-(use-package all-the-icons-dired
-  :defer t
-  :init
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-  )
-
-(use-package all-the-icons-completion
-  :defer t
-  :config
-  (all-the-icons-completion-mode)
-  ;; (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
-  )
-
-(use-package all-the-icons-ivy-rich
-  :defer t
-  :init (all-the-icons-ivy-rich-mode 1)
-  :config
-  (setq all-the-icons-ivy-rich-icon t)
-  (setq all-the-icons-ivy-rich-color-icon t)
-  ;; If you experience a slow down in performance when rendering multiple icons simultaneously,
-  ;; you can try setting the following variable
-  ;; (setq inhibit-compacting-font-caches t)
-  )
-#+end_src
-
 ** nerd-icons
 Used in doom-modeline. Install package, then run =M-x nerd-icons-install-fonts=, and install =NFM.ttf= font manually.
 #+begin_src emacs-lisp
-(use-package nerd-icons
-  :defer t
-  )
+
 #+end_src
-
-** SLOW ein - Emacs iron python notebook (Jupyter)
-CLOSED: [2019-03-17 Sun 10:55]
-- Jupyter Notebooks in emacs!  Added [2017-10-19 Thu]
-  dfs
-
-- Slow. Include only when needed or designated configs
-#+BEGIN_SRC emacs-lisp :tangle no
-;; Jupyter python  ;added 2017-10-17
-(use-package ein
-  :ensure t
-  :defer t
-  ;; :backends ein:company-backend
-  :init
-  (require 'ein-connect)     ; not sure why this is needed suddenly..?
-
-  ;; Fix Null value passed to ein:get-ipython-major-version #work pc
-  ;; https://github.com/millejoh/emacs-ipython-notebook/issues/176
-  ;; (ein:force-ipython-version-check)
-
-  :config
-  ;; (advice-add 'request--netscape-cookie-parse :around #'fix-request-netscape-cookie-parse)
-  (setq ein:completion-backend 'ein:use-company-backend)
-  )
-
-#+END_SRC
-
-** SLOW projectile
-CLOSED: [2019-03-18 Mon 22:47]
-- https://krsoninikhil.github.io/2018/12/15/easy-moving-from-vscode-to-emacs/
-- some performance issues on lesser computers.  Will have to investigate
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package projectile
-  :ensure t				; ensure package is downloaded
-  :defer t
-  :init					; pre-load config
-  (setq projectile-enable-caching t)	; resolve missing projects
-  ;; (projectile-mode +1)			; global projectil mode
-  :config nil				; post-load config
-  )
-#+END_SRC
-
-** SLOW ob-ipython - jupyter for org-mode
-CLOSED: [2019-03-17 Sun 11:00]
-- https://github.com/gregsexton/ob-ipython
-- http://cachestocaches.com/2018/6/org-literate-programming/
-
-  org-babel integration with Jupyter for evaluating code blocks.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-;; INCREDIBLY slow startup time.  Disabled, run when needed.
-(use-package ob-ipython
-  :ensure t
-  :config
-  (add-hook 'ob-ipython-mode-hookp
-            (lambda ()
-              (company-mode 1)))
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((ipython . t)
-     ;; other languages..
-     ))
-  (add-to-list 'company-backends 'company-ob-ipython)
-  )
-#+END_SRC
-
-** SLOW ob-async - asynchronous execution of org-babel src blocks
-CLOSED: [2019-03-17 Sun 11:00]
-https://github.com/astahlman/ob-async
-
-#+BEGIN_SRC emacs-lisp :tangle no
-;; INCREDIBLY slow startup time.  Disabled until needed.
-(use-package ob-async
-  :ensure t)
-#+END_SRC
-
 
 * Dired
 
@@ -1379,8 +1271,9 @@ directories to reflect your edits.
 
 #+BEGIN_SRC emacs-lisp
 (setq dired-dwim-target t)		; guess target directory
-(setq ls-lisp-dirs-first 't)
-(define-key dired-mode-map (kbd "C-c w") 'wdired-change-to-wdired-mode)
+(setq ls-lisp-dirs-first t)
+(eval-after-load "dired"
+  '(define-key dired-mode-map (kbd "C-c w") 'wdired-change-to-wdired-mode))
 ;; https://www.gnu.org/software/emacs/manual/html_node/dired-x/
 (add-hook 'dired-load-hook
           (lambda ()
@@ -1920,7 +1813,6 @@ Reference:
 - [[https://www.reddit.com/r/emacs/comments/5slhkb/what_is_your_preferred_setup_for_python/][Reddit Emacs Python setup]]
   - https://github.com/proofit404/company-anaconda
   - https://github.com/proofit404/anaconda-mode
-- [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html][Ivy, Counsel, Swiper]] - counsel alternatives to built-ins
 - EMACS on a Windows USB key: https://gaballench.wordpress.com/2018/11/10/emacs-as-an-operating-system/
   - includes portable git, LaTeX, AUCTeX, Pandoc, markdown, customizations
 
