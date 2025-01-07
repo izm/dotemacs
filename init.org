@@ -1,7 +1,7 @@
- #+STARTUP: hidestars indent content
+#+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2024-12-29 00:26:37>
+Updated: <2025-01-07 02:23:15>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -33,6 +33,7 @@ directory, =~/init.d/=.
 
 * my/* functions
 #+begin_src emacs-lisp :results output silent
+;;  -*- lexical-binding: t; -*-
 (defun my/now ()
   "Return the current date and time appropriate for placing in Windows file names."
   (interactive)
@@ -207,7 +208,7 @@ packages.
 ;; This is only needed once, near the top of the file
 (eval-when-compile
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
-  (add-to-list 'load-path "<path where use-package is installed>")
+  ;; (add-to-list 'load-path "<path where use-package is installed>")
   (require 'use-package))                ; we want this instead of 'require
 
 (setq use-package-always-ensure t)      ; ensure package is installed
@@ -1533,19 +1534,31 @@ https://emacs.stackexchange.com/questions/2221/running-emacs-from-windows-taskba
 4. Shift right-click on the pinned Emacs icon on the taskbar, click on Properties, and change the target from emacs.exe to runemacs.exe.
 
 ** External Programs
-*** Open with default Windows app (w32-browser)
+*** Open with default Windows app (w32-browser/w32-shell-execute)
 - /Control-Enter/ to open with default windows application in dired mode.
 - src: https://stackoverflow.com/questions/2284319/opening-files-with-default-windows-application-from-within-emacs
 
 #+BEGIN_SRC emacs-lisp
 (when (eq 'windows-nt system-type)
-  (defun w32-browser (doc) (w32-shell-execute 1 doc))
-  ;; Ctrl-ENT to open with default application
+  (defun w32-browser (doc)
+    (w32-shell-execute 1 doc))
+
   (eval-after-load "dired"
-    '(define-key dired-mode-map [C-return]
-       (lambda ()
-         (interactive)
-         (w32-browser (dired-replace-in-string "/" "\\" (dired-get-filename)))))))
+    '(define-key
+      dired-mode-map [C-return]
+      
+      ;; C-ENT to open with default Windows application, C-u C-ENT to open parent directory      
+      (lambda (&optional arg)
+        (interactive "P")
+        (let ((current-file
+               (or
+                (dired-get-filename nil t) ; absolute, no error, (no slash on dirs)
+                (dired-get-subdir)         ; has / at end
+                default-directory)))        ; has / at end
+          (if arg
+              (w32-browser (replace-regexp-in-string "/" "\\" (file-name-parent-directory current-file) t t))
+            (w32-browser (replace-regexp-in-string "/" "\\" current-file t t)))))
+      )))
 
 #+END_SRC
 
