@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-01-07 02:23:15>
+Updated: <2025-01-13 08:24:47>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -341,7 +341,7 @@ Load things that should be slightly more private.
 (toggle-scroll-bar 0)
 (tool-bar-mode 0)                      ; Remove clunky toolbar and icons
 (global-eldoc-mode 1)                  ; highlight parameters in minibuffer
-(setq reb-re-syntax 'string)           ; C-c TAB to cycle when in regexp-builder
+(setq reb-re-syntax 'string)           ; c-c TAB to cycle when in regexp-builder
 
 ;; see file-local variable: time-stamp-pattern, time-stamp-start, etc
 (add-hook 'before-save-hook 'time-stamp) ; update timestamps of set format before saving
@@ -355,6 +355,9 @@ Load things that should be slightly more private.
 (add-hook
  'python-mode-hook
  (lambda ()
+   ;; 110 fits roughly 2 buffers on 1080p monitor, more sane for jupyter notebooks
+   ;; Keep consistent with tools: ~/.black "line-length = 110" ;; ~/.flake8 "max-line-length = 110" ;; etc
+   (setq-local fill-column 110)
    (setq-local comment-inline-offset 2) ; PEP8 & personal preference
    (setq tab-width 4)
    (setq python-indent-offset 4)))
@@ -1592,14 +1595,13 @@ https://emacs.stackexchange.com/questions/2221/running-emacs-from-windows-taskba
 Includes a bash environment with various tools that is a /much/ simpler alternative to a full cygwin environment.
 
 #+begin_src emacs-lisp
-;; Add git-for-windows usr/bin directory to PATH, which includes diff & other tools
+;; Add git-for-windows usr/bin directory to PATH and exec-path; includes diff & other tools
 (let* ((git-win-usr-bin-path (file-name-concat my/git4win-directory "usr/bin")))
   (if (file-exists-p git-win-usr-bin-path)
-      (setenv "PATH"
-              (concat
-               (getenv "PATH")
-               path-separator
-               git-win-usr-bin-path))))
+      (progn
+        (setenv "PATH"
+                (concat (getenv "PATH") path-separator git-win-usr-bin-path))
+        (add-to-list 'exec-path git-win-usr-bin-path))))
 #+end_src
 
 *** OLD Cygwin
