@@ -1,24 +1,16 @@
 * dotemacs README
 
-This is my personal emacs configuration.  It is quite personalized, so would
-probably require modification to use, but bits and pieces may be useful.  I also
-use it as a tool for learning and playing around, so no promises are given on
-its state at any point.
+This is my personal Emacs configuration. It is both highly personalized and a
+bit of a playground; likely broken at any given time, and running code from it
+will delete data without warning. That being said, it can be useful to see
+others' configurations, so here is mine.
 
-It began as an =emacs-lisp= file called =.emacs= (hence the repository name).
-It is now a rich =org-mode= file, [[file:init.org::*init.org][init.org]], that is processed by =emacs
-org-mode= overwriting the default =emacs= configuration file at
-=~/.emacs.d/init.el=.  Again, when it does this, it /overwrites/ the existing
-=init.el= so be sure to back that up before running this.
+All configuration is done in =emacs-lisp= code blocks in [[file:init.org::*init.org][init.org]]. When updating
+my configuration, I make changes in the =org= file and then I evaluate the first
+code block (=C-c C-c= or =M-x org-babel-src-execute=), which [[https://orgmode.org/manual/Extracting-Source-Code.html][extracts]] select
+=emacs-lisp= code blocks into =~/.emacs.d/init.el=, *overwriting* the existing
+config. Once the new =init.el= is created, it is evaluated to update the current
+session's settings.
 
-GitHub parses =org-mode= files such as [[file:init.org::*init.org][init.org]] and this =README.org= file, so
-that's probably the best way to [[https://github.com/izm/dotemacs][view it]].
-
-If you /do/ want to process it (and /overwrite/ the current
-=~/.emacs.d/init.el=), open the [[file:init.org::*init.org][init.org]] file in =emacs=, move the cursor to the
-first emacs-lisp source code block at the top of the file (under the =init.org=
-heading), and press =C-c C-c= or use =M-x org-babel-src-execute=.  This will
-extract all the other source code blocks into =init.el= and then load it,
-downloading and compiling any needed packages.
-
-You may have to first install =use-package=.
+Again, the existing =~/.emacs.d/init.el= gets nuked without warning. Please do not
+run this code block yourself unless you fully understand it.
