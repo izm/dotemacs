@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-01-13 08:24:47>
+Updated: <2025-01-15 23:55:14>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -73,6 +73,27 @@ directory, =~/init.d/=.
     (message "%s  %s done."
              (format-time-string time-format-str (current-time))
              op-name)))
+
+
+(defun my/file-buffer-modtime ()
+  "Check if the current buffer is in sync with modifications from
+external programs. Return `nil' if current buffer does not point to file."
+  (interactive)
+  (if (eq nil (buffer-file-name))
+    nil
+    (let ((file-modtime (format-time-string "%H:%M:%S" (visited-file-modtime))))
+      (message "%s"
+               (concat
+                (buffer-file-name)
+                "  [Modified "
+                file-modtime
+                "]"
+                (if (verify-visited-file-modtime)
+                    "  - Buffer in sync."
+                  "  - Buffer NOT in sync!")
+                (if (buffer-modified-p)
+                    (concat "  (Unsaved changes: " (symbol-name (buffer-modified-p)) ")")
+                  ""))))))
 
 
 (add-hook 'emacs-startup-hook #'my/display-startup-time)
