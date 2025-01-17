@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-01-15 23:55:14>
+Updated: <2025-01-17 08:35:56>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1322,6 +1322,10 @@ directories to reflect your edits.
 
 (define-key global-map "\C-x\C-j" 'dired-jump)
 (define-key global-map "\C-x4\C-j" 'dired-jump-other-window)
+
+;; Use the following RECENT and OLD time strings for dired buffers
+(setq ls-lisp-use-localized-time-format 't)
+(setq ls-lisp-format-time-list '("%Y-%m-%d %H:%M" "%Y-%m-%d"))
 #+END_SRC
 
 * Org Mode
