@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-01-17 08:35:56>
+Updated: <2025-01-17 08:57:13>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -538,11 +538,15 @@ Use =eval-last-sexp= (=C-x C-e=) to try the different fonts: [[info:emacs#Lisp E
          ("Notebooks"
           (name . "\\*ein:.*"))
          ("Python"
-          (used-mode . python-mode))
+          (or
+           (used-mode . python-mode)
+           (used-mode . python-ts-mode)))
          ("Emacs Lisp"
           (used-mode . emacs-lisp-mode))
          ("Images"
           (used-mode . image-mode))
+         ("Magit"
+          (name . "magit.*"))
          ("Definitions"
           (name . "\\*define-it:.*"))
          ("Help"
