@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-02-09 23:31:57>
+Updated: <2025-03-05 14:33:22>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -611,7 +611,8 @@ If there is a compile error, or "tar not found," try
 (use-package vertico
   :ensure t
   :config
-  (vertico-mode 1))
+  (vertico-mode 1)
+  (setq vertico-cycle 't))
 
 (use-package orderless
   :ensure t
@@ -672,7 +673,11 @@ Emacs Built-in.
 #+begin_src emacs-lisp
 (add-hook 'python-mode-hook 'hs-minor-mode)
 (eval-after-load "python"
-  '(define-key python-mode-map (kbd "<C-tab>") 'hs-toggle-hiding))
+  '(define-key python-mode-map (kbd "C-<tab>") 'hs-toggle-hiding))
+
+;; temporary fix for python-ts-mode, can be updated when fully migrated to Emacs 30
+(add-hook 'python-ts-mode-hook 'hs-minor-mode)
+(define-key python-ts-mode-map (kbd "C-<tab>") 'hs-toggle-hiding)
 #+end_src
 
 ** diminish
