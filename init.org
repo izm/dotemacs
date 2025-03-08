@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-03-05 14:33:22>
+Updated: <2025-03-07 18:44:20>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1726,6 +1726,9 @@ installed on Cygwin on Windows.
 ;; Correct recent emacs defaults from python3
 (setq python-shell-interpreter "python")
 (setq python-interpreter "python")
+
+;; Start python shell in project root if detected
+(setq python-shell-dedicated 'project) 
 #+END_SRC
 
 * Finally
@@ -1832,38 +1835,16 @@ Benchmarking
 | C-c C-v n | org-babel-next-src-block                            |
 | C-c C-v p | org-babel-previous-src-block                        |
 
-*Converting from customize settings*:
-: (custom-set-variables
-:  '(my-variable value)
-:  '(column-number-mode t)
-:  ; ...
-: )
-:
+- Reference:
+  + [[https://github.com/asimpson/dotfiles/blob/master/emacs/emacs-lite.org][emacs-lite init.org]]
+  + [[https://github.com/munen/emacs.d][Alain Lafon: play emacs like an instrument talk]]
+  + [[https://github.com/howardabrams/dot-files/blob/master/emacs-client.org][sanityinc-tomorrow-theme]]
+  + [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua init.org]]
+  + [[https://www.masteringemacs.org/article/running-shells-in-emacs-overview][Shells, including Customizing on Windows]]
+  + [[https://www.johndcook.com/blog/emacs_windows/#select][Nicely written tips for emacs on Windows]]
+  + [[https://github.com/emacs-tw/awesome-emacs][Awesome Emacs - Community list of useful packages]]
+  + [[https://www.reddit.com/r/emacs/][Reddit r/Emacs]]
 
--->
-
-: (setq column-number-mode t)
-
-Reference:
-
-- emacs-lite: https://github.com/asimpson/dotfiles/blob/master/emacs/emacs-lite.org
-- Alain Lafon emacs: https://github.com/munen/emacs.d \\
-  (play emacs like an instrument talk)
-- https://github.com/howardabrams/dot-files/blob/master/emacs-client.org \\
-  sanityinc-tomorrow-theme
-- [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua init.org]]
-- https://www.masteringemacs.org/article/running-shells-in-emacs-overview \\
-  You *must* set extra variables if customizing shell on Windows....
-- https://github.com/daedreth/UncleDavesEmacs
-- https://www.johndcook.com/blog/emacs_windows/#select \\
-  Nicely written tips for emacs on Windows.
-- https://github.com/emacs-tw/awesome-emacs Awesome Emacs \\
-  Community list of useful packages.
-- [[https://www.reddit.com/r/emacs/comments/5slhkb/what_is_your_preferred_setup_for_python/][Reddit Emacs Python setup]]
-  - https://github.com/proofit404/company-anaconda
-  - https://github.com/proofit404/anaconda-mode
-- EMACS on a Windows USB key: https://gaballench.wordpress.com/2018/11/10/emacs-as-an-operating-system/
-  - includes portable git, LaTeX, AUCTeX, Pandoc, markdown, customizations
 
 # Local Variables:
 # time-stamp-start: "Updated:[  ]+\\\\?[\"<]+"
