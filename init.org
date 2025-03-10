@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-03-09 17:16:08>
+Updated: <2025-03-09 22:53:43>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1796,26 +1796,34 @@ mapping.
 #+BEGIN_SRC emacs-lisp :results output silent
 ;; l = back (last), r (reverse?) = forward
 
-;; Info-mode
-(derived-mode-init-mode-variables 'Info-mode)
-(define-key Info-mode-map (kbd "u") 'Info-up)
-(define-key Info-mode-map (kbd "j") 'Info-next-reference)
-(define-key Info-mode-map (kbd "k") 'Info-prev-reference)
+;; info-mode (but "Info-mode-map")  >.<
+(use-package info
+  :ensure nil
+  :bind (:map Info-mode-map
+         ("j" . Info-next-reference)
+         ("k" . Info-prev-reference)
+         ("u" . Info-up)))
 
 ;; help-mode
-(derived-mode-init-mode-variables 'help-mode)
-(define-key help-mode-map (kbd "j") 'forward-button)
-(define-key help-mode-map (kbd "k") 'backward-button)
+(use-package help
+  :ensure nil
+  :bind (:map help-mode-map
+         ("j" . forward-button)
+         ("k" . backward-button)))
 
 ;; apropos-mode
-(derived-mode-init-mode-variables 'apropos-mode)
-(define-key apropos-mode-map (kbd "j") 'forward-button)
-(define-key apropos-mode-map (kbd "k") 'backward-button)
+(use-package apropos
+  :ensure nil
+  :bind (:map apropos-mode-map
+         ("j" . forward-button)
+         ("k" . backward-button)))
 
 ;; helpful-mode
-(derived-mode-init-mode-variables 'helpful-mode)
-(define-key helpful-mode-map (kbd "j") 'forward-button)
-(define-key helpful-mode-map (kbd "k") 'backward-button)
+(use-package helpful
+  :ensure nil
+  :bind (:map helpful-mode-map
+         ("j" . forward-button)
+         ("k" . backward-button)))
 #+END_SRC
 
 * Notes
