@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-03-07 18:44:20>
+Updated: <2025-03-09 17:16:08>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -371,17 +371,38 @@ Load things that should be slightly more private.
 
 (add-hook 'image-mode-hook 'auto-revert-mode) ; update image buffers when files change
 
+(setq set-mark-command-repeat-pop 't)   ; remove leading modifier key on repeat mark pops
+;; C-u C-SPC C-SPC to pop local mark twice
+;; C-x C-SPC C-SPC to pop global mark twice
+
+(setq isearch-lazy-count 't)
+(repeat-mode 1)                         ; Enable C-x o o o o....
+(electric-pair-mode 1)                  ; Auto-insertion and wropping of character pairs
+#+END_SRC
+
+** Python
+#+BEGIN_SRC emacs-lisp
 ;; python tabs and spacing
 (setq-default python-indent-offset 4)
-(add-hook
- 'python-mode-hook
- (lambda ()
-   ;; 110 fits roughly 2 buffers on 1080p monitor, more sane for jupyter notebooks
-   ;; Keep consistent with tools: ~/.black "line-length = 110" ;; ~/.flake8 "max-line-length = 110" ;; etc
-   (setq-local fill-column 110)
-   (setq-local comment-inline-offset 2) ; PEP8 & personal preference
-   (setq tab-width 4)
-   (setq python-indent-offset 4)))
+
+;; temporary fix for python-ts-mode, can be updated when fully migrated to Emacs 30
+(defun my/python-setup()
+  "Python setup to be used for both python-mode and python-ts-mode."
+  (progn
+    ;; 110 fits roughly 2 buffers on 1080p monitor, more sane for jupyter notebooks
+    ;; Keep consistent with tools: ~/.black "line-length = 110" ;; ~/.flake8 "max-line-length = 110" ;; etc
+    (setq-local fill-column 110)
+    (setq-local comment-inline-offset 2) ; PEP8 & personal preference
+    (setq tab-width 4)
+    (setq python-indent-offset 4)
+    
+    (hs-minor-mode 1)
+    (keymap-set (current-local-map) "C-<tab>" 'hs-toggle-hiding)
+    ))
+
+
+(add-hook 'python-mode-hook 'my/python-setup)
+(add-hook 'python-ts-mode-hook 'my/python-setup)
 
 ;; tree-sitter
 ;; pre-compiled grammars: https://github.com/emacs-tree-sitter/tree-sitter-langs/releases
@@ -389,14 +410,7 @@ Load things that should be slightly more private.
 ;; font lock: https://www.gnu.org/software/emacs/manual/html_node/emacs/Parser_002dbased-Font-Lock.html
 (add-hook
  'python-ts-mode-hook                   ; not sure why this is needed...?
- (lambda ()
-   (run-hooks 'python-mode-hook)))
-
-(setq set-mark-command-repeat-pop 't)   ; remove leading modifier key on repeat mark pops
-;; C-u C-SPC C-SPC to pop local mark twice
-;; C-x C-SPC C-SPC to pop global mark twice
-
-(setq isearch-lazy-count 't)
+ (lambda () (run-hooks 'python-mode-hook)))
 #+END_SRC
 
 ** Fonts
@@ -671,13 +685,7 @@ Emacs Built-in.
 - =C-c C-j= to jump (imenu)
 
 #+begin_src emacs-lisp
-(add-hook 'python-mode-hook 'hs-minor-mode)
-(eval-after-load "python"
-  '(define-key python-mode-map (kbd "C-<tab>") 'hs-toggle-hiding))
 
-;; temporary fix for python-ts-mode, can be updated when fully migrated to Emacs 30
-(add-hook 'python-ts-mode-hook 'hs-minor-mode)
-(define-key python-ts-mode-map (kbd "C-<tab>") 'hs-toggle-hiding)
 #+end_src
 
 ** diminish
