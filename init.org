@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-03-09 22:53:43>
+Updated: <2025-03-22 22:13:36>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -839,6 +839,7 @@ Place to put themes 100% decided on.
          (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
   :config
+  (setopt lsp-pylsp-plugins-autopep8-enabled 't)  ;; indent-region [ C-M-\ ] uses autopep8 
   )
 
 ;; optional
