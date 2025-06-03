@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-03-22 22:13:36>
+Updated: <2025-06-03 07:26:17>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -406,7 +406,8 @@ Load things that should be slightly more private.
 
 ;; tree-sitter
 ;; pre-compiled grammars: https://github.com/emacs-tree-sitter/tree-sitter-langs/releases
-;; about: https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
+;; They must be renamed from python.dll to libtree-sitter-python.dll
+;; More: https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
 ;; font lock: https://www.gnu.org/software/emacs/manual/html_node/emacs/Parser_002dbased-Font-Lock.html
 (add-hook
  'python-ts-mode-hook                   ; not sure why this is needed...?
@@ -1160,7 +1161,7 @@ in HOME directory (=C:/Users/Username/AppData/Roaming/= on /Windows 10/)
 
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
-  :ensure nil
+  :ensure t
   :defer t
   )
 ;; add generic fundamental-mode snippets across all modes
