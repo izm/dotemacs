@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-06-24 01:00:39>
+Updated: <2025-06-29 23:28:38>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -94,6 +94,14 @@ external programs. Return `nil' if current buffer does not point to file."
                 (if (buffer-modified-p)
                     (concat "  (Unsaved changes: " (symbol-name (buffer-modified-p)) ")")
                   ""))))))
+
+
+(defun my/toggle-215 ()
+  "Toggling two-fifteen-theme when developing."
+  (interactive)
+  (if (eq custom-enabled-themes nil)
+      (load-theme 'two-fifteen 't)
+    (disable-theme (car custom-enabled-themes))))
 
 
 (add-hook 'emacs-startup-hook #'my/display-startup-time)
@@ -379,6 +387,7 @@ Load things that should be slightly more private.
 (repeat-mode 1)                         ; Enable C-x o o o o....
 (electric-pair-mode 1)                  ; Auto-insertion and wropping of character pairs
 (setopt kill-whole-line 't)
+(savehist-mode 1)
 #+END_SRC
 
 ** Python
@@ -622,7 +631,6 @@ If there is a compile error, or "tar not found," try
 #+end_src
 ** Completion and Minibuffer (consult, vertico, marginalia, corfu, etc)
 #+begin_src emacs-lisp
-
 ;; https://github.com/minad/vertico
 (use-package vertico
   :ensure t
@@ -645,15 +653,15 @@ If there is a compile error, or "tar not found," try
 (use-package consult
   :ensure t
   :bind (;; A recursive grep
-	 ;;        ("M-s M-g" . consult-grep)
-	 ;;        ;; Search for files names recursively
-	 ;;        ("M-s M-f" . consult-find)
-	 ;;        ;; Search through the outline (headings) of the file
+         ;; ("M-s M-g" . consult-grep)
+         ;; Search for files names recursively
+         ;; ("M-s M-f" . consult-find)
+         ;; Search through the outline (headings) of the file
          ("M-s M-o" . consult-outline)
-	 ;;        ;; Search the current buffer
+         ;; Search the current buffer
          ("M-s M-l" . consult-line)
-	 ;;        ;; Switch to another buffer, or bookmarked file, or recently
-	 ;;        ;; opened file.
+         ;; Switch to another buffer, or bookmarked file, or recently
+         ;; opened file.
          ("M-s M-b" . consult-buffer)))
 
 ;; https://github.com/oantolin/embark
