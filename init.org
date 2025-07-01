@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-07-01 10:19:10>
+Updated: <2025-07-01 11:31:36>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1764,7 +1764,7 @@ files and setting key maps.
 
 #+BEGIN_SRC emacs-lisp
 ;; Open a couple files and buffers
-(let* ((org-init-file (concat my/user-dir "Projects/dotemacs/init.org"))
+(let* ((org-init-file (concat my/user-dir "Projects/dotemacs/init.org")) ; tied to home setup
        (init-private-file (concat user-emacs-directory "init_private.el"))
        (org-work-file (concat my/org-directory "work.org"))
        (org-private-file (concat my/org-directory "private.org"))
@@ -1772,27 +1772,32 @@ files and setting key maps.
 
   (message "%s  START opening files and directories." (format-time-string my-time-format-string (current-time)))
   ;; org init file
-  (when (file-exists-p org-init-file)
-    (my/log-time-of-op-on-file 'find-file org-init-file my-time-format-string))
+  (when (and (file-exists-p org-init-file)
+             (not (find-buffer-visiting org-init-file)))
+    (my/log-time-of-op-on-file 'find-file-noselect org-init-file my-time-format-string))
 
   ;; additional private .el file loaded by init
-  (when (file-exists-p init-private-file)
-    (my/log-time-of-op-on-file 'find-file init-private-file my-time-format-string))
+  (when (and (file-exists-p init-private-file)
+             (not (find-buffer-visiting init-private-file)))
+    (my/log-time-of-op-on-file 'find-file-noselect init-private-file my-time-format-string))
 
   ;; ORG DIRECTORY FILES
   (when (and (file-exists-p my/org-directory)
-             (file-directory-p my/org-directory))
+             (file-directory-p my/org-directory)
+             (not (find-buffer-visiting my/org-directory)))
 
     ;; dired *.org files in org directory
-    (my/log-time-of-op-on-file 'dired my/org-directory my-time-format-string)
+    (my/log-time-of-op-on-file 'dired-noselect my/org-directory my-time-format-string)
 
     ;; open different org file depedning on work/non-work PC
     (when (and my/on-work-pc
-               (file-exists-p org-work-file))
+               (file-exists-p org-work-file)
+               (not (find-buffer-visiting org-work-file)))
       (my/log-time-of-op-on-file 'find-file org-work-file my-time-format-string))
 
     (when (and (not my/on-work-pc)
-               (file-exists-p org-private-file))
+               (file-exists-p org-private-file)
+               (not (find-buffer-visiting org-private-file)))
       (my/log-time-of-op-on-file 'find-file org-private-file my-time-format-string)))
 
   (message "%s DONE opening files and directories.. " (format-time-string my-time-format-string (current-time))))
