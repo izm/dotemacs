@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-06-29 23:28:38>
+Updated: <2025-07-01 10:19:10>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1552,10 +1552,11 @@ directories to reflect your edits.
 ;; Don't remind me of weekly tasks immediately after completion
 (setq org-deadline-warning-days 5)
 ;; Add more depth to agenda clock report: "v R" from agenda view
-(setq org-agenda-clockreport-parameter-plist '(:link t :maxlevel 4))
+(setopt org-agenda-clockreport-parameter-plist '(:link t :maxlevel 4 :compact t))
 ;; Save clock history across sessions
 (setq org-clock-persist 'history)
 (org-clock-persistence-insinuate)
+(setopt org-clock-display-default-range 'today) ; 'thisyear default too long
 #+END_SRC
 
 * Windows
@@ -1648,13 +1649,20 @@ https://emacs.stackexchange.com/questions/2221/running-emacs-from-windows-taskba
 Includes a bash environment with various tools that is a /much/ simpler alternative to a full cygwin environment.
 
 #+begin_src emacs-lisp
-;; Add git-for-windows usr/bin directory to PATH and exec-path; includes diff & other tools
+;; Add git-for-windows usr/bin directory to PATH and exec-path; includes diff, find & other tools
 (let* ((git-win-usr-bin-path (file-name-concat my/git4win-directory "usr/bin")))
   (if (file-exists-p git-win-usr-bin-path)
       (progn
-        (setenv "PATH"
-                (concat (getenv "PATH") path-separator git-win-usr-bin-path))
-        (add-to-list 'exec-path git-win-usr-bin-path))))
+        ;; keep PATH and exec-path in sync, prioritizing git usr/bin path
+        (unless (string-search git-win-usr-bin-path (getenv "PATH"))
+          (setenv "PATH"
+                  (concat git-win-usr-bin-path ; add to beginning of PATH
+                          path-separator ; semicolon on Windows, colon on Linux
+                          (getenv "PATH")))
+          )
+        (unless (member git-win-usr-bin-path exec-path)
+          (add-to-list 'exec-path git-win-usr-bin-path))  ; add to head of list
+        )))
 #+end_src
 
 *** OLD Cygwin
