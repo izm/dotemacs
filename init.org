@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-07-01 11:31:36>
+Updated: <2025-07-18 15:41:19>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -388,6 +388,7 @@ Load things that should be slightly more private.
 (electric-pair-mode 1)                  ; Auto-insertion and wropping of character pairs
 (setopt kill-whole-line 't)
 (savehist-mode 1)
+(setopt sentence-end-double-space nil)
 #+END_SRC
 
 ** Python
