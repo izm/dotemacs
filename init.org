@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-07-18 15:41:19>
+Updated: <2025-07-22 13:07:56>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -121,6 +121,20 @@ external programs. Return `nil' if current buffer does not point to file."
 ;; https://orgmode.org/worg/dev/org-element-api.html
 ;; http://xahlee.info/emacs/emacs/elisp_parse_org_mode.html
 ;; These currently use properties... org elements offer more detail (if needed)... like headline level?
+
+
+(defun my/org-table-to-clipboard ()
+  "Copy the Org table at point to the clipboard."
+  (interactive)
+  (when (org-at-table-p)
+    (let ((table (cl-remove 'hline (org-table-to-lisp))))
+      (with-temp-buffer
+        (insert
+         (mapconcat
+          #'(lambda (row) (mapconcat 'identity row "\t"))
+          table "\n"))
+        (clipboard-kill-region (point-min) (point-max))))))
+
 
 (defun my/org-timestamp-to-string (orgtimestamp &optional fmt)
   "Take an active or inactive org-timestamp string and format it accordding to fmt.
