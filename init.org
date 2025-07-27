@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-07-22 13:07:56>
+Updated: <2025-07-27 01:06:07>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -403,6 +403,7 @@ Load things that should be slightly more private.
 (setopt kill-whole-line 't)
 (savehist-mode 1)
 (setopt sentence-end-double-space nil)
+(setopt remember-notes-initial-major-mode 'org-mode)
 #+END_SRC
 
 ** Python
@@ -1094,7 +1095,7 @@ Rainbow parentheses. Face customization might be required, depending on theme.
 ** transpose-frame - transpose windows in frame
 https://melpa.org/#/transpose-frame
 
-#+begin_quote
+#+begin_example
 This program provides some interactive functions which allows users
 to transpose windows arrangement in currently selected frame:
 
@@ -1157,7 +1158,7 @@ to transpose windows arrangement in currently selected frame:
 +------------+------------+      |        A        |       |
 |            D            |      |                 |       |
 +-------------------------+      +-----------------+-------+
-#+end_quote
+#+end_example
 
 #+BEGIN_SRC emacs-lisp
 (use-package transpose-frame
