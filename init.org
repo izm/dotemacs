@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-07-27 01:06:07>
+Updated: <2025-08-02 14:56:34>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -619,6 +619,17 @@ Use =eval-last-sexp= (=C-x C-e=) to try the different fonts: [[info:emacs#Lisp E
 If there is a compile error, or "tar not found," try
 =package-refresh-contents= to refresh the package database.
 
+** Writeroom
+https://github.com/joostkremers/writeroom-mode
+#+begin_src emacs-lisp
+(use-package writeroom-mode
+  :ensure t
+  :defer t
+  :config
+  (setopt writeroom-restore-window-config 't)
+  )
+#+end_src
+
 ** Icons 
 #+begin_src emacs-lisp
 ;; Icons ======================================================================
@@ -1192,6 +1203,8 @@ in HOME directory (=C:/Users/Username/AppData/Roaming/= on /Windows 10/)
 ;; add generic fundamental-mode snippets across all modes
 (add-hook 'yas-minor-mode-hook
           (lambda () (yas-activate-extra-mode 'fundamental-mode)))
+(add-hook 'python-mode-hook 'yas-minor-mode)
+(add-hook 'python-ts-mode-hook 'yas-minor-mode)
 #+END_SRC
 
 ** neotree - File tree explorer bound to <F8>
