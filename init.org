@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-08-02 14:56:34>
+Updated: <2025-08-25 20:13:40>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -368,6 +368,8 @@ Load things that should be slightly more private.
 (setq uniquify-buffer-name-style (quote post-forward-angle-brackets))
 
 (desktop-save-mode 0)         ; save the desktop/state of emacs' frames/buffersb
+(save-place-mode t)           ; return to last point in file
+(setopt proced-enable-color-flag t)
 
 ;; backups - filename.ext~
 (setq backup-directory-alist `(("." . ,(expand-file-name ".backups/" user-emacs-directory)))) ; keep in clean
@@ -1182,6 +1184,14 @@ A Git version control interface.
 
 Recommended: =ssh-keygen=, add key to git host, ensure =.ssh/= directory is
 in HOME directory (=C:/Users/Username/AppData/Roaming/= on /Windows 10/)
+
+Improve Git performance on Windows! (magit uses many git calls to produce status screen)
+https://magit.vc/manual/magit/Microsoft-Windows-Performance.html
+#+begin_src shell :tangle no :results silent
+git config --global core.preloadindex true   # default since v2.1
+git config --global core.fscache true        # default since v2.8
+git config --global gc.auto 256
+#+end_src
 
 #+BEGIN_SRC emacs-lisp
 (use-package magit
