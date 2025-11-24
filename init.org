@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-08-25 20:13:40>
+Updated: <2025-11-24 15:21:27>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -414,7 +414,7 @@ Load things that should be slightly more private.
 (setq-default python-indent-offset 4)
 
 ;; temporary fix for python-ts-mode, can be updated when fully migrated to Emacs 30
-(defun my/python-setup()
+(defun my/python-setup ()
   "Python setup to be used for both python-mode and python-ts-mode."
   (progn
     ;; 110 fits roughly 2 buffers on 1080p monitor, more sane for jupyter notebooks
@@ -542,10 +542,28 @@ Use =eval-last-sexp= (=C-x C-e=) to try the different fonts: [[info:emacs#Lisp E
 - Both allow tab-completion for applicable themes.
 
 #+BEGIN_SRC emacs-lisp
-;; (unless custom-enabled-themes
-;;   (load-theme 'material t nil))		; load & enable theme, if nothing already set
+(defun my/theme-load-new (theme)
+  "Disable any active themes and load THEME if it's available and not already enabled.
+Return t if THEME was loaded, nil otherwise."
+  (when (member theme (custom-available-themes))
+    (unless (custom-theme-enabled-p theme)
+      (mapc #'disable-theme custom-enabled-themes)
+      (load-theme theme t))))
+
+(defun my/theme-load-first-availablle (theme-list)
+  "Load the first availalbe theme in THEME-LIST and return t.
+If no theme in THEME-LIST is available, do nothing & return nil."
+  (my/theme-load-new
+   (cl-find-if
+    (lambda (x)
+      (member x (custom-available-themes)))
+    theme-list)))
+
+
+(setq custom-safe-themes t)
 (setq custom-theme-directory user-emacs-directory)
-(load-theme 'two-fifteen t)             ; current theme, work-in-progress
+(my/theme-load-first-availablle
+ '(two-fifteen modus-vivendi-tinted modus-operandi-tinted modus-vivendi))
 
 (setq window-divider-default-right-width 4)
 (setq window-divider-default-bottom-width 1)
@@ -632,7 +650,8 @@ https://github.com/joostkremers/writeroom-mode
   )
 #+end_src
 
-** Icons 
+** Icons
+Used in doom-modeline. Install package, then run =M-x nerd-icons-install-fonts=, and install =NFM.ttf= font manually.
 #+begin_src emacs-lisp
 ;; Icons ======================================================================
 (use-package nerd-icons
@@ -1340,11 +1359,6 @@ Use "org-variable-pitch-minor-mode" instead of "variable-pitch-mode" for proper 
   ))
 #+end_src
 
-** nerd-icons
-Used in doom-modeline. Install package, then run =M-x nerd-icons-install-fonts=, and install =NFM.ttf= font manually.
-#+begin_src emacs-lisp
-
-#+end_src
 
 * Dired
 
