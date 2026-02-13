@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-11-28 16:10:00>
+Updated: <2025-12-05 09:41:43>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -574,7 +574,7 @@ If no theme in THEME-LIST is available, do nothing & return nil."
 ** UTF-8
 
 #+BEGIN_SRC emacs-lisp
-(setq PYTHONIOENCODING "utf-8")        ;print utf-8 in shell
+(setenv "PYTHONIOENCODING" "utf-8")     ;print utf-8 in shell
 (prefer-coding-system 'utf-8)
 
 ;; Unicode characters cause some windows systems to hang obnoxiously
