@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2025-12-05 09:41:43>
+Updated: <2026-02-25 09:49:31>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1856,7 +1856,8 @@ files and setting key maps.
     (my/log-time-of-op-on-file 'find-file-noselect init-private-file my-time-format-string))
 
   ;; ORG DIRECTORY FILES
-  (when (and (file-exists-p my/org-directory)
+  (when (and (stringp my/org-directory)
+             (file-exists-p my/org-directory)
              (file-directory-p my/org-directory)
              (not (find-buffer-visiting my/org-directory)))
 
