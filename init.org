@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-03-06 11:30:47>
+Updated: <2026-05-03 23:42:37>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -401,7 +401,13 @@ Load things that should be slightly more private.
 
 (setq isearch-lazy-count 't)
 (repeat-mode 1)                         ; Enable C-x o o o o....
+
 (electric-pair-mode 1)                  ; Auto-insertion and wropping of character pairs
+;; Don't insert matching pair if cursor is on word-character, and other intelligent scenarios (this should be default)
+(setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
+;; If first character in parens is newline, insert additional newline so closing paren is on a separate line
+(setq electric-pair-open-newline-between-pairs t)
+
 (setopt kill-whole-line 't)
 (savehist-mode 1)
 (setopt sentence-end-double-space nil)
@@ -550,7 +556,7 @@ Return t if THEME was loaded, nil otherwise."
       (mapc #'disable-theme custom-enabled-themes)
       (load-theme theme t))))
 
-(defun my/theme-load-first-availablle (theme-list)
+(defun my/theme-load-first-available (theme-list)
   "Load the first availalbe theme in THEME-LIST and return t.
 If no theme in THEME-LIST is available, do nothing & return nil."
   (my/theme-load-new
@@ -560,9 +566,9 @@ If no theme in THEME-LIST is available, do nothing & return nil."
     theme-list)))
 
 
-(setq custom-safe-themes t)
+(setq custom-safe-themes t)          ; show safety the door and load that theme!
 (setq custom-theme-directory user-emacs-directory)
-(my/theme-load-first-availablle
+(my/theme-load-first-available
  '(two-fifteen modus-vivendi-tinted modus-operandi-tinted modus-vivendi))
 
 (setq window-divider-default-right-width 4)
