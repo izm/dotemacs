@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-05-03 23:42:37>
+Updated: <2026-05-05 00:28:50>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -566,10 +566,60 @@ If no theme in THEME-LIST is available, do nothing & return nil."
     theme-list)))
 
 
+(defun my/list-cycle (thelist &optional prev)
+  "Return a new list with the first element in THELIST moved to the end if PREV is nil.
+Move the last item to the beginning of the list if PREV is non-nil."
+  (progn
+    (if (eq nil prev)
+        ;; Cycle Next
+        (setq thelist
+              (append
+               (cdr thelist)
+               (list (car thelist))))
+      ;; Cycle Prev
+      (setq thelist
+            (append
+             (last thelist)
+             (take (1- (length thelist))
+                   thelist))))))
+
+
+(defun my/theme-cycle-dark (arg)
+  "Cycle to the next dark theme in `my/themes-preferred-dark'. Cycle previous if prefix provided as `ARG'."
+  (interactive "P")
+  (let ((themelist my/themes-preferred-dark))
+    (progn
+      (if (eq nil arg)
+          (setq themelist (my/list-cycle themelist))
+        (setq themelist (my/list-cycle themelist t)))
+      
+      ;; update global list
+      (setq my/themes-preferred-dark themelist)
+      (message "Theme-Cycler (Dark) :: Loading Next: %s" (car themelist))
+      (my/theme-load-first-available themelist))))
+
+
+(defun my/theme-cycle-light (arg)
+  "Cycle to the next light theme in `my/themes-preferred-light'. Cycle previous if prefix provided as `ARG'."
+  (interactive "P")
+  (let ((themelist my/themes-preferred-light))
+    (progn
+      (if (eq nil arg)
+          (setq themelist (my/list-cycle themelist))
+        (setq themelist (my/list-cycle themelist t)))
+      
+      ;; update global list
+      (setq my/themes-preferred-light themelist)
+      (message "Theme-Cycler (Light) :: Loading Next: %s" (car themelist))
+      (my/theme-load-first-available themelist))))
+
+
+(setq my/themes-preferred-dark '(two-fifteen modus-vivendi-tinted ef-owl ef-winter ef-night ef-deuteranopia-dark))
+(setq my/themes-preferred-light '(modus-operandi-tinted leuven ef-deuteranopia-light ef-day))
+
 (setq custom-safe-themes t)          ; show safety the door and load that theme!
 (setq custom-theme-directory user-emacs-directory)
-(my/theme-load-first-available
- '(two-fifteen modus-vivendi-tinted modus-operandi-tinted modus-vivendi))
+(my/theme-load-first-available my/themes-preferred-dark)
 
 (setq window-divider-default-right-width 4)
 (setq window-divider-default-bottom-width 1)
