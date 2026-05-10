@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-05-05 00:28:50>
+Updated: <2026-05-10 09:57:06>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -412,6 +412,9 @@ Load things that should be slightly more private.
 (savehist-mode 1)
 (setopt sentence-end-double-space nil)
 (setopt remember-notes-initial-major-mode 'org-mode)
+
+;; Show buffer boundaries and if it extends past visible window in left fringe
+(setopt indicate-buffer-boundaries '((top . left) (bottom . left) (up . left) (down . left)))
 #+END_SRC
 
 ** Python
