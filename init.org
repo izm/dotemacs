@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-05-10 09:57:06>
+Updated: <2026-06-11 09:10:52>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1045,9 +1045,12 @@ Highlight window jumps.
 #+BEGIN_SRC emacs-lisp
 (use-package doom-modeline
   :ensure t
+  :init
+  ;; before package has loaded
   :config
+  ;; after doom-modeline has loaded
   (setq doom-modeline-icon t)           ; requires nerd-icons
-  :init (doom-modeline-mode 1)
+  (doom-modeline-mode 1)
   )
 #+END_SRC
 
