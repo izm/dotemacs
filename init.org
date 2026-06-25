@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-06-11 09:10:52>
+Updated: <2026-06-25 10:33:25>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -490,6 +490,11 @@ Some good programming fonts [[https://blog.checkio.org/top-10-most-popular-codin
   (setq default-font-name "Courier New")
   (setq default-font-size 12))
  )
+
+;; symbols
+(when (and (eq system-type 'windows-nt)
+           (member "Segoe UI Symbol" (font-family-list)))
+  (set-fontset-font t 'symbol "Segoe UI Symbol"))
 
 ;; variable pitch font
 (cond
@@ -1543,6 +1548,7 @@ directories to reflect your edits.
 ** Capture
 
 - [[https://www.gnu.org/software/emacs/manual/html_node/org/Template-elements.html][Capture Template Elements]]
+- [[https://orgmode.org/manual/Template-expansion.html][Org Template Expansion]]
 
 #+BEGIN_SRC emacs-lisp :results output silent
 (setq org-capture-templates
@@ -1585,7 +1591,7 @@ directories to reflect your edits.
          "Daily Log (work)"
          item
          (file+olp+datetree ,(concat my/org-directory "work.org") "Daily")
-         "1. %<%H:%M> %^{prompt}  %K - %a\n   - %?\n"  ; ?? Use %<...> instead of %U
+         "1. %U %^{prompt}  ⏲%K, ↑%a\n   - %?\n" ; [datetime] prompt  ⏲<link-to-currently-clocked-task>, ↑<link-to-current-header/location>
          :prepend nil
          :unnarrowed t
          :empty-lines-before 0
