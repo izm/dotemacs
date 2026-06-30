@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-06-29 16:57:26>
+Updated: <2026-06-30 09:46:40>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -228,7 +228,7 @@ TODO: Provide optional default-date parameter as start or end when effort presen
         (progn
           (kill-new (string-trim num))
           (message "Copied: %s" (string-trim num)))
-      (message "No org-num-mode number found at point.")
+      (message "No org-num-mode number found at point."))))
 #+end_src
 
 * Initialize
@@ -2025,6 +2025,12 @@ mapping.
          ("k" . backward-button)))
 #+END_SRC
 
+#+begin_src emacs-lisp
+;; For graphical sessions, rebind C-z from suspend-frame, allows quick frame cycling
+(when (display-graphic-p)
+  (keymap-global-unset "C-z")
+  (keymap-global-set "C-z" 'other-frame))
+#+end_src
 * Notes
 
 Benchmarking
