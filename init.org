@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-06-30 09:46:40>
+Updated: <2026-06-30 10:56:56>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -361,65 +361,65 @@ Load things that should be slightly more private.
 ** General - colour, lines, columns, backups, frame
 
 #+BEGIN_SRC emacs-lisp
-(setq ansi-color-faces-vector
+(setopt ansi-color-faces-vector
       [default bold shadow italic underline bold bold-italic bold])
 (setq-default fill-column 80)      ; where to wrap lines; set locally with C-x f
-(set-default 'truncate-lines t)    ; truncate long lines, don't wrap them
-(setq column-number-mode t)        ; show column numbers in modeline
-(setq inhibit-startup-screen t)    ; skip startup screen
+(setq-default truncate-lines t)    ; truncate long lines, don't wrap them
+(setopt column-number-mode t)        ; show column numbers in modeline
+(setopt inhibit-startup-screen t)    ; skip startup screen
 (show-paren-mode t)                ; highlight matching parentheses
-(setq show-paren-delay 0)
-(setq show-paren-when-point-inside-paren t)
-(setq show-paren-when-point-in-periphery t)
-(setq show-paren-style 'parenthesis)    ; "mixed" and "expression" is far too obnoxious for incomplete expressions
-;(global-hl-line-mode t)            ; highlight current line
-(setq visible-bell t)              ; blink, don't bark
-(setq x-stretch-cursor t)          ; cursor width will match tab character width
-(set-default 'indent-tabs-mode nil)
+(setopt show-paren-delay 0)
+(setopt delete-pair-blink-delay 0)
+(setopt show-paren-when-point-inside-paren t)
+(setopt show-paren-when-point-in-periphery t)
+(setopt show-paren-style 'parenthesis)    ; "mixed" and "expression" is far too obnoxious for incomplete expressions
+;; (global-hl-line-mode t)            ; highlight current line
+(setopt visible-bell t)              ; blink, don't bark
+(setopt x-stretch-cursor t)          ; cursor width will match tab character width
+(setq-default indent-tabs-mode nil)  ; indentation cannot use tabs, only space
 
-;;(setq uniquify-buffer-name-style (quote forward) nil (uniquify))
-(setq uniquify-buffer-name-style (quote post-forward-angle-brackets))
+(setopt uniquify-buffer-name-style 'post-forward-angle-brackets)
 
 (desktop-save-mode 0)         ; save the desktop/state of emacs' frames/buffersb
 (save-place-mode t)           ; return to last point in file
 (setopt proced-enable-color-flag t)
 
 ;; backups - filename.ext~
-(setq backup-directory-alist `(("." . ,(expand-file-name ".backups/" user-emacs-directory)))) ; keep in clean
-(setq backup-by-copying t)              ; vs renaming
+(setopt backup-directory-alist `(("." . ,(expand-file-name ".backups/" user-emacs-directory)))) ; keep in clean
+(setopt backup-by-copying t)              ; vs renaming
 
 ;; autosaves - #filename.ext#, when autosave mode enabled, saves unsaved changes
-;; (setq auto-save-list-file-prefix (expand-file-name ".auto-saves/" user-emacs-directory))
+;; (setopt auto-save-list-file-prefix (expand-file-name ".auto-saves/" user-emacs-directory))
 
 ;; lock files - .#filename.ext
-;; (setq create-lockfiles nil)
+;; (setopt create-lockfiles nil)
 
 (put 'narrow-to-region 'disabled nil)   ; enable narrowing C-x n n
 
 (toggle-scroll-bar 0)
 (tool-bar-mode 0)                      ; Remove clunky toolbar and icons
 (global-eldoc-mode 1)                  ; highlight parameters in minibuffer
-(setq reb-re-syntax 'string)           ; c-c TAB to cycle when in regexp-builder
+(setopt reb-re-syntax 'string)         ; c-c TAB to cycle when in regexp-builder
 
 ;; see file-local variable: time-stamp-pattern, time-stamp-start, etc
 (add-hook 'before-save-hook 'time-stamp) ; update timestamps of set format before saving
 
-(setq delete-by-moving-to-trash t)     ; move files to trash instead of deleting
+(setopt delete-by-moving-to-trash t)     ; move files to trash instead of deleting
 
 (add-hook 'image-mode-hook 'auto-revert-mode) ; update image buffers when files change
 
-(setq set-mark-command-repeat-pop 't)   ; remove leading modifier key on repeat mark pops
+(setopt set-mark-command-repeat-pop 't)   ; remove leading modifier key on repeat mark pops
 ;; C-u C-SPC C-SPC to pop local mark twice
 ;; C-x C-SPC C-SPC to pop global mark twice
 
-(setq isearch-lazy-count 't)
+(setopt isearch-lazy-count 't)
 (repeat-mode 1)                         ; Enable C-x o o o o....
 
 (electric-pair-mode 1)                  ; Auto-insertion and wropping of character pairs
 ;; Don't insert matching pair if cursor is on word-character, and other intelligent scenarios (this should be default)
-(setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
+(setopt electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
 ;; If first character in parens is newline, insert additional newline so closing paren is on a separate line
-(setq electric-pair-open-newline-between-pairs t)
+(setopt electric-pair-open-newline-between-pairs t)
 
 (setopt kill-whole-line 't)
 (savehist-mode 1)
