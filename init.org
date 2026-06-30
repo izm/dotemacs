@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-06-25 10:33:25>
+Updated: <2026-06-29 16:57:26>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -216,6 +216,19 @@ TODO: Provide optional default-date parameter as start or end when effort presen
   (org-map-entries 'my/org-headline-to-plantuml-gantt nil nil 'archive 'comment)
   (message "my/org-entries-to-plantuml-gantt complete.")
   )
+
+
+(defun my/org-copy-headline-number ()
+  "Copy the current org-num-mode headline number to kill-ring."
+  (interactive)
+  (let* ((overlays (overlays-at (point)))
+         (num-overlay (cl-find-if (lambda (o) (overlay-get o 'org-num)) overlays))
+         (num (when num-overlay (substring-no-properties (overlay-get num-overlay 'after-string)))))
+    (if num
+        (progn
+          (kill-new (string-trim num))
+          (message "Copied: %s" (string-trim num)))
+      (message "No org-num-mode number found at point.")
 #+end_src
 
 * Initialize
