@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-06-30 10:56:56>
+Updated: <2026-07-02 15:18:51>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1604,7 +1604,8 @@ directories to reflect your edits.
          "Daily Log (work)"
          item
          (file+olp+datetree ,(concat my/org-directory "work.org") "Daily")
-         "1. %U %^{prompt}  ⏲%K, ↑%a\n   - %?\n" ; [datetime] prompt  ⏲<link-to-currently-clocked-task>, ↑<link-to-current-header/location>
+         ;; %(cond ((string-equal \"%K\" \"%a\" ) \"⏲↑%K\") (t \"⏲%K, ↑%a\")) → use only %K if both %K and %a are equal
+         "1. %U %^{prompt}  %(cond ((string-equal \"%K\" \"%a\" ) \"⏲↑%K\") (t \"⏲%K, ↑%a\")) \n   - %?\n" ; [datetime] prompt  ⏲<link-to-currently-clocked-task>, ↑<link-to-current-header/location>
          :prepend nil
          :unnarrowed t
          :empty-lines-before 0
