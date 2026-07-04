@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-07-02 15:18:51>
+Updated: <2026-07-04 15:54:20>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -468,77 +468,118 @@ Load things that should be slightly more private.
 
 =list-fontsets= to see available installed fonts.
 
-Some good programming fonts [[https://blog.checkio.org/top-10-most-popular-coding-fonts-5f6e65282266?imm_mid=0f5f86][here]].
+Some good programming fonts ([[https://blog.checkio.org/top-10-most-popular-coding-fonts-5f6e65282266?imm_mid=0f5f86][list]]).
 
-1. Inconsolata
-2. Fira Mono
-3. Source Code Pro
-4. Anonymous Pro
-5. M+ 1M
-6. Hack
-7. *DejaVu Sans Mono*
-8. Droid Sans Mono
-9. Ubuntu Mono
-10. Bitsream Vera Sans Mono
+1. Iosevka NF ← NerdFont patched
+2. Inconsolata ← Nice, but no /italic/ or /oblique/? 😕
+3. Fira Mono
+4. Source Code Pro
+5. Anonymous Pro
+6. M+ 1M
+7. Hack
+8. *DejaVu Sans Mono*
+9. Droid Sans Mono
+10. Ubuntu Mono
+11. Bitsream Vera Sans Mono
 
 #+BEGIN_SRC emacs-lisp :results none
 ;; Test char and monospace:
 ;; 0123456789abcdefghijklmnopqrstuvwxyz [] () :;,. !@#$^&*
 ;; 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ {} <> "'`  ~-_/|\?
 
-(setq default-font-name nil)
-(cond
- ;; First choice
- ((find-font (font-spec :name "DejaVu Sans Mono"))
-  (setq default-font-name "DejaVu Sans Mono")
-  (setq default-font-size 12))
+(let ((default-font-name nil)
+      (default-font-size 12))
+  (cond
+   ;; First choice
+   ((find-font (font-spec :name "Iosevka NF"))
+    (setq default-font-name "Iosevka NF")
+    (setq default-font-size 13))
+   
+   ((find-font (font-spec :name "Inconsolata Nerd Font Regular"))
+    (setq default-font-name "Inconsolata Nerd Font Regular")
+    (setq default-font-size 13))
 
- ;; Second choice
- ((find-font (font-spec :name "Consolas"))
-  (setq default-font-name "Consolas")
-  (setq default-font-size 13))
+   ((find-font (font-spec :name "DejaVu Sans Mono"))
+    (setq default-font-name "DejaVu Sans Mono")
+    (setq default-font-size 12))
+   
+   ((find-font (font-spec :name "Consolas"))
+    (setq default-font-name "Consolas")
+    (setq default-font-size 13))
 
- ;; Fallback, if we must...
- ((find-font (font-spec :name "Courier New"))
-  (setq default-font-name "Courier New")
-  (setq default-font-size 12))
- )
+   ;; Fallback, if we must...
+   ((find-font (font-spec :name "Courier New"))
+    (setq default-font-name "Courier New")
+    (setq default-font-size 12))
+   )
 
-;; symbols
-(when (and (eq system-type 'windows-nt)
-           (member "Segoe UI Symbol" (font-family-list)))
-  (set-fontset-font t 'symbol "Segoe UI Symbol"))
+  ;; symbols
+  (when (and (eq system-type 'windows-nt)
+             (member "Segoe UI Symbol" (font-family-list)))
+    (set-fontset-font t 'symbol "Segoe UI Symbol"))
 
-;; variable pitch font
-(cond
- ((find-font (font-spec :name "Calibri"))
-  (set-face-attribute 'variable-pitch nil
-                      :family "Calibri"
-                      :height (* 10 (+ 2 default-font-size))
-                      )))
+  ;; variable pitch font
+  (cond
+   ((find-font (font-spec :name "Calibri"))
+    (set-face-attribute 'variable-pitch nil
+                        :family "Calibri"
+                        :height 1.2
+                        ))
+   )
 
-(when default-font-name
-  (progn
-    ;; use default font in new frames
-    (add-to-list 'default-frame-alist
-                 `(font . ,(format "%s-%s"
-                                   default-font-name
-                                   (or default-font-size 12))))
+  (when default-font-name
+    (progn
+      ;; use default font in new frames
+      (add-to-list 'default-frame-alist
+                   `(font . ,(format "%s-%s"
+                                     default-font-name
+                                     (or default-font-size 12))))
 
-    (set-face-attribute 'fixed-pitch nil
-                        :family default-font-name
-                        :height 'unspecified)))
+      (set-face-attribute 'fixed-pitch nil
+                          :family default-font-name
+                          :height 'unspecified)))
+  )
 
-;; FRAME SIZE
-;; initial frame should reasonably fit various laptop screens (smaller than 1080p)
-(setq initial-frame-alist
-      `((top . 10) (left . 1) (width . 130) (height . 47)))
-;; new frames should be slightly smaller, but still usable
-(add-to-list 'default-frame-alist
-             '(width . 110))
-(add-to-list 'default-frame-alist
-             '(height . 45))
+;; FRAMES
+;; Set initial and default frame dynamically to be comfortable for primary display
+(let* ((primary-monitor-disp (cdr (assoc 'geometry (car (display-monitor-attributes-list)))))
+       (w (nth 2 primary-monitor-disp))
+       (h (nth 3 primary-monitor-disp))
+       (w-init (floor (* w .8)))
+       (h-init (floor (* h .8))))
+
+  ;; TODO: This should be done in early init: `.emacs.d/early-init.el'
+  ;; Initial Frame
+  (setq initial-frame-alist
+        `((top . 10) (left . 1) (width . (text-pixels . ,w-init)) (height . (text-pixels . ,h-init))))
+  ;; Default Frame
+  (add-to-list 'default-frame-alist
+               `(width . (text-pixels . ,w-init)))
+  (add-to-list 'default-frame-alist
+               `(height . (text-pixels . ,h-init)))
+  )
 #+END_SRC
+
+*** Unicode Symbols and Emoji 🔥
+When symbols or characters are displayed as boxes, Emacs is missing the font or configuration.
+You can get access to many more icons, symbols, and even emoji with a bit of setup.
+
+1. Use your system's included font for access to additional Unicode symbols.
+   - http://xahlee.info/emacs/emacs/emacs_set_font_symbol.html
+   - Windows: Segoe UI Symbol; Mac:Apple Symbols; Linux:Symbola
+
+2. Install a patched font from the Nerd-Fonts downloads page and use that as your default.
+   - https://www.nerdfonts.com/font-downloads
+   - These are popular programming fonts that have been patched with additional glyphs related to programming.
+   
+3. Emoji (Emacs 29 or higher) provide access to additional symbols not in the unicode set.
+   - https://fonts.google.com/noto/specimen/Noto+Emoji
+   - [2026-07-03 Fri]: You CANNOT use color emoji in Emacs on Windows, use plain Noto Emoji.
+     + https://www.reddit.com/r/emacs/comments/18t93lk/emojis_in_emacs_on_windows_10_solved/
+   - For me, the light-bulb icon (💡) that =lsp-mode= defaults to for code-actions in the modeline wasn't in the Unicode or Nerd-Font... but is displayed after installing Noto Emoji.
+   - Emoji Insert: =C-x 8 e e= 
+   - Emoji Search: =C-x 8 e s=
+
 
 *** Try a font
 Use =eval-last-sexp= (=C-x C-e=) to try the different fonts: [[info:emacs#Lisp Eval][info:emacs#Lisp Eval]]
@@ -995,6 +1036,7 @@ Place to put themes 100% decided on.
          (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
   :config
+  (setopt lsp-modeline-code-action-fallback-icon "🗲")
   (setopt lsp-pylsp-plugins-autopep8-enabled 't)  ; indent-region [ C-M-\ ] uses autopep8
   (setopt lsp-completion-provider :none)          ; autoconfigures to company-capf, even if company company-mode not installed
   (lsp-register-client                            ; Add Pyrefly as LSP client
