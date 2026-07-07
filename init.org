@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-07-04 15:54:20>
+Updated: <2026-07-07 11:09:31>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1577,11 +1577,12 @@ directories to reflect your edits.
 - http://orgmode.org/manual/Export-settings.html#Export-settings
 
 #+BEGIN_SRC emacs-lisp
-(setq org-export-initial-scope 'subtree)
-(setq org-use-subsuperscripts '{})      ; require {} wrapper for ^super/_sub scripts
+(setopt org-export-backends '(org odt latex icalendar html ascii))
+(setopt org-export-initial-scope 'subtree)
+(setopt org-use-subsuperscripts '{})      ; require {} wrapper for ^super/_sub scripts
 ;; postamble
-(setq org-html-postamble 't)
-(setq org-html-postamble-format
+(setopt org-html-postamble 't)
+(setopt org-html-postamble-format
       '(("en" "<p class=\"author\">%a</p> <p class=\"date\">%T</p>")))
 #+END_SRC
 
