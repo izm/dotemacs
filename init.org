@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-07-07 11:09:31>
+Updated: <2026-08-03 11:21:55>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1807,6 +1807,33 @@ https://emacs.stackexchange.com/questions/2221/running-emacs-from-windows-taskba
 2. Right click on the running Emacs icon in the taskbar, and click on "pin this program to taskbar."
 3. Close Emacs
 4. Shift right-click on the pinned Emacs icon on the taskbar, click on Properties, and change the target from emacs.exe to runemacs.exe.
+
+** Specifying the init-directory from the command-line
+I like to have different shortcuts to Emacs that specify a different init directory. This allows me to try different Emacs configurations simply by creating a shortcut and changing the directory specified in the shortcut.
+
+Apparently, this has been a command-line-option since emacs 29.
+https://emacsredux.com/blog/2024/02/23/changing-the-emacs-configuration-directory/
+
+Command-line options can be added to the shortcut in the Target field:
+=C:\Path\to\emacs\bin\runemacs.exe --init-directory "C:/Path/to/specific/.emacs/"=
+
+If the =init-directory= does not contain =init.el=, Emacs will fall back to other locations when searching for it. See "Inital Options" in the Emacs manual ([[info:emacs#Initial Options][Info]], [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Initial-Options.html#index-_002d_002dinit_002ddirectory][Web]]).
+
+Previously, my shortcut launcher Target was much more complicated:
+#+begin_example
+C:\Path\to\emacs\bin\runemacs.exe
+-q
+--eval "(setq user-emacs-directory \"C:/Path/to/specific/.emacs/\")"
+--load "C:\Path\to\specific\.emacs\init.el"
+#+end_example
+
+- -q :: don't load an init file
+- --eval :: manually set the user-emacs-directory using elisp
+- --load :: provide init file explicitly as generic elisp file to load
+
+This was a messy hack that worked with caveats. Due to WHEN the eval code was executed in the init process, some environment elements will have already been set up using the default =.emacs.d= leading to an inconsistent environment that had to be corrected on a case-by-case basis. For example, my abbrevs (=abbrev-file-name=) wasn't using the desired path.
+
+This /also/ meant that packages used by different configurations were all managed in the same directory (=package-user-dir=), and updating packages in one configuration would clobber them in another. Practically, this turned out to be not much of an issue for me, but /could/ have definitely introduced incompatibilities.
 
 ** External Programs
 *** Open with default Windows app (w32-browser/w32-shell-execute)
