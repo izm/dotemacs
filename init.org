@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-08-11 10:41:55>
+Updated: <2026-08-18 00:18:43>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -400,7 +400,7 @@ Load things that should be slightly more private.
 ;; lock files - .#filename.ext
 ;; (setopt create-lockfiles nil)
 
-(put 'narrow-to-region 'disabled nil)   ; enable narrowing C-x n n
+(put 'narrow-to-region 'disabled nil)   ; enable arbitrary narrowing C-x n n
 
 (toggle-scroll-bar 0)
 (tool-bar-mode 0)                      ; Remove clunky toolbar and icons
@@ -410,7 +410,17 @@ Load things that should be slightly more private.
 ;; see file-local variable: time-stamp-pattern, time-stamp-start, etc
 (add-hook 'before-save-hook 'time-stamp) ; update timestamps of set format before saving
 
-(setopt delete-by-moving-to-trash t)     ; move files to trash instead of deleting
+(setopt delete-by-moving-to-trash t)   ; move files to trash instead of deleting
+
+;; If current clipboard item from other program is smaller than 600 characters,
+;; put it in killring before performing current emacs kill operation
+(setopt save-interprogram-paste-before-kill 600)
+
+(pixel-scroll-mode -1)                  ; legacy, ensure disabled
+(pixel-scroll-precision-mode 1)
+(setopt pixel-scroll-precision-interpolate-page 't)
+(keymap-global-set "<remap> <scroll-up-command>" #'pixel-scroll-interpolate-up)
+(keymap-global-set "<remap> <scroll-down-command>" #'pixel-scroll-interpolate-down)
 
 (add-hook 'image-mode-hook 'auto-revert-mode) ; update image buffers when files change
 
