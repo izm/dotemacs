@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-08-18 00:18:43>
+Updated: <2026-08-19 09:41:57>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1625,7 +1625,6 @@ directories to reflect your edits.
 #+END_SRC
 
 ** Capture
-
 - [[https://www.gnu.org/software/emacs/manual/html_node/org/Template-elements.html][Capture Template Elements]]
 - [[https://orgmode.org/manual/Template-expansion.html][Org Template Expansion]]
 
@@ -1663,7 +1662,7 @@ directories to reflect your edits.
          entry                          ; type
          ;; heading type and title
          (file+headline ,(concat my/org-directory "work.org") "MINUTES & MEETINGS") ; target
-         "* %?\n%^T  (entered %U from %a)\n%i\n\n" ; template
+         "* %?\n- %^T  (%(string-join '(\"entered\" \"%U\" \"↑%a\") \" \"))\n- Who: SB, \n- \n\n" ; template
          :prepend t
          )
         ("l"
@@ -1671,7 +1670,7 @@ directories to reflect your edits.
          item
          (file+olp+datetree ,(concat my/org-directory "work.org") "Daily")
          ;; %(cond ((string-equal \"%K\" \"%a\" ) \"⏲↑%K\") (t \"⏲%K, ↑%a\")) → use only %K if both %K and %a are equal
-         "1. %U %^{prompt}  %(cond ((string-equal \"%K\" \"%a\" ) \"⏲↑%K\") (t \"⏲%K, ↑%a\")) \n   - %?\n" ; [datetime] prompt  ⏲<link-to-currently-clocked-task>, ↑<link-to-current-header/location>
+         "1. %U %^{Log title|Today|Call w/X re Y}  [%(cond ((string-equal \"%K\" \"%a\" ) \"⏲↑%K\") (t (string-join '(\"⏲%K\" \"↑%a\") \", \")))]\n   - %?\n" ; [datetime] prompt  ⏲<link-to-currently-clocked-task>, ↑<link-to-current-header/location>
          :prepend nil
          :unnarrowed t
          :empty-lines-before 0
