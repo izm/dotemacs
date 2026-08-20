@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-08-19 09:41:57>
+Updated: <2026-08-19 10:25:05>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -419,8 +419,8 @@ Load things that should be slightly more private.
 (pixel-scroll-mode -1)                  ; legacy, ensure disabled
 (pixel-scroll-precision-mode 1)
 (setopt pixel-scroll-precision-interpolate-page 't)
-(keymap-global-set "<remap> <scroll-up-command>" #'pixel-scroll-interpolate-up)
-(keymap-global-set "<remap> <scroll-down-command>" #'pixel-scroll-interpolate-down)
+(keymap-global-set "<remap> <scroll-down-command>" #'pixel-scroll-interpolate-up)
+(keymap-global-set "<remap> <scroll-up-command>" #'pixel-scroll-interpolate-down)
 
 (add-hook 'image-mode-hook 'auto-revert-mode) ; update image buffers when files change
 
@@ -1635,7 +1635,7 @@ directories to reflect your edits.
          entry				; type
          ;; heading type and title
          (file+headline ,(concat my/org-directory "work.org") "Inbox") ; target
-         "* TODO %?\n%i\n%a\n\n"	; template
+         "* TODO %?\n- Added %U ↑%a\n- \n\n"	; template
          ;; optional property list  ; properties
          :prepend t                     ; insert at head of list
          )
