@@ -1,16 +1,19 @@
 * dotemacs README
 
 This is my personal Emacs configuration. It is both highly personalized and a
-bit of a playground; likely broken at any given time, and running code from it
-will delete data without warning. That being said, it can be useful to see
-others' configurations, so here is mine.
+bit of a playground; likely broken at any given time, and running code may
+delete data without warning. That being said, it can be useful to see others'
+configurations, so here is mine.
 
-All configuration is done in =emacs-lisp= code blocks in [[file:init.org::*init.org][init.org]]. When updating
-my configuration, I make changes in the =org= file and then I evaluate the first
-code block (=C-c C-c= or =M-x org-babel-src-execute=), which [[https://orgmode.org/manual/Extracting-Source-Code.html][extracts]] select
-=emacs-lisp= code blocks into =~/.emacs.d/init.el=, *overwriting* the existing
-config. Once the new =init.el= is created, it is evaluated to update the current
-session's settings.
+All configuration is done in =emacs-lisp= code blocks in [[file:init.org::*init.org][init.org]]. I also maintain
+a separate =init_private.el= that I don't put on GitHub, but is loaded by the
+generated =init.el=.
 
-Again, the existing =~/.emacs.d/init.el= gets nuked without warning. Please do not
-run this code block yourself unless you fully understand it.
+When updating my configuration, I make changes in the =org= file and then I
+evaluate the first code block, which does the following:
+
+1. Backs up any existing =user-emacs-directory/init.el= into the same directory
+2. [[https://orgmode.org/manual/Extracting-Source-Code.html][Extracts]] [[file:init.org::*init.org][init.org]] =emacs-lisp= code blocks into a new =user-emacs-directory/init.el=, *overwriting* the existing config.
+3. Once the new =init.el= is created, it is evaluated to update the current session's settings.
+
+As with any code, please do not run this unless you understand it.
