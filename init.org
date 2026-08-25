@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-08-21 01:12:01>
+Updated: <2026-08-25 11:25:04>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -442,6 +442,8 @@ Load things that should be slightly more private.
 
 (setopt use-short-answers t)            ; y or n, instead of yes or no
 (setopt confirm-kill-emacs 'yes-or-no-p) ; always confirm this
+
+(setopt project-vc-extra-root-markers '(".dir-locals.el" "readme*" ".project")) ; Add C-x p p markers, not always in a vc directory
 #+END_SRC
 
 ** Python
@@ -1591,7 +1593,7 @@ directories to reflect your edits.
 - http://orgmode.org/manual/Export-settings.html#Export-settings
 
 #+BEGIN_SRC emacs-lisp
-(setopt org-export-backends '(org odt latex icalendar html ascii))
+(setopt org-export-backends '(org md odt latex icalendar html ascii))
 (setopt org-export-initial-scope 'subtree)
 (setopt org-use-subsuperscripts '{})      ; require {} wrapper for ^super/_sub scripts
 ;; postamble
