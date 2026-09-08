@@ -1,7 +1,7 @@
 #+STARTUP: hidestars indent content
 #+TODO: TODO TRY | SLOW NOTE OLD
 
-Updated: <2026-09-06 23:50:56>
+Updated: <2026-09-07 21:50:32>
 
 * init.org
 This file must be tangled into =init.el= in the emacs configuration
@@ -1665,7 +1665,7 @@ directories to reflect your edits.
 (setq org-ellipsis " ⤵")			;⤵, ▐, ►, ▽, ◿, ◹, », ↵, ≋, …, ⋞, ⊡, ⊹, ⊘
 
 ;; use global ids for links
-(setq org-id-link-to-org-use-id t)
+(setopt org-id-link-to-org-use-id 'create-if-interactive)
 
 ;; fontify (pretty formating) code in code blocks
 (setq org-src-fontify-natively t)	; important for init.org !
